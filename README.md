@@ -34,6 +34,9 @@ npm run build
 ## Database
 
 - SQL migrations are in `supabase/migrations/`, applied in order. Example lesson groups: `supabase/seed.sql`.
+- Question content: `supabase/seed_content.sql` (safe to run more than once). Rebuild it after changing
+  `content/ielts/mock-sets.json` with `python3 scripts/content/build_seed_sql.py`.
+- Admins can also export and import all content as JSON at `/admin/import-export`.
 - The owner email is set once with SQL (it is not stored in this repository):
 
   ```sql

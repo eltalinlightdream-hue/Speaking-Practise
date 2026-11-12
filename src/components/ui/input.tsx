@@ -30,4 +30,17 @@ function NativeSelect({ className, children, ...props }: React.ComponentProps<"s
   );
 }
 
-export { Input, NativeSelect };
+function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+  return (
+    <textarea
+      data-slot="textarea"
+      className={cn(
+        "flex min-h-28 w-full rounded-button border border-input bg-card px-3 py-2 text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-3 focus-visible:outline-offset-1 focus-visible:outline-ring disabled:cursor-not-allowed disabled:bg-muted",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+export { Input, NativeSelect, Textarea };
