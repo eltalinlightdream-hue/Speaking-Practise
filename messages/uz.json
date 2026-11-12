@@ -1,0 +1,80 @@
+{
+  "app": {
+    "name": "Speaking Easy with Practise",
+    "shortName": "Speaking Easy",
+    "tagline": "IELTS va CEFR speaking boʻyicha kundalik mashq"
+  },
+  "common": {
+    "language": "Til",
+    "signOut": "Chiqish",
+    "save": "Saqlash",
+    "saving": "Saqlanmoqda…",
+    "back": "Orqaga",
+    "comingSoon": "Tez orada",
+    "comingSoonText": "Bu boʻlim tayyorlanmoqda va tez orada shu yerda paydo boʻladi."
+  },
+  "landing": {
+    "title": "Har kuni gapirishni mashq qiling",
+    "lead": "Savollar ovoz chiqarib oʻqiladi, siz ovozli javob berasiz, yozuvlaringiz esa faqat oʻz qurilmangizda qoladi. Kuniga 15 daqiqa mashq qilib, ketma-ketlikni (streak) saqlang.",
+    "start": "Mashqni boshlash",
+    "point1": "IELTS va CEFR speaking",
+    "point2": "Haqiqiy imtihonga oʻxshash mock testlar",
+    "point3": "Barcha oʻquvchilar uchun bepul",
+    "privacy": "Maxfiylik"
+  },
+  "login": {
+    "title": "Kirish",
+    "lead": "Davom etish uchun Google hisobingizdan foydalaning.",
+    "google": "Google orqali davom etish",
+    "telegram": "Telegram orqali kirish tez orada qoʻshiladi.",
+    "error": "Kirish amalga oshmadi. Iltimos, qaytadan urinib koʻring."
+  },
+  "onboarding": {
+    "title": "Xush kelibsiz!",
+    "lead": "Oʻqituvchingiz natijalaringizni koʻra olishi uchun oʻzingiz haqingizda yozing.",
+    "fullName": "Toʻliq ism-familiya",
+    "fullNamePlaceholder": "masalan: Aziza Karimova",
+    "group": "Dars guruhi",
+    "groupPlaceholder": "Guruhingizni tanlang",
+    "submit": "Davom etish",
+    "errorName": "Iltimos, toʻliq ismingizni kiriting (kamida 2 ta harf).",
+    "errorGroup": "Iltimos, dars guruhingizni tanlang.",
+    "errorSave": "Saqlab boʻlmadi. Iltimos, qaytadan urinib koʻring."
+  },
+  "nav": {
+    "home": "Bosh sahifa",
+    "progress": "Natijalar",
+    "recordings": "Yozuvlar",
+    "settings": "Sozlamalar",
+    "admin": "Admin",
+    "owner": "Egasi"
+  },
+  "home": {
+    "greeting": "Salom, {name}",
+    "today": "Bugun: {minutes} / 15 daqiqa",
+    "chooseExam": "Imtihonni tanlang",
+    "ielts": "IELTS",
+    "ieltsText": "1, 2 va 3-qismlar",
+    "cefr": "CEFR",
+    "cefrText": "Multilevel speaking",
+    "generalTraining": "Umumiy mashq",
+    "mockTest": "Mock test"
+  },
+  "settings": {
+    "title": "Sozlamalar",
+    "languageHelp": "Sayt tilini tanlang."
+  },
+  "admin": {
+    "title": "Admin",
+    "lead": "Oʻquvchilar, savollar va mock testlar shu yerda boshqariladi."
+  },
+  "owner": {
+    "title": "Egasi",
+    "lead": "Bu yerda admin huquqini berish yoki olib tashlash mumkin."
+  },
+  "roles": {
+    "student": "Oʻquvchi",
+    "admin": "Admin",
+    "owner": "Egasi"
+  }
+}

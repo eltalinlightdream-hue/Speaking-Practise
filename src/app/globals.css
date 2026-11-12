@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+/*
+  "Jade pebble morning" palette. All colours live here.
+  Components use the token names (bg-primary, text-foreground, ...),
+  never raw hex codes. A dark mode can be added later by redefining
+  these variables.
+*/
+:root {
+  --background: #fafaf7; /* Paper */
+  --foreground: #1f2a1c; /* Ink */
+  --card: #ffffff;
+  --card-foreground: #1f2a1c;
+  --popover: #ffffff;
+  --popover-foreground: #1f2a1c;
+
+  --primary: #404e3b; /* Forest */
+  --primary-foreground: #ffffff;
+  --accent: #7b9669; /* Sage */
+  --accent-foreground: #1f2a1c;
+  --secondary: #6c8480; /* Slate */
+  --secondary-foreground: #ffffff;
+  --surface: #bac8b1; /* Mist */
+  --surface-foreground: #404e3b;
+  --muted: #f0f2ec;
+  --muted-foreground: #4b5947;
+
+  --border: #e6e6e6; /* Pebble */
+  --input: #6c8480; /* Slate, for 3:1 contrast on input borders */
+  --ring: #404e3b;
+
+  --destructive: #b3261e;
+  --destructive-foreground: #ffffff;
+  --warning: #b7791f;
+  --warning-foreground: #ffffff;
+
+  --radius-card: 12px;
+  --radius-button: 10px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --radius-card: var(--radius-card);
+  --radius-button: var(--radius-button);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  h1,
+  h2,
+  h3 {
+    color: var(--primary);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
