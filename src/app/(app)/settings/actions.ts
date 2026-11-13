@@ -2,7 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
+import type { DangerState } from "@/components/danger-confirm";
 
 export type ProfileState = { ok?: boolean; error?: "name" | "group" | "save" };
 
@@ -29,18 +31,17 @@ export async function updateProfile(_prev: ProfileState, formData: FormData): Pr
   return { ok: true };
 }
 
-export type DeleteState = { error?: boolean };
-
 /**
  * Delete the signed-in user's account. The database function
  * delete_my_account() does the work (and refuses for the owner).
  */
-export async function deleteAccount(_prev: DeleteState, formData: FormData): Promise<DeleteState> {
-  if (formData.get("confirm") !== "yes") return { error: true };
+export async function deleteAccount(_prev: DangerState, formData: FormData): Promise<DangerState> {
+  const t = await getTranslations("settings");
+  if (formData.get("confirm") !== "yes") return { error: t("deleteError") };
 
   const supabase = await createClient();
   const { error } = await supabase.rpc("delete_my_account");
-  if (error) return { error: true };
+  if (error) return { error: t("deleteError") };
 
   // The account is gone; clear the login cookies on this device.
   await supabase.auth.signOut({ scope: "local" });

@@ -31,7 +31,7 @@ export default async function SettingsPage() {
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="flex min-w-0 flex-col gap-1">
               <CardTitle>{t("profileTitle")}</CardTitle>
-              <CardDescription className="break-all">{profile.email}</CardDescription>
+              <CardDescription className="break-all">{profile.email ?? t("viaTelegram")}</CardDescription>
             </div>
             <Badge>{tr(profile.role)}</Badge>
           </div>

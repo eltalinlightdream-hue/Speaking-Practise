@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./env";
 
 // Paths anyone can open without signing in.
-const PUBLIC_PATHS = ["/", "/login", "/privacy", "/design"];
+const PUBLIC_PATHS = ["/", "/login", "/privacy", "/design", "/manifest.webmanifest"];
 const PUBLIC_PREFIXES = ["/auth/"];
 
 function isPublic(pathname: string) {

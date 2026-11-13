@@ -98,7 +98,7 @@ export function MockSetEditor({
           const available = (options[part] ?? []).filter((o) => !list.includes(o.id));
           return (
             <fieldset key={part} className="flex flex-col gap-3 rounded-card border border-border bg-card p-4">
-              <legend className="px-1 font-semibold text-secondary">{t("stats.part", { part })}</legend>
+              <legend className="px-1 font-semibold text-primary">{t("stats.part", { part })}</legend>
               {list.length === 0 && <p className="text-sm text-warning">{t("mocks.missingPart", { part })}</p>}
               <ol className="flex flex-col gap-2">
                 {list.map((id, i) => (

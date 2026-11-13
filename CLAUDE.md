@@ -118,6 +118,20 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Dates shown to users go through `src/lib/format-date.ts` (phone browsers lack Uzbek month names).
 - Unit tests: `npm test` (Node's built-in runner; tests import with `.ts` extensions).
 
+## Admin, privacy, Telegram (Step 5)
+
+- `admin_daily_totals(from, to)`: per-student daily sums (security invoker + `is_admin()` check).
+  Report logic in `src/lib/admin/report.ts` (tested); loaders in `src/lib/admin/queries.ts`.
+- Pages: `/admin/reports` (week Mon–Sun Tashkent, group filter, CSV at `/admin/reports/csv`),
+  `/admin/students` + `/admin/students/[id]` (shared `ProgressView`, kept mark, owner-only role switch,
+  delete via `admin_delete_user`), `/owner` (admins list), `/privacy` (text in messages `privacy.sections`).
+- "Kept" = an admin's mark on accounts a teacher has checked and wants to keep (meaning assumed; confirm with owner).
+- Telegram login: widget on `/login` only when `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME` is set; `/auth/telegram`
+  checks the HMAC (`src/lib/telegram-auth.ts`, tested), creates the user with the service role key
+  (`telegram-<id>@users.invalid`, profile email set to null) and signs in with a server-made magic-link token.
+  Secrets `TELEGRAM_BOT_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` live only in Vercel. Setup steps: README.
+- Manifest + icons (`src/app/manifest.ts`, `public/icons/`), `not-found.tsx`, `error.tsx`.
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).
@@ -136,3 +150,10 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
 - [x] Step 4: `mock_history` + Mock Test flow (rotation by cycle, no replay, auto-advance, half-done mocks
   do not count), shared streak function with unit tests, My progress, My recordings, Settings.
 - [ ] Step 5: admin analytics, privacy, Telegram login, polish, Vercel launch.
+  Migration `20261113000200_admin_daily_totals.sql` is applied to the Supabase project.
+  `/admin/reports` (+ CSV), `/admin/students`, `/admin/students/[id]` and `/owner` were live-tested at
+  375px and on desktop with temporary accounts (created with SQL, signed in with @supabase/ssr, driven
+  with Playwright, deleted afterwards): numbers, streaks, group filter, week picker, CSV, kept mark,
+  owner-only role switch and delete all behave. STILL TO DO: launch on Vercel (free vercel.app address)
+  and set the Supabase Auth URLs, enable the Google provider in Supabase (it is still off, so sign-in
+  cannot work yet), then Telegram end-to-end once the owner has made the bot.

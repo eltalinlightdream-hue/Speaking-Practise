@@ -27,7 +27,10 @@
     "lead": "Use your Google account to continue.",
     "google": "Continue with Google",
     "telegram": "Telegram sign-in is coming soon.",
-    "error": "Sign-in did not work. Please try again."
+    "error": "Sign-in did not work. Please try again.",
+    "or": "or",
+    "telegramError": "Telegram sign-in did not work. Please try again, or use Google.",
+    "leadBoth": "Use your Google or Telegram account to continue."
   },
   "onboarding": {
     "title": "Welcome!",
@@ -77,7 +80,8 @@
     "deleteConfirmButton": "Yes, delete my account",
     "deleteCancel": "Cancel",
     "deleteError": "Could not delete the account. Please try again.",
-    "ownerNote": "The owner account cannot be deleted from the app."
+    "ownerNote": "The owner account cannot be deleted from the app.",
+    "viaTelegram": "Signed in with Telegram"
   },
   "admin": {
     "title": "Admin",
@@ -87,7 +91,9 @@
       "content": "Topics",
       "add": "Add questions",
       "mockSets": "Mock sets",
-      "importExport": "Import / export"
+      "importExport": "Import / export",
+      "reports": "Weekly report",
+      "students": "Students"
     },
     "stats": {
       "topics": "Topics",
@@ -96,7 +102,6 @@
       "activeOf": "{active} active of {total}",
       "part": "Part {part}"
     },
-    "comingNext": "Students list and weekly reports come in Step 5.",
     "content": {
       "title": "Topics and questions",
       "exam": "Exam",
@@ -218,11 +223,76 @@
       "generic": "Something went wrong: {message}",
       "duplicateTitle": "A topic with this title already exists in this part.",
       "required": "Please fill in the title."
+    },
+    "reports": {
+      "title": "Weekly report",
+      "lead": "How much each student practised this week (Monday to Sunday, Tashkent time).",
+      "prevWeek": "Previous week",
+      "nextWeek": "Next week",
+      "thisWeek": "This week",
+      "allGroups": "All groups",
+      "noGroup": "No group",
+      "active": "Practised",
+      "activeValue": "{active} of {total}",
+      "minutes": "Minutes",
+      "countedDays": "Days with 15+ min",
+      "mocks": "Mock tests finished",
+      "byGroup": "By group",
+      "group": "Group",
+      "students": "Students",
+      "name": "Name",
+      "streak": "Streak now",
+      "lastActive": "Last practice",
+      "never": "Never",
+      "download": "Download CSV",
+      "downloadHelp": "Opens in Excel or Google Sheets.",
+      "empty": "No students in this group yet.",
+      "daysValue": "{n}/7",
+      "minutesValue": "{m} min",
+      "streakValue": "{n, plural, one {# day} other {# days}}"
+    },
+    "students": {
+      "title": "Students",
+      "lead": "Find a student to see their practice, streak and calendar.",
+      "search": "Search by name or email",
+      "searchButton": "Search",
+      "count": "{count, plural, one {# person} other {# people}}",
+      "limited": "Showing the first {count}. Search to find others.",
+      "empty": "Nobody found.",
+      "back": "All students",
+      "email": "Email",
+      "group": "Group",
+      "role": "Role",
+      "joined": "Joined",
+      "thisWeek": "This week",
+      "keptTitle": "Kept",
+      "keptHelp": "Mark accounts a teacher has checked and wants to keep.",
+      "keptYes": "Marked as kept",
+      "keptNo": "Not marked",
+      "keptSet": "Mark as kept",
+      "keptUnset": "Remove the mark",
+      "roleHelp": "Admins can manage questions, mock tests and see all students.",
+      "makeAdmin": "Make admin",
+      "makeStudent": "Make student",
+      "deleteTitle": "Delete this account",
+      "deleteLead": "Deletes this account, its streak and its practice history for good.",
+      "deleteButton": "Delete account",
+      "deleteConfirmTitle": "Are you sure?",
+      "deleteConfirmText": "{name}'s account, streak and practice history will be deleted. This cannot be undone.",
+      "deleteConfirmButton": "Yes, delete this account",
+      "cannotDeleteOwner": "The owner account cannot be deleted.",
+      "cannotDeleteAdmin": "Only the owner can delete an admin.",
+      "error": "That did not work: {message}"
     }
   },
   "owner": {
     "title": "Owner",
-    "lead": "Give or remove the admin role here."
+    "lead": "Give or remove the admin role here.",
+    "admins": "Admins",
+    "noAdmins": "There are no admins yet.",
+    "howTo": "To make someone an admin, find them in Admin → Students, open their page and press “Make admin”.",
+    "openStudents": "Open students",
+    "you": "you"
   },
   "roles": {
     "student": "Student",
@@ -345,7 +415,7 @@
     "days": "{count, plural, one {# day} other {# days}}",
     "today": "Today",
     "todayMinutes": "{minutes} / 15 min",
-    "goalDone": "Today counts for your streak.",
+    "goalDone": "Today counts for the streak.",
     "goalLeft": "{minutes, plural, one {# more minute} other {# more minutes}} to count today.",
     "rule": "A day counts after 15 minutes of practice in total (Tashkent time). Missing a day starts the streak again from 0.",
     "calendar": "Practice days",
@@ -359,10 +429,11 @@
     "dayNone": "{date}: no practice",
     "sessions": "Past sessions",
     "noSessions": "No sessions yet. Start with General Training or a Mock Test.",
+    "noSessionsPlain": "No sessions yet.",
     "start": "Start practising",
     "notFinished": "Not finished",
     "completed": "Completed",
-    "lastN": "Your last {count} sessions",
+    "lastN": "Last {count} sessions",
     "minutesShort": "{m, plural, =0 {<1 min} other {# min}}"
   },
   "recordings": {
@@ -377,5 +448,86 @@
     "delete": "Delete",
     "deleteConfirm": "Delete this recording? This cannot be undone.",
     "length": "{m} min {s} s"
+  },
+  "privacy": {
+    "title": "Privacy",
+    "updated": "Last updated: 13 November 2026",
+    "intro": "Speaking Easy with Practise is a free website for daily IELTS and CEFR speaking practice. This page explains, in plain words, what we keep about you and why.",
+    "sections": [
+      {
+        "title": "What we keep",
+        "items": [
+          "Your name and email address, from Google when you sign in with Google. If you sign in with Telegram: your Telegram name, username and Telegram ID (not your phone number).",
+          "Your lesson group, the website language you chose, and your role (student, admin or owner).",
+          "Your practice: when you practised, for how long, which exam and parts, which mock test, and whether you finished it. This is how your streak and minutes are counted."
+        ]
+      },
+      {
+        "title": "What we never keep",
+        "items": [
+          "Your recordings. They are saved only in your own browser on your own device and are never uploaded. Nobody else can listen to them.",
+          "What you say during practice, your location, your contacts or any payment details. The website is free."
+        ]
+      },
+      {
+        "title": "Microphone and camera",
+        "items": [
+          "The website uses your microphone (and camera, if you choose video) only during a practice session, and only after you allow it in your browser. You can choose “No recording” at any time."
+        ]
+      },
+      {
+        "title": "Cookies",
+        "items": [
+          "We use only the cookies the website needs: one to keep you signed in and one to remember your language. There are no advertising or tracking cookies."
+        ]
+      },
+      {
+        "title": "Who can see your data",
+        "items": [
+          "You can see your own practice on the My progress page.",
+          "Your teachers (the website's admins) can see your name, email, group and practice times, so they can follow your progress. Nobody else can.",
+          "We do not sell or share your data with anyone."
+        ]
+      },
+      {
+        "title": "Where it is stored",
+        "items": [
+          "Your account and practice data are stored with Supabase, in a data centre in the European Union (Frankfurt). The website runs on Vercel.",
+          "Google and Telegram are used only to sign you in."
+        ]
+      },
+      {
+        "title": "How long we keep it, and deleting it",
+        "items": [
+          "We keep your data while you have an account.",
+          "You can change your name and group in Settings at any time.",
+          "You can delete your account in Settings. Your account, streak and practice history are deleted at once and cannot be brought back. An admin can also delete an account, for example one that is no longer used.",
+          "To delete your recordings, use My recordings, or clear your browser's data for this website."
+        ]
+      },
+      {
+        "title": "Children",
+        "items": [
+          "If you are under 16, please use the website with the permission of a parent or your teacher."
+        ]
+      },
+      {
+        "title": "Changes and questions",
+        "items": [
+          "If this page changes, the date at the top will change too.",
+          "If you have a question about your data, ask your teacher."
+        ]
+      }
+    ],
+    "contact": "You can also write to:",
+    "back": "Back"
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundText": "This page does not exist or has moved.",
+    "errorTitle": "Something went wrong",
+    "errorText": "The page could not load. Check your internet connection and try again.",
+    "tryAgain": "Try again",
+    "home": "Go to Home"
   }
 }

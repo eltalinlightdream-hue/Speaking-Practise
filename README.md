@@ -62,3 +62,27 @@ npm run build
 - **Playwright**: open the site in a real browser and take screenshots
 
 After opening Claude Code in this folder, approve the project tools, then type `/mcp` and log in to Supabase and Vercel.
+
+## Going live on Vercel (free)
+
+1. On [vercel.com](https://vercel.com), **Add New → Project**, import this GitHub repository. Framework: Next.js (found by itself).
+2. Under **Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+   (same values as `.env.local`). Optional: `NEXT_PUBLIC_CONTACT_EMAIL` (shown on the privacy page).
+3. Deploy. The site gets a free address like `https://speaking-easy.vercel.app`.
+4. In Supabase → **Authentication → URL Configuration**: set **Site URL** to that address and add
+   `https://<your-address>/auth/callback` to **Redirect URLs**. Google sign-in needs this.
+5. Every push to `main` deploys again by itself.
+
+## Telegram login (one-time setup)
+
+Telegram login stays hidden until these steps are done.
+
+1. In Telegram, open **@BotFather**, send `/newbot`, and follow the questions (name: *Speaking Easy*).
+   BotFather gives you a **token**. Keep it secret: never paste it into chat or into the code.
+2. Still in @BotFather, send `/setdomain`, choose your bot and send your site address without `https://`
+   (for example `speaking-easy.vercel.app`). Telegram only shows the button on that address.
+3. In Vercel → Project → **Settings → Environment Variables**, add:
+   - `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME`: the bot's username, without `@`
+   - `TELEGRAM_BOT_TOKEN`: the token from step 1
+   - `SUPABASE_SERVICE_ROLE_KEY`: Supabase → **Project Settings → API Keys** → the secret (service_role) key
+4. Redeploy (Vercel → Deployments → ⋯ → Redeploy). The Telegram button appears on `/login`.
