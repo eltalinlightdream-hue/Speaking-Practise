@@ -443,5 +443,78 @@
     "delete": "Delete",
     "deleteConfirm": "Delete this recording? This cannot be undone.",
     "length": "{m} min {s} s"
+  },
+  "privacy": {
+    "title": "Privacy",
+    "updated": "Last updated: 13 November 2026",
+    "intro": "Speaking Easy with Practise is a free website for daily IELTS and CEFR speaking practice. This page explains, in plain words, what we keep about you and why.",
+    "sections": [
+      {
+        "title": "What we keep",
+        "items": [
+          "Your name and email address, from Google when you sign in with Google. If you sign in with Telegram: your Telegram name, username and Telegram ID (not your phone number).",
+          "Your lesson group, the website language you chose, and your role (student, admin or owner).",
+          "Your practice: when you practised, for how long, which exam and parts, which mock test, and whether you finished it. This is how your streak and minutes are counted."
+        ]
+      },
+      {
+        "title": "What we never keep",
+        "items": [
+          "Your recordings. They are saved only in your own browser on your own device and are never uploaded. Nobody else can listen to them.",
+          "What you say during practice, your location, your contacts or any payment details. The website is free."
+        ]
+      },
+      {
+        "title": "Microphone and camera",
+        "items": [
+          "The website uses your microphone (and camera, if you choose video) only during a practice session, and only after you allow it in your browser. You can choose “No recording” at any time."
+        ]
+      },
+      {
+        "title": "Cookies",
+        "items": [
+          "We use only the cookies the website needs: one to keep you signed in and one to remember your language. There are no advertising or tracking cookies."
+        ]
+      },
+      {
+        "title": "Who can see your data",
+        "items": [
+          "You can see your own practice on the My progress page.",
+          "Your teachers (the website's admins) can see your name, email, group and practice times, so they can follow your progress. Nobody else can.",
+          "We do not sell or share your data with anyone."
+        ]
+      },
+      {
+        "title": "Where it is stored",
+        "items": [
+          "Your account and practice data are stored with Supabase, in a data centre in the European Union (Frankfurt). The website runs on Vercel.",
+          "Google and Telegram are used only to sign you in."
+        ]
+      },
+      {
+        "title": "How long we keep it, and deleting it",
+        "items": [
+          "We keep your data while you have an account.",
+          "You can change your name and group in Settings at any time.",
+          "You can delete your account in Settings. Your account, streak and practice history are deleted at once and cannot be brought back. An admin can also delete an account, for example one that is no longer used.",
+          "To delete your recordings, use My recordings, or clear your browser's data for this website."
+        ]
+      },
+      {
+        "title": "Children",
+        "items": [
+          "If you are under 16, please use the website with the permission of a parent or your teacher."
+        ]
+      },
+      {
+        "title": "Changes and questions",
+        "items": [
+          "If this page changes, the date at the top will change too.",
+          "If you have a question about your data, ask your teacher."
+        ]
+      }
+    ],
+    "contact": "You can also write to:",
+    "back": "Back"
   }
 }

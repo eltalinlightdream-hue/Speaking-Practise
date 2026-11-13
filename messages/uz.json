@@ -443,5 +443,78 @@
     "delete": "Oʻchirish",
     "deleteConfirm": "Bu yozuv oʻchirilsinmi? Buni qaytarib boʻlmaydi.",
     "length": "{m} daqiqa {s} soniya"
+  },
+  "privacy": {
+    "title": "Maxfiylik",
+    "updated": "Oxirgi yangilanish: 2026-yil 13-noyabr",
+    "intro": "Speaking Easy with Practise — IELTS va CEFR speaking boʻyicha har kungi mashq uchun bepul sayt. Bu sahifada siz haqingizda nimalarni saqlashimiz va nima uchun saqlashimiz oddiy soʻzlar bilan tushuntirilgan.",
+    "sections": [
+      {
+        "title": "Nimalarni saqlaymiz",
+        "items": [
+          "Ismingiz va email manzilingiz — Google orqali kirsangiz, Googledan olinadi. Telegram orqali kirsangiz: Telegramdagi ismingiz, username va Telegram ID raqamingiz (telefon raqamingiz emas).",
+          "Dars guruhingiz, tanlagan sayt tilingiz va rolingiz (oʻquvchi, admin yoki ega).",
+          "Mashqlaringiz: qachon va qancha vaqt mashq qilganingiz, qaysi imtihon va qismlar, qaysi mock test va uni tugatganingiz. Seriyangiz va daqiqalaringiz shu orqali hisoblanadi."
+        ]
+      },
+      {
+        "title": "Nimalarni hech qachon saqlamaymiz",
+        "items": [
+          "Yozuvlaringizni. Ular faqat oʻz qurilmangizdagi brauzerda saqlanadi va hech qachon yuklanmaydi. Ularni hech kim eshita olmaydi.",
+          "Mashq paytida aytgan gaplaringiz, joylashuvingiz, kontaktlaringiz yoki toʻlov maʼlumotlari. Sayt bepul."
+        ]
+      },
+      {
+        "title": "Mikrofon va kamera",
+        "items": [
+          "Sayt mikrofoningizdan (video tanlasangiz, kamerangizdan ham) faqat mashq paytida va faqat brauzerda ruxsat berganingizdan keyin foydalanadi. Istalgan vaqtda “Yozmaslik”ni tanlashingiz mumkin."
+        ]
+      },
+      {
+        "title": "Cookie fayllar",
+        "items": [
+          "Faqat sayt ishlashi uchun kerakli cookie fayllardan foydalanamiz: biri sizni tizimda saqlab turadi, ikkinchisi tilingizni eslab qoladi. Reklama yoki kuzatuv cookie fayllari yoʻq."
+        ]
+      },
+      {
+        "title": "Maʼlumotlaringizni kim koʻra oladi",
+        "items": [
+          "Oʻz mashqlaringizni “Mening natijalarim” sahifasida koʻrasiz.",
+          "Oʻqituvchilaringiz (sayt adminlari) natijalaringizni kuzatib borishi uchun ismingiz, emailingiz, guruhingiz va mashq vaqtlaringizni koʻra oladi. Boshqa hech kim koʻra olmaydi.",
+          "Maʼlumotlaringizni hech kimga sotmaymiz va bermaymiz."
+        ]
+      },
+      {
+        "title": "Maʼlumotlar qayerda saqlanadi",
+        "items": [
+          "Hisobingiz va mashq maʼlumotlaringiz Supabase xizmatida, Yevropa Ittifoqidagi (Frankfurt) maʼlumotlar markazida saqlanadi. Sayt Vercel xizmatida ishlaydi.",
+          "Google va Telegram faqat tizimga kirish uchun ishlatiladi."
+        ]
+      },
+      {
+        "title": "Qancha vaqt saqlaymiz va qanday oʻchirasiz",
+        "items": [
+          "Hisobingiz bor ekan, maʼlumotlaringizni saqlaymiz.",
+          "Ismingiz va guruhingizni istalgan vaqtda Sozlamalarda oʻzgartirishingiz mumkin.",
+          "Hisobingizni Sozlamalarda oʻchirishingiz mumkin. Hisobingiz, seriyangiz va mashqlar tarixi darhol oʻchiriladi va ularni qaytarib boʻlmaydi. Admin ham hisobni oʻchirishi mumkin, masalan, endi ishlatilmayotgan hisobni.",
+          "Yozuvlaringizni oʻchirish uchun “Mening yozuvlarim” sahifasidan foydalaning yoki brauzerda shu sayt maʼlumotlarini tozalang."
+        ]
+      },
+      {
+        "title": "Bolalar",
+        "items": [
+          "Agar 16 yoshga toʻlmagan boʻlsangiz, saytdan ota-onangiz yoki oʻqituvchingiz ruxsati bilan foydalaning."
+        ]
+      },
+      {
+        "title": "Oʻzgarishlar va savollar",
+        "items": [
+          "Bu sahifa oʻzgarsa, yuqoridagi sana ham oʻzgaradi.",
+          "Maʼlumotlaringiz haqida savolingiz boʻlsa, oʻqituvchingizdan soʻrang."
+        ]
+      }
+    ],
+    "contact": "Shuningdek, bu manzilga yozishingiz mumkin:",
+    "back": "Orqaga"
   }
 }
