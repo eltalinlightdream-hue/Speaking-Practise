@@ -17,7 +17,10 @@ type TopicWithQuestions = {
   questions: { text: string; audio_url: string | null; active: boolean; sort_order: number }[];
 };
 
-const COUNTS = [3, 5, 8, 10];
+// 0 means "unlimited": every question in the pool, until the student taps Finish.
+const COUNTS = [3, 5, 8, 10, 0];
+/** With "unlimited" in Part 1 + Part 3, Part 1 stops here so Part 3 is reached. */
+const UNLIMITED_PART1_WITH_PART3 = 12;
 
 async function loadTopics(exam: ExamCode, part: number) {
   const supabase = await createClient();
@@ -60,7 +63,8 @@ export async function startGeneralTraining(input: {
   const exam = input.exam;
   const option = EXAMS[exam].generalTraining.find((o) => o.id === input.optionId);
   if (!option) return { error: "invalid option" };
-  const count = COUNTS.includes(input.count) ? input.count : EXAMS[exam].defaultQuestionCount;
+  const unlimited = input.count === 0 && option.parts.some((p) => partConfig(exam, p)?.kind === "questions");
+  const count = unlimited ? Infinity : COUNTS.includes(input.count) ? input.count : EXAMS[exam].defaultQuestionCount;
   const recordingType: RecordingType = ["none", "audio", "video"].includes(input.recordingType) ? input.recordingType : "none";
 
   const steps: Step[] = [];
@@ -99,7 +103,8 @@ export async function startGeneralTraining(input: {
       steps.push(...picked);
     } else {
       // Part 1: a few questions from each of several random topics.
-      steps.push(...questionSteps(exam, part, topics, count, 4));
+      const p1Count = unlimited && option.parts.length > 1 ? UNLIMITED_PART1_WITH_PART3 : count;
+      steps.push(...questionSteps(exam, part, topics, p1Count, 4));
     }
   }
 
@@ -123,6 +128,7 @@ export async function startGeneralTraining(input: {
       steps,
       allowReplay: true,
       autoAdvance: false,
+      unlimited,
       recordingType,
     },
   };

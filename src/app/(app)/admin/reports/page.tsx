@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ChevronLeft, ChevronRight, Download } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, FileDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { loadWeeklyReport } from "@/lib/admin/queries";
@@ -157,8 +157,8 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
             {/* Phones: one card per student */}
             <ul className="flex flex-col divide-y divide-border overflow-hidden rounded-card border border-border bg-card md:hidden">
               {report.students.map((s) => (
-                <li key={s.id}>
-                  <Link href={`/admin/students/${s.id}`} className="flex flex-col gap-1 px-4 py-3 hover:bg-muted">
+                <li key={s.id} className="flex items-center">
+                  <Link href={`/admin/students/${s.id}`} className="flex min-w-0 flex-1 flex-col gap-1 px-4 py-3 hover:bg-muted">
                     <span className="flex items-baseline justify-between gap-3">
                       <span className="min-w-0 truncate font-semibold text-primary">{s.name}</span>
                       <span className="shrink-0 text-sm font-semibold tabular-nums">{minutes(s.weekSeconds)}</span>
@@ -168,6 +168,15 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
                       {t("streakValue", { n: s.currentStreak })}
                     </span>
                   </Link>
+                  <a
+                    href={`/progress/report?week=${monday}&user=${s.id}`}
+                    download
+                    aria-label={`${t("pdf")}: ${s.name}`}
+                    title={t("pdf")}
+                    className="mr-2 inline-flex size-11 shrink-0 items-center justify-center rounded-button text-primary hover:bg-muted"
+                  >
+                    <FileDown className="size-5" aria-hidden />
+                  </a>
                 </li>
               ))}
             </ul>
@@ -184,6 +193,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
                     <th scope="col" className="px-4 py-2 text-right font-semibold">{t("mocks")}</th>
                     <th scope="col" className="px-4 py-2 text-right font-semibold">{t("streak")}</th>
                     <th scope="col" className="px-4 py-2 font-semibold">{t("lastActive")}</th>
+                    <th scope="col" className="px-4 py-2 font-semibold"><span className="sr-only">PDF</span></th>
                   </tr>
                 </thead>
                 <tbody className="tabular-nums">
@@ -200,6 +210,18 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
                       <td className="px-4 py-2 text-right">{s.mocksCompleted}</td>
                       <td className="px-4 py-2 text-right">{s.currentStreak}</td>
                       <td className="px-4 py-2">{lastActive(s.lastActive)}</td>
+                      <td className="px-2 py-1 text-right">
+                        <a
+                          href={`/progress/report?week=${monday}&user=${s.id}`}
+                          download
+                          aria-label={`${t("pdf")}: ${s.name}`}
+                          title={t("pdf")}
+                          className="inline-flex min-h-11 items-center gap-1.5 rounded-button px-3 font-semibold text-primary hover:bg-muted"
+                        >
+                          <FileDown className="size-4" aria-hidden />
+                          PDF
+                        </a>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

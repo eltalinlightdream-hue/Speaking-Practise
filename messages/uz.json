@@ -249,7 +249,8 @@
       "empty": "Bu guruhda hali oʻquvchilar yoʻq.",
       "daysValue": "{n}/7",
       "minutesValue": "{m} daq.",
-      "streakValue": "{n} kun"
+      "streakValue": "{n} kun",
+      "pdf": "Haftalik PDF hisobot"
     },
     "students": {
       "title": "Oʻquvchilar",
@@ -371,7 +372,8 @@
       "paused": "Sahifa yopiq paytda toʻxtatildi",
       "leaveWarning": "Mashq hali davom etmoqda. Baribir chiqasizmi?",
       "quit": "Mashqni tugatish",
-      "quitMockConfirm": "Mock testni hozir tugatasizmi? U bajarilgan deb hisoblanmaydi."
+      "quitMockConfirm": "Mock testni hozir tugatasizmi? U bajarilgan deb hisoblanmaydi.",
+      "questionN": "{n}-savol"
     },
     "finish": {
       "title": "Barakalla!",
@@ -406,7 +408,9 @@
       "doneNote": "{name} bajarildi. Keyingi safar boshqa mock test beriladi.",
       "stoppedNote": "Siz oxirigacha yetmasdan toʻxtadingiz, shuning uchun bu mock test bajarilgan hisoblanmaydi. U keyinroq yana chiqishi mumkin.",
       "another": "Keyingi mock test"
-    }
+    },
+    "unlimited": "Cheksiz",
+    "unlimitedHelp": "Savollar tugamaguncha yoki siz “Tugatish”ni bosguningizcha davom etadi."
   },
   "progress": {
     "title": "Mening natijalarim",
@@ -529,5 +533,48 @@
     "errorText": "Sahifani yuklab boʻlmadi. Internet aloqasini tekshirib, qaytadan urinib koʻring.",
     "tryAgain": "Qayta urinish",
     "home": "Bosh sahifaga"
+  },
+  "report": {
+    "brand": "Speaking Easy with Practise",
+    "title": "Haftalik hisobot",
+    "student": "Oʻquvchi",
+    "group": "Guruh",
+    "week": "Hafta",
+    "generated": "Tayyorlangan sana",
+    "totalTime": "Jami mashq",
+    "goalDays": "15+ daqiqali kunlar",
+    "sessions": "Mashgʻulotlar",
+    "mockTests": "Mock testlar",
+    "daily": "Kunma-kun",
+    "day": "Kun",
+    "time": "Vaqt",
+    "sessionsCol": "Mashgʻulot",
+    "goal": "15 daqiqa maqsad",
+    "goalYes": "Bajarildi",
+    "goalNo": "Bajarilmadi",
+    "breakdown": "Nima mashq qilindi",
+    "general": "Umumiy mashq mashgʻulotlari",
+    "mock": "Mock test mashgʻulotlari",
+    "mockCompleted": "Tugatilgan mock testlar",
+    "part": "{n}-qism (mashgʻulotlar)",
+    "partsNone": "Bu hafta mashq qilinmagan",
+    "note": "15 daqiqa yoki undan koʻp mashq qilingan kun hisobga olinadi (Toshkent vaqti). Mashq vaqti — faol mashgʻulot ichidagi vaqt.",
+    "unitH": "soat",
+    "unitMin": "daq"
+  },
+  "footer": {
+    "why": "Speaking Easy oʻquvchilar IELTS va CEFR speakingni har kuni, bepul va oʻz telefonida mashq qilishlari uchun yaratilgan. Gapirish faqat muntazam mashq bilan oʻsadi: kuniga 15 daqiqa ham katta natija beradi.",
+    "started": "Loyiha boshlangan sana: {date}",
+    "engineer": "Muhandis",
+    "contributors": "Hissa qoʻshganlar",
+    "free": "Barcha oʻquvchilar uchun bepul.",
+    "privacy": "Maxfiylik"
+  },
+  "weeklyPdf": {
+    "title": "Haftalik hisobot (PDF)",
+    "lead": "Haftani tanlang va bir sahifalik PDF hisobotni yuklab oling. Uni ustozingizga yuborishingiz mumkin.",
+    "week": "Hafta",
+    "thisWeek": "shu hafta",
+    "download": "PDF yuklab olish"
   }
 }

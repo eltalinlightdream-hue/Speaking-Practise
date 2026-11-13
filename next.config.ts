@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
     // Admin JSON imports can be larger than the 1 MB default.
     serverActions: { bodySizeLimit: "6mb" },
   },
+  // The weekly PDF report reads the Inter font files from disk.
+  outputFileTracingIncludes: {
+    "/progress/report": ["./src/assets/fonts/**/*"],
+  },
   turbopack: {
     rules: {
       "*.css": {

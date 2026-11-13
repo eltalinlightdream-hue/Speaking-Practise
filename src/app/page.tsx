@@ -5,6 +5,7 @@ import { Check, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
+import { SiteFooter } from "@/components/site-footer";
 import { getCurrentProfile } from "@/lib/auth";
 
 export default async function LandingPage() {
@@ -61,11 +62,7 @@ export default async function LandingPage() {
         </div>
       </main>
 
-      <footer className="mx-auto w-full max-w-5xl px-4 py-6 text-sm text-muted-foreground sm:px-6">
-        <Link href="/privacy" className="underline underline-offset-4 hover:no-underline">
-          {t("privacy")}
-        </Link>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { ChevronLeft } from "lucide-react";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
+import { SiteFooter } from "@/components/site-footer";
 
 type Section = { title: string; items: string[] };
 
@@ -20,7 +21,8 @@ export default async function PrivacyPage() {
   const contact = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim();
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-6 sm:px-6">
+    <div className="flex min-h-dvh flex-col">
+    <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-6 sm:px-6">
       <header className="flex items-center justify-between gap-3">
         <Link href="/" aria-label="Speaking Easy" className="text-primary">
           <Logo />
@@ -60,6 +62,8 @@ export default async function PrivacyPage() {
           {t("back")}
         </Link>
       </main>
+    </div>
+      <SiteFooter className="mt-12" />
     </div>
   );
 }

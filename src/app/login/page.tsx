@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
+import { SiteFooter } from "@/components/site-footer";
 import { GoogleButton } from "./google-button";
 import { TelegramButton } from "./telegram-button";
 
@@ -48,6 +49,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
           </CardContent>
         </Card>
       </main>
+      <SiteFooter className="mt-12" />
     </div>
   );
 }
