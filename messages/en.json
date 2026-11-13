@@ -1,0 +1,305 @@
+{
+  "app": {
+    "name": "Speaking Easy with Practise",
+    "shortName": "Speaking Easy",
+    "tagline": "Daily IELTS and CEFR speaking practice"
+  },
+  "common": {
+    "language": "Language",
+    "signOut": "Log out",
+    "save": "Save",
+    "saving": "Saving…",
+    "back": "Back",
+    "comingSoon": "Coming soon",
+    "comingSoonText": "This part is being built and will appear here soon."
+  },
+  "landing": {
+    "title": "Practise speaking every day",
+    "lead": "Questions are read aloud, you answer by voice, and your recordings stay on your own device. Build a daily streak with 15 minutes of practice.",
+    "start": "Start practising",
+    "point1": "IELTS and CEFR speaking",
+    "point2": "Real exam-style mock tests",
+    "point3": "Free for all students",
+    "privacy": "Privacy"
+  },
+  "login": {
+    "title": "Sign in",
+    "lead": "Use your Google account to continue.",
+    "google": "Continue with Google",
+    "telegram": "Telegram sign-in is coming soon.",
+    "error": "Sign-in did not work. Please try again."
+  },
+  "onboarding": {
+    "title": "Welcome!",
+    "lead": "Tell us who you are so your teacher can see your progress.",
+    "fullName": "Full name",
+    "fullNamePlaceholder": "e.g. Aziza Karimova",
+    "group": "Lesson group",
+    "groupPlaceholder": "Choose your group",
+    "submit": "Continue",
+    "errorName": "Please enter your full name (at least 2 letters).",
+    "errorGroup": "Please choose your lesson group.",
+    "errorSave": "Could not save. Please try again."
+  },
+  "nav": {
+    "home": "Home",
+    "progress": "Progress",
+    "recordings": "Recordings",
+    "settings": "Settings",
+    "admin": "Admin",
+    "owner": "Owner"
+  },
+  "home": {
+    "greeting": "Hello, {name}",
+    "today": "{minutes} / 15 min today",
+    "chooseExam": "Choose an exam",
+    "ielts": "IELTS",
+    "ieltsText": "Parts 1, 2 and 3",
+    "cefr": "CEFR",
+    "cefrText": "Multilevel speaking",
+    "generalTraining": "General Training",
+    "mockTest": "Mock Test"
+  },
+  "settings": {
+    "title": "Settings",
+    "languageHelp": "Choose the language of the website."
+  },
+  "admin": {
+    "title": "Admin",
+    "lead": "Manage questions, topics and mock tests.",
+    "nav": {
+      "overview": "Overview",
+      "content": "Topics",
+      "add": "Add questions",
+      "mockSets": "Mock sets",
+      "importExport": "Import / export"
+    },
+    "stats": {
+      "topics": "Topics",
+      "questions": "Questions",
+      "mockSets": "Mock sets",
+      "activeOf": "{active} active of {total}",
+      "part": "Part {part}"
+    },
+    "comingNext": "Students list and weekly reports come in Step 5.",
+    "content": {
+      "title": "Topics and questions",
+      "exam": "Exam",
+      "part": "Part",
+      "allParts": "All parts",
+      "search": "Search topics",
+      "showDisabled": "Show disabled",
+      "filter": "Filter",
+      "newTopic": "New topic",
+      "questionsCount": "{count, plural, one {# question} other {# questions}}",
+      "cueCard": "Cue card",
+      "linkedTo": "Linked to: {title}",
+      "notLinked": "Not linked to a cue card",
+      "placeholder": "Placeholder",
+      "empty": "No topics found."
+    },
+    "topic": {
+      "newTitle": "New topic",
+      "title": "Title",
+      "active": "Active (students can see it)",
+      "core": "Core topic",
+      "bullets": "Bullet points (one per line)",
+      "explain": "“and explain…” line",
+      "related": "Linked cue card (Part 2)",
+      "none": "None",
+      "save": "Save",
+      "create": "Create topic",
+      "saved": "Saved.",
+      "disabled": "Disabled",
+      "disable": "Disable",
+      "restore": "Restore",
+      "back": "All topics",
+      "usedInMocks": "{count, plural, =0 {Not used in any mock set} one {Used in # mock set} other {Used in # mock sets}}",
+      "questions": "Questions",
+      "noQuestions": "No questions yet.",
+      "details": "Topic details",
+      "cuePreview": "Cue card preview",
+      "youShouldSay": "You should say:"
+    },
+    "question": {
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "save": "Save",
+      "preview": "Preview voice",
+      "stop": "Stop",
+      "uploadAudio": "Upload audio",
+      "removeAudio": "Remove audio",
+      "hasAudio": "Audio file",
+      "uploading": "Uploading…",
+      "disabled": "Disabled",
+      "noSpeech": "This browser cannot read text aloud."
+    },
+    "add": {
+      "title": "Add questions",
+      "lead": "Choose a topic, then add one question or paste many (one per line).",
+      "chooseTopic": "Topic",
+      "pickTopic": "Choose a topic",
+      "open": "Open",
+      "single": "One question",
+      "singlePlaceholder": "Type the question…",
+      "addOne": "Add question",
+      "bulk": "Paste many",
+      "bulkPlaceholder": "One question per line",
+      "check": "Check list",
+      "previewTitle": "Preview ({count})",
+      "inTopic": "Already in this topic",
+      "similar": "Similar to “{text}” ({where})",
+      "repeated": "Repeated in your list",
+      "new": "New",
+      "saveN": "{count, plural, one {Save # question} other {Save # questions}}",
+      "skipNote": "Questions already in this topic are skipped. Similar ones are only a warning.",
+      "added": "{count, plural, =0 {Nothing new was added.} one {# question added.} other {# questions added.}}",
+      "notCueCard": "Part 2 cue cards have bullet points instead of questions. Edit them on the topic page."
+    },
+    "mocks": {
+      "title": "Mock sets",
+      "newSet": "New mock set",
+      "name": "Name",
+      "active": "Active (students can get it)",
+      "order": "Order",
+      "topicsInSet": "Topics in this set",
+      "addTopic": "Add",
+      "chooseTopic": "Choose a topic",
+      "remove": "Remove",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "empty": "No mock sets yet.",
+      "missingPart": "Missing Part {part}",
+      "save": "Save",
+      "create": "Create mock set",
+      "back": "All mock sets",
+      "disabled": "Disabled",
+      "edit": "Edit"
+    },
+    "io": {
+      "title": "Import and export",
+      "exportTitle": "Export",
+      "exportLead": "Download all topics, questions and mock sets as one JSON file. Keep it somewhere safe as a backup.",
+      "download": "Download JSON",
+      "importTitle": "Import",
+      "importLead": "Use a file in the same format. Nothing is deleted: new items are added and existing ones are updated.",
+      "chooseFile": "Choose a JSON file",
+      "orPaste": "…or paste JSON here",
+      "preview": "Preview import",
+      "confirm": "Import now",
+      "previewNote": "This is a preview. Nothing has been saved yet.",
+      "done": "Import finished.",
+      "topicsCreated": "New topics",
+      "topicsUpdated": "Updated topics",
+      "questionsCreated": "New questions",
+      "questionsUpdated": "Updated questions",
+      "mocksCreated": "New mock sets",
+      "mocksUpdated": "Updated mock sets",
+      "problems": "Problems",
+      "invalidJson": "This is not valid JSON.",
+      "wrongFormat": "This file is not in the speaking-easy-content/v2 format."
+    },
+    "errors": {
+      "generic": "Something went wrong: {message}",
+      "duplicateTitle": "A topic with this title already exists in this part.",
+      "required": "Please fill in the title."
+    }
+  },
+  "owner": {
+    "title": "Owner",
+    "lead": "Give or remove the admin role here."
+  },
+  "roles": {
+    "student": "Student",
+    "admin": "Admin",
+    "owner": "Owner"
+  },
+  "exams": {
+    "ielts": "IELTS",
+    "cefr": "CEFR"
+  },
+  "practice": {
+    "back": "Back",
+    "generalTitle": "{exam} General Training",
+    "mockTitle": "{exam} Mock Test",
+    "mockSoon": "Mock tests arrive in the next update. Try General Training for now.",
+    "chooseParts": "What do you want to practise?",
+    "options": {
+      "p1": "Part 1 only",
+      "p2": "Part 2 only",
+      "p3": "Part 3 only",
+      "p1p3": "Part 1 + Part 3"
+    },
+    "optionHelp": {
+      "p1": "Short questions about you and familiar topics",
+      "p2": "One cue card: 1 minute to prepare, up to 2 minutes to speak",
+      "p3": "Discussion questions on one topic",
+      "p1p3": "Part 1 first, then Part 3, like the real exam"
+    },
+    "howMany": "Questions per part",
+    "next": "Next",
+    "recordingTitle": "Recording",
+    "recordingLead": "Recordings stay only on this device. They are never uploaded.",
+    "recording": {
+      "none": "No recording",
+      "audio": "Audio",
+      "video": "Video + audio"
+    },
+    "recordingHelp": {
+      "none": "Just practise",
+      "audio": "Record your voice",
+      "video": "Record yourself with the camera"
+    },
+    "check": {
+      "title": "Microphone check",
+      "titleVideo": "Camera and microphone check",
+      "button": "Check microphone",
+      "buttonVideo": "Check camera and microphone",
+      "speak": "Say something. The bar should move.",
+      "ok": "Working",
+      "denied": "Permission was denied. Allow the microphone (and camera) for this site in your browser settings, then try again.",
+      "notFound": "No microphone or camera was found on this device.",
+      "unsupported": "This browser cannot record. Try the latest Chrome or Safari, or choose “No recording”.",
+      "error": "Could not start the microphone: {message}",
+      "level": "Microphone level"
+    },
+    "start": "Start practice",
+    "starting": "Starting…",
+    "empty": "There are no questions for this choice yet.",
+    "safariNote": "On iPhone, keep the screen on and stay on this page while you practise.",
+    "voiceNote": "Questions are read by your device's voice. Turn the sound on.",
+    "session": {
+      "question": "Question {n} of {total}",
+      "part": "Part {part}",
+      "listening": "Listen…",
+      "answer": "Answer now",
+      "timeUp": "Time is up",
+      "replay": "Replay question",
+      "nextQuestion": "Next question",
+      "finish": "Finish",
+      "recording": "Recording",
+      "prepare": "Prepare",
+      "speak": "Speak",
+      "prepHelp": "You have 1 minute to think. You can make notes.",
+      "notes": "Your notes (not saved)",
+      "startSpeaking": "Start speaking now",
+      "youShouldSay": "You should say:",
+      "paused": "Paused while the page is hidden",
+      "leaveWarning": "Your session is still running. Leave anyway?",
+      "quit": "End session"
+    },
+    "finish": {
+      "title": "Well done!",
+      "time": "Practice time",
+      "minutes": "{m} min {s} s",
+      "saved": "Your practice time is saved.",
+      "notSaved": "Could not save your practice time. Check your internet connection.",
+      "download": "Download recording",
+      "deviceOnly": "This recording is only on this device. Download it if you want to keep it. Old recordings are deleted automatically when there are more than 10.",
+      "noRecording": "No recording this time.",
+      "again": "Practise again",
+      "home": "Home",
+      "recordingFailed": "The recording could not be saved on this device."
+    }
+  }
+}
