@@ -91,6 +91,16 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   phone locks or the tab closes; "completed" (for mock rotation) only when the session finishes.
 - A day counts at 900 seconds (15 minutes) total, Asia/Tashkent time, every day of the week. A missed day resets the streak.
 
+## Practice engine (Step 3)
+
+- Plan builder: `src/app/(app)/practice/actions.ts` (Part 1: a few questions from several random topics;
+  Part 2: one random cue card; Part 3: one discussion topic, linked to the cue card when there is one).
+- `src/components/practice/session-runner.tsx` takes a `SessionPlan` (`src/lib/practice/types.ts`):
+  `allowReplay` and `autoAdvance` switch between General Training and Mock behaviour.
+- Active time counts only while the page is visible. Progress is POSTed to `/api/practice/progress`.
+- `day_tashkent` = Tashkent day the session started (a session crossing midnight counts for its start day).
+- iPhone: `unlockSpeech()` runs inside the Start tap; recorder falls back to MP4.
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).
@@ -102,6 +112,9 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
 - [x] Step 2: topics/questions/mock sets tables + RLS, `question-audio` storage bucket, content loaded
   (34 IELTS mocks, 29 Part 1 topics, 34 cue cards, 40 Part 3 topics, CEFR placeholders), admin pages
   (overview, topics, add questions with voice preview + duplicate check, mock set editor, JSON import/export).
-- [ ] Step 3: practice engine and General Training.
+- [x] Step 3: `practice_sessions` (written only through `start_practice_session` / `practice_session_progress`,
+  time capped at real elapsed time, max 3 h), General Training (`/practice/[exam]/general`), reusable
+  `SessionRunner` (speech, timers, replay, cue card prep, recording, 30 s progress saves + beacon on close),
+  device check, recordings in IndexedDB (latest 10 / 300 MB), finish screen with download, real minutes on home.
 - [ ] Step 4: mock tests, streak, my recordings, settings.
 - [ ] Step 5: admin analytics, privacy, Telegram login, polish, Vercel launch.

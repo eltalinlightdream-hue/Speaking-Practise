@@ -217,5 +217,89 @@
   "exams": {
     "ielts": "IELTS",
     "cefr": "CEFR"
+  },
+  "practice": {
+    "back": "Orqaga",
+    "generalTitle": "{exam} umumiy mashq",
+    "mockTitle": "{exam} mock test",
+    "mockSoon": "Mock testlar keyingi yangilanishda qoʻshiladi. Hozircha umumiy mashqni sinab koʻring.",
+    "chooseParts": "Nimani mashq qilmoqchisiz?",
+    "options": {
+      "p1": "Faqat 1-qism",
+      "p2": "Faqat 2-qism",
+      "p3": "Faqat 3-qism",
+      "p1p3": "1-qism + 3-qism"
+    },
+    "optionHelp": {
+      "p1": "Oʻzingiz va tanish mavzular haqida qisqa savollar",
+      "p2": "Bitta cue card: 1 daqiqa tayyorlanish, 2 daqiqagacha gapirish",
+      "p3": "Bitta mavzu boʻyicha muhokama savollari",
+      "p1p3": "Avval 1-qism, keyin 3-qism, haqiqiy imtihondagidek"
+    },
+    "howMany": "Har bir qismda savollar soni",
+    "next": "Keyingisi",
+    "recordingTitle": "Yozib olish",
+    "recordingLead": "Yozuvlar faqat shu qurilmada qoladi. Ular hech qachon yuklanmaydi.",
+    "recording": {
+      "none": "Yozmaslik",
+      "audio": "Audio",
+      "video": "Video + audio"
+    },
+    "recordingHelp": {
+      "none": "Shunchaki mashq qilish",
+      "audio": "Ovozingizni yozib olish",
+      "video": "Oʻzingizni kamera bilan yozib olish"
+    },
+    "check": {
+      "title": "Mikrofonni tekshirish",
+      "titleVideo": "Kamera va mikrofonni tekshirish",
+      "button": "Mikrofonni tekshirish",
+      "buttonVideo": "Kamera va mikrofonni tekshirish",
+      "speak": "Biror narsa deng. Chiziq harakatlanishi kerak.",
+      "ok": "Ishlayapti",
+      "denied": "Ruxsat berilmadi. Brauzer sozlamalarida bu sayt uchun mikrofon (va kamera)ga ruxsat bering, soʻng qayta urinib koʻring.",
+      "notFound": "Bu qurilmada mikrofon yoki kamera topilmadi.",
+      "unsupported": "Bu brauzer yozib ololmaydi. Chrome yoki Safarining soʻnggi versiyasini sinab koʻring yoki “Yozmaslik”ni tanlang.",
+      "error": "Mikrofonni ishga tushirib boʻlmadi: {message}",
+      "level": "Mikrofon darajasi"
+    },
+    "start": "Mashqni boshlash",
+    "starting": "Boshlanmoqda…",
+    "empty": "Bu tanlov uchun hali savollar yoʻq.",
+    "safariNote": "iPhoneʼda mashq paytida ekranni yoqiq tuting va shu sahifada qoling.",
+    "voiceNote": "Savollarni qurilmangiz ovozi oʻqiydi. Ovozni yoqing.",
+    "session": {
+      "question": "{total} tadan {n}-savol",
+      "part": "{part}-qism",
+      "listening": "Tinglang…",
+      "answer": "Endi javob bering",
+      "timeUp": "Vaqt tugadi",
+      "replay": "Savolni qayta eshitish",
+      "nextQuestion": "Keyingi savol",
+      "finish": "Tugatish",
+      "recording": "Yozilmoqda",
+      "prepare": "Tayyorlaning",
+      "speak": "Gapiring",
+      "prepHelp": "Oʻylash uchun 1 daqiqangiz bor. Qayd qilib olishingiz mumkin.",
+      "notes": "Qaydlaringiz (saqlanmaydi)",
+      "startSpeaking": "Hozir gapirishni boshlash",
+      "youShouldSay": "You should say:",
+      "paused": "Sahifa yopiq paytda toʻxtatildi",
+      "leaveWarning": "Mashq hali davom etmoqda. Baribir chiqasizmi?",
+      "quit": "Mashqni tugatish"
+    },
+    "finish": {
+      "title": "Barakalla!",
+      "time": "Mashq vaqti",
+      "minutes": "{m} daqiqa {s} soniya",
+      "saved": "Mashq vaqtingiz saqlandi.",
+      "notSaved": "Mashq vaqtini saqlab boʻlmadi. Internet aloqasini tekshiring.",
+      "download": "Yozuvni yuklab olish",
+      "deviceOnly": "Bu yozuv faqat shu qurilmada. Saqlab qolmoqchi boʻlsangiz, yuklab oling. 10 tadan koʻp boʻlsa, eski yozuvlar avtomatik oʻchiriladi.",
+      "noRecording": "Bu safar yozib olinmadi.",
+      "again": "Yana mashq qilish",
+      "home": "Bosh sahifa",
+      "recordingFailed": "Yozuvni bu qurilmada saqlab boʻlmadi."
+    }
   }
 }

@@ -35,10 +35,34 @@ export function speak(text: string, opts: { rate?: number } = {}): Promise<void>
     u.lang = cachedVoice?.lang ?? "en-GB";
     if (cachedVoice) u.voice = cachedVoice;
     u.rate = opts.rate ?? 0.95;
-    u.onend = () => resolve();
-    u.onerror = () => resolve();
+    // Some phones never fire "end"; never wait longer than the text could take.
+    let finished = false;
+    const done = () => {
+      if (finished) return;
+      finished = true;
+      window.clearTimeout(timer);
+      resolve();
+    };
+    const timer = window.setTimeout(done, Math.max(4000, text.length * 110));
+    u.onend = done;
+    u.onerror = done;
     synth.speak(u);
   });
+}
+
+/**
+ * iPhone/Safari only allows speech that starts from a tap. Call this inside the
+ * tap handler (before any await) so later questions can be read aloud.
+ */
+export function unlockSpeech() {
+  if (!speechSupported()) return;
+  try {
+    const u = new SpeechSynthesisUtterance(" ");
+    u.volume = 0;
+    window.speechSynthesis.speak(u);
+  } catch {
+    /* ignore */
+  }
 }
 
 export function stopSpeaking() {

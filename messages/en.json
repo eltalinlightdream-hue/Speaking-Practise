@@ -217,5 +217,89 @@
   "exams": {
     "ielts": "IELTS",
     "cefr": "CEFR"
+  },
+  "practice": {
+    "back": "Back",
+    "generalTitle": "{exam} General Training",
+    "mockTitle": "{exam} Mock Test",
+    "mockSoon": "Mock tests arrive in the next update. Try General Training for now.",
+    "chooseParts": "What do you want to practise?",
+    "options": {
+      "p1": "Part 1 only",
+      "p2": "Part 2 only",
+      "p3": "Part 3 only",
+      "p1p3": "Part 1 + Part 3"
+    },
+    "optionHelp": {
+      "p1": "Short questions about you and familiar topics",
+      "p2": "One cue card: 1 minute to prepare, up to 2 minutes to speak",
+      "p3": "Discussion questions on one topic",
+      "p1p3": "Part 1 first, then Part 3, like the real exam"
+    },
+    "howMany": "Questions per part",
+    "next": "Next",
+    "recordingTitle": "Recording",
+    "recordingLead": "Recordings stay only on this device. They are never uploaded.",
+    "recording": {
+      "none": "No recording",
+      "audio": "Audio",
+      "video": "Video + audio"
+    },
+    "recordingHelp": {
+      "none": "Just practise",
+      "audio": "Record your voice",
+      "video": "Record yourself with the camera"
+    },
+    "check": {
+      "title": "Microphone check",
+      "titleVideo": "Camera and microphone check",
+      "button": "Check microphone",
+      "buttonVideo": "Check camera and microphone",
+      "speak": "Say something. The bar should move.",
+      "ok": "Working",
+      "denied": "Permission was denied. Allow the microphone (and camera) for this site in your browser settings, then try again.",
+      "notFound": "No microphone or camera was found on this device.",
+      "unsupported": "This browser cannot record. Try the latest Chrome or Safari, or choose “No recording”.",
+      "error": "Could not start the microphone: {message}",
+      "level": "Microphone level"
+    },
+    "start": "Start practice",
+    "starting": "Starting…",
+    "empty": "There are no questions for this choice yet.",
+    "safariNote": "On iPhone, keep the screen on and stay on this page while you practise.",
+    "voiceNote": "Questions are read by your device's voice. Turn the sound on.",
+    "session": {
+      "question": "Question {n} of {total}",
+      "part": "Part {part}",
+      "listening": "Listen…",
+      "answer": "Answer now",
+      "timeUp": "Time is up",
+      "replay": "Replay question",
+      "nextQuestion": "Next question",
+      "finish": "Finish",
+      "recording": "Recording",
+      "prepare": "Prepare",
+      "speak": "Speak",
+      "prepHelp": "You have 1 minute to think. You can make notes.",
+      "notes": "Your notes (not saved)",
+      "startSpeaking": "Start speaking now",
+      "youShouldSay": "You should say:",
+      "paused": "Paused while the page is hidden",
+      "leaveWarning": "Your session is still running. Leave anyway?",
+      "quit": "End session"
+    },
+    "finish": {
+      "title": "Well done!",
+      "time": "Practice time",
+      "minutes": "{m} min {s} s",
+      "saved": "Your practice time is saved.",
+      "notSaved": "Could not save your practice time. Check your internet connection.",
+      "download": "Download recording",
+      "deviceOnly": "This recording is only on this device. Download it if you want to keep it. Old recordings are deleted automatically when there are more than 10.",
+      "noRecording": "No recording this time.",
+      "again": "Practise again",
+      "home": "Home",
+      "recordingFailed": "The recording could not be saved on this device."
+    }
   }
 }
