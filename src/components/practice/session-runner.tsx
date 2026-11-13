@@ -12,6 +12,8 @@ import { SessionRecorder } from "@/lib/practice/recorder";
 import type { SessionPlan, Step } from "@/lib/practice/types";
 
 export type SessionOutcome = {
+  /** True only when the student reached the end (not "End session" halfway). */
+  completed: boolean;
   activeSeconds: number;
   savedSeconds: number | null;
   recording: Blob | null;
@@ -27,8 +29,8 @@ function phaseLimit(p: Phase, s: Step) {
   return s.kind === "question" ? (p === "answering" ? s.seconds : 0) : p === "prep" ? s.prepSeconds : p === "speak" ? s.speakSeconds : 0;
 }
 
-function sendProgress(sessionId: string, seconds: number, finished: boolean, beacon = false) {
-  const body = JSON.stringify({ sessionId, seconds, finished });
+function sendProgress(sessionId: string, seconds: number, finished: boolean, beacon = false, completed = false) {
+  const body = JSON.stringify({ sessionId, seconds, finished, completed });
   if (beacon && typeof navigator.sendBeacon === "function") {
     navigator.sendBeacon("/api/practice/progress", new Blob([body], { type: "text/plain" }));
     return Promise.resolve(null);
@@ -179,7 +181,8 @@ export function SessionRunner({
     };
   }, [plan.sessionId]);
 
-  const finish = useCallback(async () => {
+  /** completed = the student went through every step (a mock only counts then). */
+  const finish = useCallback(async (completed: boolean) => {
     if (done.current) return;
     done.current = true;
     setFinishing(true);
@@ -187,15 +190,15 @@ export function SessionRunner({
     token.current++;
     const activeSeconds = Math.floor(activeMs.current / 1000);
     const [savedSeconds, blob] = await Promise.all([
-      sendProgress(plan.sessionId, activeSeconds, true),
+      sendProgress(plan.sessionId, activeSeconds, true, false, completed),
       recorder.current ? recorder.current.stop() : Promise.resolve(null),
     ]);
-    onFinished({ activeSeconds, savedSeconds, recording: blob, mimeType: recorder.current?.mimeType || blob?.type || "" });
+    onFinished({ completed, activeSeconds, savedSeconds, recording: blob, mimeType: recorder.current?.mimeType || blob?.type || "" });
   }, [plan.sessionId, onFinished]);
 
   const next = useCallback(() => {
     if (isLast) {
-      void finish();
+      void finish(true);
       return;
     }
     const i = index + 1;
@@ -232,7 +235,12 @@ export function SessionRunner({
               {t("recording")}
             </span>
           )}
-          <Button type="button" variant="ghost" size="icon" onClick={() => void finish()} disabled={finishing} aria-label={t("quit")} title={t("quit")}>
+          <Button type="button" variant="ghost" size="icon" onClick={() => {
+              // A mock left halfway does not count, so make sure it was not a stray tap.
+              if (plan.mode === "mock" && !window.confirm(t("quitMockConfirm"))) return;
+              void finish(false);
+            }}
+            disabled={finishing} aria-label={t("quit")} title={t("quit")}>
             <X aria-hidden />
           </Button>
         </div>

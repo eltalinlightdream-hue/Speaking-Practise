@@ -4,6 +4,7 @@ import { requireProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { EXAMS, isExamCode, partConfig, type ExamCode } from "@/config/exams";
 import { pickAcrossTopics, shuffle } from "@/lib/practice/random";
+import { allowedMock, buildMockSteps } from "@/lib/practice/mock";
 import type { RecordingType, SessionPlan, Step } from "@/lib/practice/types";
 
 type TopicWithQuestions = {
@@ -42,7 +43,7 @@ function questionSteps(exam: ExamCode, part: number, topics: TopicWithQuestions[
   ).map(({ topic, item }) => ({ kind: "question", part, topic, text: item.text, audioUrl: item.audio_url, seconds }));
 }
 
-export type StartResult = { plan?: SessionPlan; error?: "empty" | string };
+export type StartResult = { plan?: SessionPlan; error?: "empty" | "taken" | string };
 
 /**
  * Build a General Training session and start the timer in the database.
@@ -122,6 +123,49 @@ export async function startGeneralTraining(input: {
       steps,
       allowReplay: true,
       autoAdvance: false,
+      recordingType,
+    },
+  };
+}
+
+/**
+ * Start the mock test the page showed. The set runs exactly as it is:
+ * Part 1 topic, Part 2 cue card, Part 3 topic. No replay; questions move on
+ * by themselves when the time is up.
+ */
+export async function startMockTest(input: { exam: string; mockSetId: string; recordingType: RecordingType }): Promise<StartResult> {
+  const profile = await requireProfile();
+  if (!isExamCode(input.exam)) return { error: "invalid exam" };
+  const exam = input.exam;
+  const recordingType: RecordingType = ["none", "audio", "video"].includes(input.recordingType) ? input.recordingType : "none";
+
+  // Finished on another device meanwhile, or not allowed yet: ask for a reload.
+  const next = await allowedMock(profile.id, exam, input.mockSetId);
+  if (!next) return { error: "taken" };
+
+  const { steps, missingParts } = await buildMockSteps(exam, next.set.id);
+  if (steps.length === 0 || missingParts.length > 0) return { error: "empty" };
+
+  const supabase = await createClient();
+  const parts = [...new Set(steps.map((s) => s.part))];
+  const { data: sessionId, error } = await supabase.rpc("start_practice_session", {
+    p_mode: "mock",
+    p_exam: exam,
+    p_parts: parts,
+    p_recording_type: recordingType,
+    p_mock_set_id: next.set.id,
+  });
+  if (error || !sessionId) return { error: error?.message ?? "could not start" };
+
+  return {
+    plan: {
+      sessionId: sessionId as string,
+      exam,
+      mode: "mock",
+      label: next.set.name,
+      steps,
+      allowReplay: false,
+      autoAdvance: true,
       recordingType,
     },
   };

@@ -58,11 +58,26 @@
     "cefr": "CEFR",
     "cefrText": "Multilevel speaking",
     "generalTraining": "Umumiy mashq",
-    "mockTest": "Mock test"
+    "mockTest": "Mock test",
+    "streak": "{count, plural, =0 {Hali seriya yoʻq} other {# kunlik seriya}}",
+    "seeProgress": "Mening natijalarim"
   },
   "settings": {
     "title": "Sozlamalar",
-    "languageHelp": "Sayt tilini tanlang."
+    "languageHelp": "Sayt tilini tanlang.",
+    "profileTitle": "Maʼlumotlaringiz",
+    "profileSaved": "Saqlandi.",
+    "accountTitle": "Hisob",
+    "deleteTitle": "Hisobni oʻchirish",
+    "deleteLead": "Bu hisobingiz, seriyangiz va mashqlar tarixini butunlay oʻchiradi. Shu qurilmadagi yozuvlar joyida qoladi.",
+    "deleteButton": "Hisobimni oʻchirish",
+    "deleteConfirmTitle": "Ishonchingiz komilmi?",
+    "deleteConfirmText": "Hisobingiz, seriyangiz va mashqlar tarixi oʻchiriladi. Buni qaytarib boʻlmaydi.",
+    "deleteConfirmCheck": "Buni qaytarib boʻlmasligini tushunaman",
+    "deleteConfirmButton": "Ha, hisobimni oʻchirish",
+    "deleteCancel": "Bekor qilish",
+    "deleteError": "Hisobni oʻchirib boʻlmadi. Iltimos, qaytadan urinib koʻring.",
+    "ownerNote": "Egasining hisobini ilovadan oʻchirib boʻlmaydi."
   },
   "admin": {
     "title": "Admin",
@@ -222,7 +237,6 @@
     "back": "Orqaga",
     "generalTitle": "{exam} umumiy mashq",
     "mockTitle": "{exam} mock test",
-    "mockSoon": "Mock testlar keyingi yangilanishda qoʻshiladi. Hozircha umumiy mashqni sinab koʻring.",
     "chooseParts": "Nimani mashq qilmoqchisiz?",
     "options": {
       "p1": "Faqat 1-qism",
@@ -286,7 +300,8 @@
       "youShouldSay": "You should say:",
       "paused": "Sahifa yopiq paytda toʻxtatildi",
       "leaveWarning": "Mashq hali davom etmoqda. Baribir chiqasizmi?",
-      "quit": "Mashqni tugatish"
+      "quit": "Mashqni tugatish",
+      "quitMockConfirm": "Mock testni hozir tugatasizmi? U bajarilgan deb hisoblanmaydi."
     },
     "finish": {
       "title": "Barakalla!",
@@ -299,7 +314,68 @@
       "noRecording": "Bu safar yozib olinmadi.",
       "again": "Yana mashq qilish",
       "home": "Bosh sahifa",
-      "recordingFailed": "Yozuvni bu qurilmada saqlab boʻlmadi."
+      "recordingFailed": "Yozuvni bu qurilmada saqlab boʻlmadi.",
+      "stoppedTitle": "Mashq toʻxtatildi"
+    },
+    "modes": {
+      "general": "Umumiy mashq",
+      "mock": "Mock test"
+    },
+    "mock": {
+      "none": "Bu imtihon uchun hali mock testlar yoʻq. Ular tez orada qoʻshiladi.",
+      "tryGeneral": "Umumiy mashqni sinab koʻring",
+      "number": "{total} tadan {n}-mock",
+      "round": "{n}-aylanma",
+      "p1": "Oʻzingiz haqingizda savollar, har biriga taxminan {s} soniya",
+      "p2": "Cue card: {prep} daqiqa tayyorlanish, {speak} daqiqagacha gapirish",
+      "p3": "Muhokama savollari, har biriga taxminan {s} soniya",
+      "rules": "Haqiqiy imtihondagidek: vaqt tugashi bilan savollar oʻzi almashadi va ularni qayta eshitib boʻlmaydi. Mock test uchala qismni oxirigacha tugatgandagina bajarilgan hisoblanadi.",
+      "start": "Mock testni boshlash",
+      "taken": "Bu mock test allaqachon bajarilgan. Keyingisi yuklandi.",
+      "broken": "Bu mock test hali tayyor emas. Iltimos, oʻqituvchingizga xabar bering.",
+      "doneNote": "{name} bajarildi. Keyingi safar boshqa mock test beriladi.",
+      "stoppedNote": "Siz oxirigacha yetmasdan toʻxtadingiz, shuning uchun bu mock test bajarilgan hisoblanmaydi. U keyinroq yana chiqishi mumkin.",
+      "another": "Keyingi mock test"
     }
+  },
+  "progress": {
+    "title": "Mening natijalarim",
+    "currentStreak": "Joriy seriya",
+    "longestStreak": "Eng uzun seriya",
+    "days": "{count} kun",
+    "today": "Bugun",
+    "todayMinutes": "{minutes} / 15 daqiqa",
+    "goalDone": "Bugungi kun seriyaga qoʻshildi.",
+    "goalLeft": "Bugun hisoblanishi uchun yana {minutes} daqiqa.",
+    "rule": "Jami 15 daqiqa mashq qilingan kun hisoblanadi (Toshkent vaqti bilan). Bir kun oʻtkazib yuborilsa, seriya 0 dan boshlanadi.",
+    "calendar": "Mashq kunlari",
+    "prevMonth": "Oldingi oy",
+    "nextMonth": "Keyingi oy",
+    "legendCounted": "15 daqiqa va undan koʻp",
+    "legendSome": "Biroz mashq",
+    "legendToday": "Bugun",
+    "dayCounted": "{date}: {minutes} daqiqa, hisoblandi",
+    "daySome": "{date}: {minutes} daqiqa, hisoblanmadi",
+    "dayNone": "{date}: mashq yoʻq",
+    "sessions": "Oʻtgan mashqlar",
+    "noSessions": "Hali mashqlar yoʻq. Umumiy mashq yoki mock testdan boshlang.",
+    "start": "Mashqni boshlash",
+    "notFinished": "Tugatilmagan",
+    "completed": "Bajarildi",
+    "lastN": "Oxirgi {count} ta mashqingiz",
+    "minutesShort": "{m, plural, =0 {<1 daq.} other {# daq.}}"
+  },
+  "recordings": {
+    "title": "Mening yozuvlarim",
+    "warning": "Yozuvlar faqat shu qurilmada, shu brauzerda saqlanadi. Ular hech qachon yuklanmaydi. Saqlab qolmoqchi boʻlganlaringizni yuklab oling: brauzer tozalansa yoki telefon almashtirilsa, ular yoʻqoladi. Faqat eng yangi 10 tasi saqlanadi.",
+    "loading": "Yozuvlar yuklanmoqda…",
+    "empty": "Bu qurilmada hali yozuvlar yoʻq.",
+    "emptyHelp": "Oʻzingizni yozib olish uchun mashqdan oldin Audio yoki Videoni tanlang.",
+    "unavailable": "Bu brauzer yozuvlarni saqlay olmaydi. Chrome yoki Safarining soʻnggi versiyasini sinab koʻring.",
+    "usage": "{max} tadan {count} ta yozuv · {size}",
+    "download": "Yuklab olish",
+    "delete": "Oʻchirish",
+    "deleteConfirm": "Bu yozuv oʻchirilsinmi? Buni qaytarib boʻlmaydi.",
+    "length": "{m} daqiqa {s} soniya"
   }
 }
