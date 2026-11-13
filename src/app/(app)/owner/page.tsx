@@ -52,7 +52,12 @@ export default async function OwnerPage() {
                       {tRoles(p.role)} · {p.email}
                     </span>
                   </div>
-                  {p.role === "admin" && <RoleSwitch userId={p.id} role="admin" />}
+                  {p.role === "admin" && (
+                    // Own line on phones, so the name next to it is not squeezed.
+                    <div className="w-full sm:w-auto">
+                      <RoleSwitch userId={p.id} role="admin" />
+                    </div>
+                  )}
                 </li>
               );
             })}

@@ -415,7 +415,7 @@
     "days": "{count, plural, one {# day} other {# days}}",
     "today": "Today",
     "todayMinutes": "{minutes} / 15 min",
-    "goalDone": "Today counts for your streak.",
+    "goalDone": "Today counts for the streak.",
     "goalLeft": "{minutes, plural, one {# more minute} other {# more minutes}} to count today.",
     "rule": "A day counts after 15 minutes of practice in total (Tashkent time). Missing a day starts the streak again from 0.",
     "calendar": "Practice days",
@@ -429,10 +429,11 @@
     "dayNone": "{date}: no practice",
     "sessions": "Past sessions",
     "noSessions": "No sessions yet. Start with General Training or a Mock Test.",
+    "noSessionsPlain": "No sessions yet.",
     "start": "Start practising",
     "notFinished": "Not finished",
     "completed": "Completed",
-    "lastN": "Your last {count} sessions",
+    "lastN": "Last {count} sessions",
     "minutesShort": "{m, plural, =0 {<1 min} other {# min}}"
   },
   "recordings": {

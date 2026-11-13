@@ -429,10 +429,11 @@
     "dayNone": "{date}: mashq yoʻq",
     "sessions": "Oʻtgan mashqlar",
     "noSessions": "Hali mashqlar yoʻq. Umumiy mashq yoki mock testdan boshlang.",
+    "noSessionsPlain": "Hali mashqlar yoʻq.",
     "start": "Mashqni boshlash",
     "notFinished": "Tugatilmagan",
     "completed": "Bajarildi",
-    "lastN": "Oxirgi {count} ta mashqingiz",
+    "lastN": "Oxirgi {count} ta mashq",
     "minutesShort": "{m, plural, =0 {<1 daq.} other {# daq.}}"
   },
   "recordings": {

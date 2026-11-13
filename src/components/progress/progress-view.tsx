@@ -211,7 +211,7 @@ export async function ProgressView({
         {sessions.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-start gap-4">
-              <p className="text-muted-foreground">{t("noSessions")}</p>
+              <p className="text-muted-foreground">{showStart ? t("noSessions") : t("noSessionsPlain")}</p>
               {showStart && (
                 <Button asChild>
                   <Link href="/home">{t("start")}</Link>
