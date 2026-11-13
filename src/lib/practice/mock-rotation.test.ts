@@ -2,7 +2,7 @@
 
 import test from "node:test";
 import assert from "node:assert/strict";
-import { chooseNextMock, type MockSetRef } from "./mock-rotation.ts";
+import { chooseNextMock, remainingInCycle, type MockSetRef } from "./mock-rotation.ts";
 
 const sets: MockSetRef[] = [
   { id: "a", name: "SPEAKING-1" },
@@ -73,4 +73,11 @@ test("a whole cycle hands out every set exactly once", () => {
   assert.deepEqual([...seen].sort(), ["a", "b", "c"]);
   // The fourth one opens cycle 2.
   assert.equal(chooseNextMock(sets, history, Math.random)?.cycle, 2);
+});
+
+test("remainingInCycle: what the start button may still start", () => {
+  const history = [{ mock_set_id: "a", cycle: 1 }];
+  const { cycle, remaining } = remainingInCycle(sets, history);
+  assert.equal(cycle, 1);
+  assert.deepEqual(remaining.map((s) => s.id), ["b", "c"]);
 });

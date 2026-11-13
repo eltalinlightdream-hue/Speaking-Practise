@@ -58,11 +58,26 @@
     "cefr": "CEFR",
     "cefrText": "Multilevel speaking",
     "generalTraining": "General Training",
-    "mockTest": "Mock Test"
+    "mockTest": "Mock Test",
+    "streak": "{count, plural, =0 {No streak yet} one {# day streak} other {# day streak}}",
+    "seeProgress": "My progress"
   },
   "settings": {
     "title": "Settings",
-    "languageHelp": "Choose the language of the website."
+    "languageHelp": "Choose the language of the website.",
+    "profileTitle": "Your details",
+    "profileSaved": "Saved.",
+    "accountTitle": "Account",
+    "deleteTitle": "Delete account",
+    "deleteLead": "This deletes your account, streak and practice history for good. Recordings on this device stay where they are.",
+    "deleteButton": "Delete my account",
+    "deleteConfirmTitle": "Are you sure?",
+    "deleteConfirmText": "Your account, streak and practice history will be deleted. This cannot be undone.",
+    "deleteConfirmCheck": "I understand that this cannot be undone",
+    "deleteConfirmButton": "Yes, delete my account",
+    "deleteCancel": "Cancel",
+    "deleteError": "Could not delete the account. Please try again.",
+    "ownerNote": "The owner account cannot be deleted from the app."
   },
   "admin": {
     "title": "Admin",
@@ -222,7 +237,6 @@
     "back": "Back",
     "generalTitle": "{exam} General Training",
     "mockTitle": "{exam} Mock Test",
-    "mockSoon": "Mock tests arrive in the next update. Try General Training for now.",
     "chooseParts": "What do you want to practise?",
     "options": {
       "p1": "Part 1 only",
@@ -286,7 +300,8 @@
       "youShouldSay": "You should say:",
       "paused": "Paused while the page is hidden",
       "leaveWarning": "Your session is still running. Leave anyway?",
-      "quit": "End session"
+      "quit": "End session",
+      "quitMockConfirm": "End the mock test now? It will not count as done."
     },
     "finish": {
       "title": "Well done!",
@@ -299,7 +314,68 @@
       "noRecording": "No recording this time.",
       "again": "Practise again",
       "home": "Home",
-      "recordingFailed": "The recording could not be saved on this device."
+      "recordingFailed": "The recording could not be saved on this device.",
+      "stoppedTitle": "Session ended"
+    },
+    "modes": {
+      "general": "General Training",
+      "mock": "Mock Test"
+    },
+    "mock": {
+      "none": "There are no mock tests for this exam yet. They will be added soon.",
+      "tryGeneral": "Try General Training",
+      "number": "Mock {n} of {total}",
+      "round": "Round {n}",
+      "p1": "Questions about you, about {s} seconds each",
+      "p2": "Cue card: {prep} min to prepare, up to {speak} min to speak",
+      "p3": "Discussion questions, about {s} seconds each",
+      "rules": "Like the real exam: questions move on by themselves when the time is up, and you cannot replay them. A mock test only counts as done when you finish all three parts.",
+      "start": "Start mock test",
+      "taken": "This mock test is already done. The next one has been loaded.",
+      "broken": "This mock test is not ready yet. Please tell your teacher.",
+      "doneNote": "{name} is done. You will get a different mock test next time.",
+      "stoppedNote": "You stopped before the end, so this mock test does not count as done. It can come again later.",
+      "another": "Next mock test"
     }
+  },
+  "progress": {
+    "title": "My progress",
+    "currentStreak": "Current streak",
+    "longestStreak": "Longest streak",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "today": "Today",
+    "todayMinutes": "{minutes} / 15 min",
+    "goalDone": "Today counts for your streak.",
+    "goalLeft": "{minutes, plural, one {# more minute} other {# more minutes}} to count today.",
+    "rule": "A day counts after 15 minutes of practice in total (Tashkent time). Missing a day starts the streak again from 0.",
+    "calendar": "Practice days",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "legendCounted": "15 minutes or more",
+    "legendSome": "Some practice",
+    "legendToday": "Today",
+    "dayCounted": "{date}: {minutes} min, counted",
+    "daySome": "{date}: {minutes} min, not counted",
+    "dayNone": "{date}: no practice",
+    "sessions": "Past sessions",
+    "noSessions": "No sessions yet. Start with General Training or a Mock Test.",
+    "start": "Start practising",
+    "notFinished": "Not finished",
+    "completed": "Completed",
+    "lastN": "Your last {count} sessions",
+    "minutesShort": "{m, plural, =0 {<1 min} other {# min}}"
+  },
+  "recordings": {
+    "title": "My recordings",
+    "warning": "Recordings are kept only on this device, in this browser. They are never uploaded. Download the ones you want to keep: if you clear the browser or change phones, they are gone. Only the newest 10 are kept.",
+    "loading": "Loading recordings…",
+    "empty": "No recordings on this device yet.",
+    "emptyHelp": "Choose Audio or Video before a practice session to record yourself.",
+    "unavailable": "This browser cannot keep recordings. Try the latest Chrome or Safari.",
+    "usage": "{count} of {max} recordings · {size}",
+    "download": "Download",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this recording? This cannot be undone.",
+    "length": "{m} min {s} s"
   }
 }

@@ -101,6 +101,23 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - `day_tashkent` = Tashkent day the session started (a session crossing midnight counts for its start day).
 - iPhone: `unlockSpeech()` runs inside the Start tap; recorder falls back to MP4.
 
+## Mock tests, streak, progress (Step 4)
+
+- `mock_history`: one row per mock set finished TO THE END, per cycle. Written only inside
+  `practice_session_progress(id, seconds, finished, completed)`: `finished` closes the session (also
+  "End session" halfway), `completed` = reached the end. Only completed mocks count for the rotation.
+- Rotation: `src/lib/practice/mock-rotation.ts` (pure, tested). The mock page shows the next set;
+  `startMockTest` starts exactly that set after checking it is still open in this cycle.
+- A mock runs exactly as stored: the set's Part 1 topic with all its active questions, its cue card,
+  its Part 3 topic. Part 1 topics shared by two sets share one question list (see Geography, Maps).
+- Streak: `src/lib/practice/streak.ts` is the ONE place for the rules (home + progress use `summarise`).
+  Current streak ends today, or yesterday while today is not yet counted.
+- Pages: `/practice/[exam]/mock`, `/progress` (streaks, today bar, month calendar, last 20 sessions),
+  `/recordings` (IndexedDB list: play, download, delete), `/settings` (name + group, language, log out,
+  delete account with a checkbox confirmation).
+- Dates shown to users go through `src/lib/format-date.ts` (phone browsers lack Uzbek month names).
+- Unit tests: `npm test` (Node's built-in runner; tests import with `.ts` extensions).
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).
@@ -116,5 +133,6 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
   time capped at real elapsed time, max 3 h), General Training (`/practice/[exam]/general`), reusable
   `SessionRunner` (speech, timers, replay, cue card prep, recording, 30 s progress saves + beacon on close),
   device check, recordings in IndexedDB (latest 10 / 300 MB), finish screen with download, real minutes on home.
-- [ ] Step 4: mock tests, streak, my recordings, settings.
+- [x] Step 4: `mock_history` + Mock Test flow (rotation by cycle, no replay, auto-advance, half-done mocks
+  do not count), shared streak function with unit tests, My progress, My recordings, Settings.
 - [ ] Step 5: admin analytics, privacy, Telegram login, polish, Vercel launch.

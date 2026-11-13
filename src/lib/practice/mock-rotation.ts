@@ -5,7 +5,7 @@
 // cycle starts and all sets are available again.
 //
 // A mock that was left halfway is not in the history, so it can come again.
-// Pure function, so it is easy to test.
+// Pure functions, so they are easy to test.
 
 export type MockSetRef = { id: string; name: string };
 export type MockHistoryRow = { mock_set_id: string; cycle: number };
@@ -19,13 +19,8 @@ export type NextMock = {
   total: number;
 };
 
-export function chooseNextMock(
-  sets: readonly MockSetRef[],
-  history: readonly MockHistoryRow[],
-  rand: () => number = Math.random,
-): NextMock | null {
-  if (sets.length === 0) return null;
-
+/** The sets still open in the current cycle (all of them when a new cycle starts). */
+export function remainingInCycle(sets: readonly MockSetRef[], history: readonly MockHistoryRow[]) {
   const ids = new Set(sets.map((s) => s.id));
   // Sets that no longer exist (or were disabled) do not hold a cycle open.
   const known = history.filter((h) => ids.has(h.mock_set_id));
@@ -33,12 +28,20 @@ export function chooseNextMock(
   let done = new Set(known.filter((h) => h.cycle === cycle).map((h) => h.mock_set_id));
 
   // Every set done: start the next cycle with a clean sheet.
-  if (done.size >= sets.length) {
+  if (sets.length > 0 && done.size >= sets.length) {
     cycle += 1;
     done = new Set();
   }
+  return { cycle, doneCount: done.size, remaining: sets.filter((s) => !done.has(s.id)) };
+}
 
-  const remaining = sets.filter((s) => !done.has(s.id));
+export function chooseNextMock(
+  sets: readonly MockSetRef[],
+  history: readonly MockHistoryRow[],
+  rand: () => number = Math.random,
+): NextMock | null {
+  if (sets.length === 0) return null;
+  const { cycle, doneCount, remaining } = remainingInCycle(sets, history);
   const set = remaining[Math.floor(rand() * remaining.length)] ?? remaining[0];
-  return { set, cycle, number: done.size + 1, total: sets.length };
+  return { set, cycle, number: doneCount + 1, total: sets.length };
 }

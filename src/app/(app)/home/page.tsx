@@ -6,11 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { EXAMS, EXAM_CODES } from "@/config/exams";
 import { requireProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-
-/** Today's date in Tashkent as YYYY-MM-DD. */
-function tashkentToday() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tashkent" }).format(new Date());
-}
+import { DAY_GOAL_SECONDS, addDays, summarise, tashkentDay } from "@/lib/practice/streak";
 
 export default async function HomePage() {
   const profile = await requireProfile();
@@ -19,13 +15,13 @@ export default async function HomePage() {
   const firstName = (profile.full_name ?? "").split(" ")[0];
 
   const supabase = await createClient();
-  const { data: today } = await supabase
+  // Enough days back for any streak; the streak rules live in one shared place.
+  const { data: rows } = await supabase
     .from("practice_sessions")
-    .select("duration_seconds")
+    .select("day_tashkent, duration_seconds")
     .eq("user_id", profile.id)
-    .eq("day_tashkent", tashkentToday());
-  const secondsToday = (today ?? []).reduce((sum, r) => sum + (r.duration_seconds ?? 0), 0);
-  const minutesToday = Math.floor(secondsToday / 60);
+    .gte("day_tashkent", addDays(tashkentDay(), -400));
+  const { secondsToday, minutesToday, current } = summarise(rows ?? []);
 
   const exams = EXAM_CODES.map((code) => ({
     code,
@@ -38,13 +34,21 @@ export default async function HomePage() {
     <div className="flex flex-col gap-8">
       <section className="flex flex-col gap-4">
         <h1 className="text-2xl sm:text-3xl">{t("greeting", { name: firstName })}</h1>
+        <Link
+          href="/progress"
+          className="rounded-card transition-colors [&>div]:hover:bg-muted"
+          title={t("seeProgress")}
+        >
         <Card>
           <CardContent className="flex items-center gap-4">
             <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-accent text-accent-foreground">
               <Flame className="size-6" aria-hidden />
             </span>
             <div className="flex flex-1 flex-col gap-2">
-              <p className="font-semibold">{t("today", { minutes: minutesToday })}</p>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3">
+                <p className="font-semibold">{t("streak", { count: current })}</p>
+                <p className="text-sm text-muted-foreground tabular-nums">{t("today", { minutes: minutesToday })}</p>
+              </div>
               <div
                 className="h-2.5 w-full overflow-hidden rounded-full bg-border"
                 role="progressbar"
@@ -53,11 +57,14 @@ export default async function HomePage() {
                 aria-valuenow={Math.min(15, minutesToday)}
                 aria-label={t("today", { minutes: minutesToday })}
               >
-                <div className="h-full rounded-full bg-accent" style={{ width: `${Math.min(100, (secondsToday / 900) * 100)}%` }} />
+                <div className="h-full rounded-full bg-accent" style={{ width: `${Math.min(100, (secondsToday / DAY_GOAL_SECONDS) * 100)}%` }} />
               </div>
             </div>
+            <ChevronRight className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+            <span className="sr-only">{t("seeProgress")}</span>
           </CardContent>
         </Card>
+        </Link>
       </section>
 
       <section className="flex flex-col gap-4">

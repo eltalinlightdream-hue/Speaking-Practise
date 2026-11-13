@@ -28,8 +28,11 @@ Useful pages: `/` landing, `/login`, `/design` (hidden page showing the colours 
 
 ```bash
 npm run lint
+npm test
 npm run build
 ```
+
+`npm test` runs the unit tests (`src/**/*.test.ts`) with Node's built-in test runner: no extra packages.
 
 ## Database
 
