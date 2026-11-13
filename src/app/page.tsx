@@ -46,7 +46,7 @@ export default async function LandingPage() {
         <div aria-hidden className="hidden flex-1 md:block">
           <div className="relative mx-auto aspect-square max-w-sm rounded-[32px] bg-surface/50 p-10">
             <div className="flex h-full flex-col justify-between rounded-card bg-card p-6 shadow-sm">
-              <span className="text-sm font-semibold text-secondary">Part 2</span>
+              <span className="text-sm font-semibold text-muted-foreground">Part 2</span>
               <p className="text-xl font-semibold text-primary">Describe a place where you want to go to relax</p>
               <div className="flex items-center gap-3">
                 <span className="relative flex size-14 items-center justify-center rounded-full border-4 border-accent text-sm font-semibold text-foreground">
