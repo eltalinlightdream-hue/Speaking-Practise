@@ -149,11 +149,25 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
   device check, recordings in IndexedDB (latest 10 / 300 MB), finish screen with download, real minutes on home.
 - [x] Step 4: `mock_history` + Mock Test flow (rotation by cycle, no replay, auto-advance, half-done mocks
   do not count), shared streak function with unit tests, My progress, My recordings, Settings.
-- [ ] Step 5: admin analytics, privacy, Telegram login, polish, Vercel launch.
-  Migration `20261113000200_admin_daily_totals.sql` is applied to the Supabase project.
-  `/admin/reports` (+ CSV), `/admin/students`, `/admin/students/[id]` and `/owner` were live-tested at
-  375px and on desktop with temporary accounts (created with SQL, signed in with @supabase/ssr, driven
-  with Playwright, deleted afterwards): numbers, streaks, group filter, week picker, CSV, kept mark,
-  owner-only role switch and delete all behave. STILL TO DO: launch on Vercel (free vercel.app address)
-  and set the Supabase Auth URLs, enable the Google provider in Supabase (it is still off, so sign-in
-  cannot work yet), then Telegram end-to-end once the owner has made the bot.
+- [x] Step 5: admin analytics, privacy, polish, Vercel launch. Migration
+  `20261113000200_admin_daily_totals.sql` is applied. `/admin/reports` (+ CSV), `/admin/students`,
+  `/admin/students/[id]` and `/owner` were live-tested at 375px and on desktop with temporary accounts
+  (created with SQL, signed in with @supabase/ssr, driven with Playwright, deleted afterwards):
+  numbers, streaks, group filter, week picker, CSV, kept mark, owner-only role switch and delete
+  all behave.
+
+## Live site
+
+- **https://speaking-practise.vercel.app** (Vercel project `speaking-practise`, free plan).
+  Every push to `main` deploys by itself. Deployment Protection is OFF, so students can open it.
+- Supabase Auth -> URL Configuration: Site URL is the address above; the redirect list also covers
+  Vercel preview deployments and `http://localhost:3000` for work on your own computer.
+- Google sign-in is on. The Google Cloud OAuth client sends people back to
+  `https://qmkbitspxiocrxalcmvt.supabase.co/auth/v1/callback`, and the Google consent screen is
+  PUBLISHED (while it is in "Testing" only hand-picked accounts can sign in).
+- `private.app_config.owner_email` must match the Google account the owner signs in with, or that
+  account arrives as a plain student and nobody can hand out admin rights.
+
+- [ ] Telegram login: the owner creates the bot (@BotFather), then sets `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME`,
+  `TELEGRAM_BOT_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` in Vercel and redeploys. Steps: README.
+  The code is in place and the button stays hidden until the username variable is set.
