@@ -34,3 +34,27 @@ export function formatDayTime(date: Date, locale: string, timeZone?: string): st
   const { day, month, time } = parts(date, timeZone);
   return lang === "uz" ? `${day}-${MONTHS.uz[month]}, ${time}` : `${day} ${MONTHS.en[month]}, ${time}`;
 }
+
+const MONTHS_LONG = {
+  uz: ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"],
+  en: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+} as const;
+
+/** "9–15-noyabr 2026" / "9–15 November 2026" for two YYYY-MM-DD days (any months). */
+export function formatDayRange(from: string, to: string, locale: string): string {
+  const lang: Locale = locale === "uz" ? "uz" : "en";
+  const [y1, m1, d1] = from.split("-").map(Number);
+  const [y2, m2, d2] = to.split("-").map(Number);
+  const month = (m: number) => MONTHS_LONG[lang][m - 1];
+  const one = (d: number, m: number) => (lang === "uz" ? `${d}-${month(m)}` : `${d} ${month(m)}`);
+  if (y1 === y2 && m1 === m2) return lang === "uz" ? `${d1}–${d2}-${month(m1)} ${y1}` : `${d1}–${d2} ${month(m1)} ${y1}`;
+  if (y1 === y2) return `${one(d1, m1)} – ${one(d2, m2)} ${y1}`;
+  return `${one(d1, m1)} ${y1} – ${one(d2, m2)} ${y2}`;
+}
+
+/** "13-noyabr 2026" / "13 November 2026" for a YYYY-MM-DD day. */
+export function formatDay(day: string, locale: string): string {
+  const lang: Locale = locale === "uz" ? "uz" : "en";
+  const [y, m, d] = day.split("-").map(Number);
+  return lang === "uz" ? `${d}-${MONTHS_LONG.uz[m - 1]} ${y}` : `${d} ${MONTHS_LONG.en[m - 1]} ${y}`;
+}

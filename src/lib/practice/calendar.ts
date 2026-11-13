@@ -30,3 +30,18 @@ export function monthGrid(month: string): (Day | null)[][] {
   for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
   return weeks;
 }
+
+/** The Monday of the week a day is in (weeks run Monday to Sunday). */
+export function weekStart(day: Day): Day {
+  const offset = (new Date(`${day}T12:00:00Z`).getUTCDay() + 6) % 7;
+  return addDays(day, -offset);
+}
+
+/** The 7 days of the week that starts on `monday`. */
+export function weekDays(monday: Day): Day[] {
+  return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
+}
+
+export function isDay(v: unknown): v is Day {
+  return typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(`${v}T12:00:00Z`));
+}

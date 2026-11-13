@@ -87,7 +87,9 @@
       "content": "Mavzular",
       "add": "Savol qoʻshish",
       "mockSets": "Mock testlar",
-      "importExport": "Import / eksport"
+      "importExport": "Import / eksport",
+      "reports": "Haftalik hisobot",
+      "students": "Oʻquvchilar"
     },
     "stats": {
       "topics": "Mavzular",
@@ -96,7 +98,6 @@
       "activeOf": "{total} tadan {active} tasi faol",
       "part": "{part}-qism"
     },
-    "comingNext": "Oʻquvchilar roʻyxati va haftalik hisobotlar 5-bosqichda qoʻshiladi.",
     "content": {
       "title": "Mavzular va savollar",
       "exam": "Imtihon",
@@ -218,6 +219,33 @@
       "generic": "Xatolik yuz berdi: {message}",
       "duplicateTitle": "Bu qismda shu nomli mavzu allaqachon bor.",
       "required": "Iltimos, nomini kiriting."
+    },
+    "reports": {
+      "title": "Haftalik hisobot",
+      "lead": "Har bir oʻquvchi bu hafta qancha mashq qilgani (dushanbadan yakshanbagacha, Toshkent vaqti bilan).",
+      "prevWeek": "Oldingi hafta",
+      "nextWeek": "Keyingi hafta",
+      "thisWeek": "Shu hafta",
+      "allGroups": "Barcha guruhlar",
+      "noGroup": "Guruhsiz",
+      "active": "Mashq qilganlar",
+      "activeValue": "{total} tadan {active} ta",
+      "minutes": "Daqiqalar",
+      "countedDays": "15+ daqiqali kunlar",
+      "mocks": "Tugatilgan mock testlar",
+      "byGroup": "Guruhlar boʻyicha",
+      "group": "Guruh",
+      "students": "Oʻquvchilar",
+      "name": "Ism",
+      "streak": "Joriy seriya",
+      "lastActive": "Oxirgi mashq",
+      "never": "Hech qachon",
+      "download": "CSV yuklab olish",
+      "downloadHelp": "Excel yoki Google Sheetsʼda ochiladi.",
+      "empty": "Bu guruhda hali oʻquvchilar yoʻq.",
+      "daysValue": "{n}/7",
+      "minutesValue": "{m} daq.",
+      "streakValue": "{n} kun"
     }
   },
   "owner": {

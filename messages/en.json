@@ -87,7 +87,9 @@
       "content": "Topics",
       "add": "Add questions",
       "mockSets": "Mock sets",
-      "importExport": "Import / export"
+      "importExport": "Import / export",
+      "reports": "Weekly report",
+      "students": "Students"
     },
     "stats": {
       "topics": "Topics",
@@ -96,7 +98,6 @@
       "activeOf": "{active} active of {total}",
       "part": "Part {part}"
     },
-    "comingNext": "Students list and weekly reports come in Step 5.",
     "content": {
       "title": "Topics and questions",
       "exam": "Exam",
@@ -218,6 +219,33 @@
       "generic": "Something went wrong: {message}",
       "duplicateTitle": "A topic with this title already exists in this part.",
       "required": "Please fill in the title."
+    },
+    "reports": {
+      "title": "Weekly report",
+      "lead": "How much each student practised this week (Monday to Sunday, Tashkent time).",
+      "prevWeek": "Previous week",
+      "nextWeek": "Next week",
+      "thisWeek": "This week",
+      "allGroups": "All groups",
+      "noGroup": "No group",
+      "active": "Practised",
+      "activeValue": "{active} of {total}",
+      "minutes": "Minutes",
+      "countedDays": "Days with 15+ min",
+      "mocks": "Mock tests finished",
+      "byGroup": "By group",
+      "group": "Group",
+      "students": "Students",
+      "name": "Name",
+      "streak": "Streak now",
+      "lastActive": "Last practice",
+      "never": "Never",
+      "download": "Download CSV",
+      "downloadHelp": "Opens in Excel or Google Sheets.",
+      "empty": "No students in this group yet.",
+      "daysValue": "{n}/7",
+      "minutesValue": "{m} min",
+      "streakValue": "{n, plural, one {# day} other {# days}}"
     }
   },
   "owner": {
