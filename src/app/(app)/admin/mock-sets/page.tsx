@@ -93,7 +93,7 @@ export default async function MockSetsPage({ searchParams }: PageProps<"/admin/m
                       .sort((a, b) => a.part - b.part || a.sort_order - b.sort_order)
                       .map((mt, i) => (
                         <li key={i} className="flex gap-2">
-                          <span className="w-14 shrink-0 font-semibold text-secondary">{t("stats.part", { part: mt.part })}</span>
+                          <span className="w-14 shrink-0 font-semibold text-primary">{t("stats.part", { part: mt.part })}</span>
                           <span className="min-w-0 break-words text-foreground">{mt.topics.title}</span>
                         </li>
                       ))}

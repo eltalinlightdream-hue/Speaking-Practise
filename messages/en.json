@@ -520,5 +520,13 @@
     ],
     "contact": "You can also write to:",
     "back": "Back"
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundText": "This page does not exist or has moved.",
+    "errorTitle": "Something went wrong",
+    "errorText": "The page could not load. Check your internet connection and try again.",
+    "tryAgain": "Try again",
+    "home": "Go to Home"
   }
 }

@@ -520,5 +520,13 @@
     ],
     "contact": "Shuningdek, bu manzilga yozishingiz mumkin:",
     "back": "Orqaga"
+  },
+  "errors": {
+    "notFoundTitle": "Sahifa topilmadi",
+    "notFoundText": "Bunday sahifa yoʻq yoki u boshqa joyga koʻchirilgan.",
+    "errorTitle": "Nimadir xato ketdi",
+    "errorText": "Sahifani yuklab boʻlmadi. Internet aloqasini tekshirib, qaytadan urinib koʻring.",
+    "tryAgain": "Qayta urinish",
+    "home": "Bosh sahifaga"
   }
 }

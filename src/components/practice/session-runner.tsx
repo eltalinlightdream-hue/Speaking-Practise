@@ -252,7 +252,7 @@ export function SessionRunner({
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-8 px-4 py-8 text-center">
         {step.kind === "question" ? (
           <>
-            <p className="text-sm font-semibold text-secondary">{step.topic}</p>
+            <p className="text-sm font-semibold text-muted-foreground">{step.topic}</p>
             <h1 lang="en" className="max-w-2xl text-2xl leading-snug sm:text-3xl">
               {step.text}
             </h1>
