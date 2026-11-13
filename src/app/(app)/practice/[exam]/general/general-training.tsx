@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { useTranslations } from "next-intl";
-import { AlertTriangle, ChevronRight, Play } from "lucide-react";
+import { AlertTriangle, ChevronRight, Infinity as InfinityIcon, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RecordingChoice } from "@/components/practice/recording-choice";
 import { SessionRunner, type SessionOutcome } from "@/components/practice/session-runner";
@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils";
 import { startGeneralTraining } from "../../actions";
 
 type Stage = "choose" | "record" | "running" | "finished";
-const COUNTS = [3, 5, 8, 10];
+// 0 = unlimited (shown as ∞).
+const COUNTS = [3, 5, 8, 10, 0];
 
 export function GeneralTraining({ exam }: { exam: ExamCode }) {
   const t = useTranslations("practice");
@@ -123,16 +124,19 @@ export function GeneralTraining({ exam }: { exam: ExamCode }) {
                     type="button"
                     role="radio"
                     aria-checked={n === count}
+                    aria-label={n === 0 ? t("unlimited") : undefined}
+                    title={n === 0 ? t("unlimited") : undefined}
                     onClick={() => setCount(n)}
                     className={cn(
-                      "min-h-11 min-w-14 rounded-button border-2 px-4 font-semibold tabular-nums",
+                      "inline-flex min-h-11 min-w-14 items-center justify-center rounded-button border-2 px-4 font-semibold tabular-nums transition-colors",
                       n === count ? "border-primary bg-surface text-surface-foreground" : "border-border bg-card text-primary hover:bg-muted",
                     )}
                   >
-                    {n}
+                    {n === 0 ? <InfinityIcon className="size-5" aria-hidden /> : n}
                   </button>
                 ))}
               </div>
+              {count === 0 && <p className="text-sm text-muted-foreground">{t("unlimitedHelp")}</p>}
             </section>
           )}
 

@@ -249,7 +249,8 @@
       "empty": "No students in this group yet.",
       "daysValue": "{n}/7",
       "minutesValue": "{m} min",
-      "streakValue": "{n, plural, one {# day} other {# days}}"
+      "streakValue": "{n, plural, one {# day} other {# days}}",
+      "pdf": "Weekly PDF report"
     },
     "students": {
       "title": "Students",
@@ -371,7 +372,8 @@
       "paused": "Paused while the page is hidden",
       "leaveWarning": "Your session is still running. Leave anyway?",
       "quit": "End session",
-      "quitMockConfirm": "End the mock test now? It will not count as done."
+      "quitMockConfirm": "End the mock test now? It will not count as done.",
+      "questionN": "Question {n}"
     },
     "finish": {
       "title": "Well done!",
@@ -406,7 +408,9 @@
       "doneNote": "{name} is done. You will get a different mock test next time.",
       "stoppedNote": "You stopped before the end, so this mock test does not count as done. It can come again later.",
       "another": "Next mock test"
-    }
+    },
+    "unlimited": "Unlimited",
+    "unlimitedHelp": "Questions keep coming until you tap “Finish” or the pool runs out."
   },
   "progress": {
     "title": "My progress",
@@ -529,5 +533,48 @@
     "errorText": "The page could not load. Check your internet connection and try again.",
     "tryAgain": "Try again",
     "home": "Go to Home"
+  },
+  "report": {
+    "brand": "Speaking Easy with Practise",
+    "title": "Weekly report",
+    "student": "Student",
+    "group": "Group",
+    "week": "Week",
+    "generated": "Made on",
+    "totalTime": "Total practice",
+    "goalDays": "Days with 15+ min",
+    "sessions": "Sessions",
+    "mockTests": "Mock tests",
+    "daily": "Day by day",
+    "day": "Day",
+    "time": "Time",
+    "sessionsCol": "Sessions",
+    "goal": "15-min goal",
+    "goalYes": "Reached",
+    "goalNo": "Not reached",
+    "breakdown": "What was practised",
+    "general": "General Training sessions",
+    "mock": "Mock test sessions",
+    "mockCompleted": "Mock tests finished",
+    "part": "Part {n} (sessions)",
+    "partsNone": "No practice this week",
+    "note": "A day counts when you practise 15 minutes or more (Tashkent time). Practice time is time inside an active session.",
+    "unitH": "h",
+    "unitMin": "min"
+  },
+  "footer": {
+    "why": "Speaking Easy helps students practise IELTS and CEFR speaking every day, for free, right on their phone. Speaking only grows with regular practice: even 15 minutes a day adds up.",
+    "started": "Started on {date}",
+    "engineer": "Engineer",
+    "contributors": "Contributors",
+    "free": "Free for every student.",
+    "privacy": "Privacy"
+  },
+  "weeklyPdf": {
+    "title": "Weekly report (PDF)",
+    "lead": "Pick a week and download a one-page PDF report. You can send it to your teacher.",
+    "week": "Week",
+    "thisWeek": "this week",
+    "download": "Download PDF"
   }
 }

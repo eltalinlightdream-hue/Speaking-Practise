@@ -95,3 +95,84 @@
     outline-offset: 2px;
   }
 }
+
+/* ---------- Page changes ----------
+   Loading skeleton (src/app/(app)/loading.tsx) and the short fade + slide
+   between pages (src/app/(app)/template.tsx). The top bar and bottom tab bar
+   are named so they stay still while only the page content moves. */
+@utility skeleton {
+  background: linear-gradient(90deg, var(--muted) 25%, var(--border) 37%, var(--muted) 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+/* The rest of the page (footer etc.) does not crossfade; only content moves. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-group(app-header),
+::view-transition-group(app-tabbar) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(app-header),
+::view-transition-old(app-tabbar) {
+  display: none;
+}
+::view-transition-new(app-header),
+::view-transition-new(app-tabbar) {
+  animation: none;
+}
+
+::view-transition-old(.page-exit) {
+  animation: 120ms ease-in both page-fade reverse;
+}
+::view-transition-new(.page-enter) {
+  animation:
+    200ms ease-out 60ms both page-fade,
+    260ms cubic-bezier(0.2, 0.8, 0.2, 1) both page-rise;
+}
+
+@keyframes page-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes page-rise {
+  from {
+    translate: 0 12px;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+  .skeleton {
+    animation: none;
+  }
+}

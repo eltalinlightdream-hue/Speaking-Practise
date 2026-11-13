@@ -132,6 +132,17 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   Secrets `TELEGRAM_BOT_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` live only in Vercel. Setup steps: README.
 - Manifest + icons (`src/app/manifest.ts`, `public/icons/`), `not-found.tsx`, `error.tsx`.
 
+## Added after Step 5
+
+- General Training question count: 3, 5, 8, 10 or ∞ (count `0` = unlimited: the whole pool, the student taps Finish;
+  in Part 1 + Part 3, Part 1 stops at 12 so Part 3 is reached). `SessionPlan.unlimited` hides the total.
+- Weekly PDF report: `/progress/report?week=YYYY-MM-DD[&user=id]` (route handler, pdf-lib + Inter TTF in
+  `src/assets/fonts`, shipped via `outputFileTracingIncludes`; code in `src/lib/report/`). Students pick a week
+  and download on `/progress`; admins on `/admin/students/[id]` and per row on `/admin/reports`.
+- Footer on every page (`src/components/site-footer.tsx`); names, links and start date live in `src/config/site.ts`.
+- Page changes: `(app)/loading.tsx` shows a skeleton instantly; `(app)/template.tsx` wraps pages in a React
+  `<ViewTransition>` (fade + small rise, CSS in `globals.css`, off for reduced motion). Header and tab bar stay still.
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).

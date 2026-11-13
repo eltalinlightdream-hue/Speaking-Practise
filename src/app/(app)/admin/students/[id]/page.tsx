@@ -5,6 +5,7 @@ import { ChevronLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProgressView } from "@/components/progress/progress-view";
+import { WeeklyReportDownload } from "@/components/report/weekly-report-download";
 import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { loadProgress } from "@/lib/practice/progress-data";
@@ -82,6 +83,7 @@ export default async function StudentPage({ params, searchParams }: PageProps<"/
       </Card>
 
       <ProgressView data={progress} basePath={`/admin/students/${target.id}`} showStart={false} />
+      <WeeklyReportDownload userId={target.id} />
 
       {!isSelf && (
         <Card>

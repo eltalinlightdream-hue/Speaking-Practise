@@ -217,7 +217,7 @@ export function SessionRunner({
 
   const limit = phaseLimit(phase, step);
   const remaining = Math.max(0, limit - phaseElapsed);
-  const progress = ((index + (phase === "timeUp" ? 1 : 0)) / plan.steps.length) * 100;
+  const progress = plan.unlimited ? 100 : ((index + (phase === "timeUp" ? 1 : 0)) / plan.steps.length) * 100;
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-background">
@@ -226,7 +226,7 @@ export function SessionRunner({
         <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-4 py-2">
           <Badge variant="outline" className="shrink-0 whitespace-nowrap">{t("part", { part: step.part })}</Badge>
           <span className="whitespace-nowrap text-sm font-semibold text-muted-foreground tabular-nums">
-            {t("question", { n: index + 1, total: plan.steps.length })}
+            {plan.unlimited ? t("questionN", { n: index + 1 }) : t("question", { n: index + 1, total: plan.steps.length })}
           </span>
           <span className="flex-1" />
           {isRecording && !finishing && (
@@ -311,6 +311,12 @@ export function SessionRunner({
             <Button type="button" variant="secondary" onClick={() => present(step)} disabled={phase === "listening" || finishing}>
               <RotateCcw aria-hidden />
               {t("replay")}
+            </Button>
+          )}
+          {plan.unlimited && !isLast && (
+            <Button type="button" variant="secondary" onClick={() => void finish(true)} disabled={finishing}>
+              <Flag aria-hidden />
+              {t("finish")}
             </Button>
           )}
           {step.kind === "cue-card" && phase === "prep" ? (
