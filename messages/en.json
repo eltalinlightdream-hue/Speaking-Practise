@@ -164,7 +164,6 @@
       "lead": "Choose a topic, then add one question or paste many (one per line).",
       "chooseTopic": "Topic",
       "pickTopic": "Choose a topic",
-      "open": "Open",
       "single": "One question",
       "singlePlaceholder": "Type the question…",
       "addOne": "Add question",
@@ -179,7 +178,12 @@
       "saveN": "{count, plural, one {Save # question} other {Save # questions}}",
       "skipNote": "Questions already in this topic are skipped. Similar ones are only a warning.",
       "added": "{count, plural, =0 {Nothing new was added.} one {# question added.} other {# questions added.}}",
-      "notCueCard": "Part 2 cue cards have bullet points instead of questions. Edit them on the topic page."
+      "notCueCard": "Part 2 cue cards have bullet points instead of questions. Edit them on the topic page.",
+      "newTopicOption": "+ Create a new topic",
+      "newTopicTitle": "New topic",
+      "newTopicLead": "Type the topic name. After it is created, you add the questions right here.",
+      "createAndContinue": "Create and add questions",
+      "created": "Topic created. Now add the questions."
     },
     "mocks": {
       "title": "Mock sets",

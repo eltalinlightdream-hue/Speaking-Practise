@@ -42,6 +42,8 @@ export async function createTopic(_prev: ActionResult, formData: FormData): Prom
   if (error) return { error: error.code === "23505" ? "duplicateTitle" : error.message };
 
   revalidateContent();
+  // Made from the "Add questions" page: go back there with the new topic open.
+  if (formData.get("after") === "add") redirect(`/admin/add?${new URLSearchParams({ exam, part: String(part), topic: data.id, created: "1" })}`);
   redirect(`/admin/content/${data.id}`);
 }
 
