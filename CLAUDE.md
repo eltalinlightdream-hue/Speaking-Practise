@@ -165,6 +165,5 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
   `/admin/reports` (+ CSV), `/admin/students`, `/admin/students/[id]` and `/owner` were live-tested at
   375px and on desktop with temporary accounts (created with SQL, signed in with @supabase/ssr, driven
   with Playwright, deleted afterwards): numbers, streaks, group filter, week picker, CSV, kept mark,
-  owner-only role switch and delete all behave. STILL TO DO: launch on Vercel (free vercel.app address)
-  and set the Supabase Auth URLs, enable the Google provider in Supabase (it is still off, so sign-in
+  owner-only role switch and delete all behave. Live on Vercel at https://speaking-practise.vercel.app. STILL TO DO: check the Supabase Auth URLs, enable the Google provider in Supabase (it is still off, so sign-in
   cannot work yet), then Telegram end-to-end once the owner has made the bot.
