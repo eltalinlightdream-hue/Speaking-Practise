@@ -137,7 +137,8 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   Secrets `TELEGRAM_BOT_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` live only in Vercel. Setup steps: README.
 - Required channels (Telegram-only login): students must join the channels in `src/config/telegram-channels.ts`.
   The webhook checks on Confirm with `getChatMember` (`src/lib/telegram-channels.ts`, tested); missing → the bot
-  shows Join buttons + "Check again" (same Confirm data). Admins/owner skip it. A channel the bot cannot check
+  shows Join buttons + "Check again" (same Confirm data). Admins/owner skip it. Hojiakbar's channel is commented
+  out until the bot is admin there (owner's request); owner_telegram_id is set in the database. A channel the bot cannot check
   (bot not admin there) is skipped and logged, never blocks. Check happens only at login (owner's choice).
 - `public.telegram_login_info(tg_id)` and `public.is_owner_email(email)` (service role only, migration
   `20261114000400`): the owner's Telegram id (`private.app_config` key `owner_telegram_id`) signs in to the
