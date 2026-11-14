@@ -165,12 +165,16 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 
 ## Groups, admin edit, offline, speed (added 2026-11-14)
 
-- Lesson groups: 3 teachers (Abduraimov Erkinjon, Hojiakbar, Murodjon) x even/odd days x 08:00, 10:00, 13:00, 15:00,
+- Lesson groups: 3 teachers (Abduraimov Erkinjon, Odilov Hojiakbar, Maʼmurjonov Murodjon; full names since migration
+  `20261114000500_teacher_full_names.sql`, applied) x even/odd days x 08:00, 10:00, 13:00, 15:00,
   17:00 = 30 groups (migration `20261114000200_teacher_groups_admin_edit.sql`, applied). Columns `teacher`, `day_pattern`,
   `start_time`, `sort_order`; the old example groups are disabled. Labels are translated with `src/lib/groups.ts`;
-  dropdowns use `GroupSelect` (one section per teacher), admin lists use `GroupFilter`.
+  dropdowns use `GroupSelect` (one section per teacher), admin lists use `GroupFilter`: teacher chips first, then the
+  chosen teacher's Even/Odd time chips. URL `?teacher=<name>` (all of a teacher's groups) or `?group=<id>`; helpers
+  `readGroupFilter` / `groupIdsFor` in `src/lib/groups.ts` (tested). Students list and Weekly report (+ CSV) both use it.
 - Admins edit a student's name and group on `/admin/students/[id]` via `admin_update_profile` (admins edit students,
-  only the owner edits admins).
+  only the owner edits admins). The Students list also has a ⋮ menu per row (`student-row-menu.tsx`: change name,
+  change group, delete) using `src/components/ui/dialog.tsx` and `dropdown-menu.tsx` (Radix, shadcn style).
 - Offline: `public/sw.js` (service worker, production only, registered by `src/components/offline/connectivity.tsx`)
   keeps static files and visited/main pages; `/offline.html` when a page was never saved; saved pages are deleted on
   sign-out. `experimental.useOffline` retries page changes and form saves when the internet returns; an offline banner shows.
