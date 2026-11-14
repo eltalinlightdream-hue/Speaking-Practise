@@ -79,7 +79,7 @@ export function TelegramLogin({ next, labels }: { next: string; labels: Labels }
   if (phase === "waiting" && link) {
     return (
       <div className="flex flex-col gap-3">
-        <Button asChild variant="outline" size="lg" className="w-full whitespace-normal px-4 text-center text-base sm:text-lg">
+        <Button asChild size="lg" className="w-full whitespace-normal px-4 text-center text-base sm:text-lg">
           <a href={link} target="_blank" rel="noopener noreferrer">
             <TelegramIcon />
             {labels.open}
@@ -100,7 +100,7 @@ export function TelegramLogin({ next, labels }: { next: string; labels: Labels }
           {phase === "expired" ? labels.expired : labels.error}
         </p>
       )}
-      <Button variant="outline" size="lg" className="w-full whitespace-normal px-4 text-center text-base sm:text-lg" onClick={start} disabled={phase === "creating"}>
+      <Button size="lg" className="w-full whitespace-normal px-4 text-center text-base sm:text-lg" onClick={start} disabled={phase === "creating"}>
         {phase === "creating" ? <Loader2 className="animate-spin motion-reduce:animate-none" aria-hidden /> : <TelegramIcon />}
         {phase === "expired" || phase === "error" ? labels.retry : labels.start}
       </Button>

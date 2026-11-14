@@ -89,3 +89,22 @@ these steps are done.
 4. Sign in as the owner, open **`/owner`** and press **Connect bot** in the "Telegram bot" card. This tells
    Telegram to send the bot's messages to `https://<your-address>/auth/telegram/webhook`. Press it again
    if the site address or the bot token ever changes.
+5. **Required channels.** Students must join the channels listed in `src/config/telegram-channels.ts`
+   before the bot lets them in. In **each** channel, add the bot as an **administrator** (Channel → Manage
+   channel → Administrators → Add admin → the bot; no special rights needed). Without this Telegram does not
+   let the bot see members; that channel is then skipped (not checked) and a warning appears in the Vercel logs.
+6. **Owner on Telegram (optional).** So the owner's Telegram goes to the same account as the owner email,
+   find your numeric Telegram id (send any message to @userinfobot) and run once in the Supabase SQL editor:
+   `insert into private.app_config (key, value) values ('owner_telegram_id', '123456789') on conflict (key) do update set value = excluded.value;`
+
+### Owner email sign-in
+
+The owner can also sign in at **`/login/owner`** (not linked anywhere): it emails a one-time link, but only to
+the `owner_email` in `private.app_config`. New sign-ups are switched off in Supabase (Authentication → Sign In /
+Providers → "Allow new users to sign up" = off), so nobody can make an account by email or Google and skip the
+channel check. Telegram accounts are still created by the server.
+
+### Google sign-in (hidden)
+
+The Google button is hidden but the code is kept. To show it again set `NEXT_PUBLIC_GOOGLE_LOGIN=on` in Vercel
+and switch "Allow new users to sign up" back on (new Google users would then skip the channel check).

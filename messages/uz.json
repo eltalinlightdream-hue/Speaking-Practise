@@ -24,18 +24,18 @@
   },
   "login": {
     "title": "Kirish",
-    "lead": "Davom etish uchun Google hisobingizdan foydalaning.",
     "google": "Google orqali davom etish",
-    "telegram": "Telegram orqali kirish tez orada qoʻshiladi.",
+    "telegram": "Telegram orqali kirish sozlanmoqda. Iltimos, birozdan soʻng qayting.",
     "error": "Kirish amalga oshmadi. Iltimos, qaytadan urinib koʻring.",
     "or": "yoki",
-    "telegramError": "Telegram orqali kirib boʻlmadi. Qaytadan urinib koʻring yoki Google orqali kiring.",
-    "leadBoth": "Davom etish uchun Google yoki Telegram hisobingizdan foydalaning.",
+    "telegramError": "Telegram orqali kirib boʻlmadi. Iltimos, qaytadan urinib koʻring.",
     "telegramStart": "Telegram orqali davom etish",
     "telegramOpen": "Telegramni ochish",
-    "telegramWaiting": "Botda «Start», soʻng «Tasdiqlash» tugmasini bosing. Bu sahifa sizni oʻzi kiritadi.",
+    "telegramWaiting": "Botda Start, soʻng Tasdiqlash tugmasini bosing. Bot soʻrasa, kanallarimizga aʼzo boʻlib «Tekshirish»ni bosing. Bu sahifa sizni oʻzi kiritadi.",
     "telegramExpired": "Kirish havolasi eskirdi. Qaytadan urinib koʻring.",
-    "telegramRetry": "Telegram orqali qayta urinish"
+    "telegramRetry": "Telegram orqali qayta urinish",
+    "leadTelegram": "Telegram hisobingiz orqali kiring.",
+    "channelsNote": "Speaking Easy bepul. Undan foydalanish uchun quyidagi Telegram kanallariga aʼzo boʻling (bot kirish paytida tekshiradi):"
   },
   "onboarding": {
     "title": "Xush kelibsiz!",
@@ -609,5 +609,15 @@
   "offline": {
     "banner": "Internet yoʻq. Mashq qilishda davom etishingiz mumkin: vaqtingiz telefonda saqlanadi va internet qaytganda yuboriladi.",
     "waiting": "Internetsiz qilingan {n} ta mashq saqlanmoqda…"
+  },
+  "ownerLogin": {
+    "title": "Egasi uchun kirish",
+    "lead": "Egasining email manzilini kiriting. Bir martalik kirish havolasini yuboramiz.",
+    "email": "Email",
+    "submit": "Kirish havolasini yuborish",
+    "sent": "Agar bu egasining email manzili boʻlsa, kirish havolasi yuborildi. Uni shu qurilmada oching.",
+    "invalid": "Iltimos, toʻgʻri email manzilini kiriting.",
+    "error": "Havolani yuborib boʻlmadi. Keyinroq qaytadan urinib koʻring.",
+    "back": "Telegram orqali kirishga qaytish"
   }
 }

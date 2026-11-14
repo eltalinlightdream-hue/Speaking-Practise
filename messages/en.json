@@ -24,18 +24,18 @@
   },
   "login": {
     "title": "Sign in",
-    "lead": "Use your Google account to continue.",
     "google": "Continue with Google",
-    "telegram": "Telegram sign-in is coming soon.",
+    "telegram": "Telegram sign-in is being set up. Please come back soon.",
     "error": "Sign-in did not work. Please try again.",
     "or": "or",
-    "telegramError": "Telegram sign-in did not work. Please try again, or use Google.",
-    "leadBoth": "Use your Google or Telegram account to continue.",
+    "telegramError": "Telegram sign-in did not work. Please try again.",
     "telegramStart": "Continue with Telegram",
     "telegramOpen": "Open Telegram",
-    "telegramWaiting": "In the bot, press Start, then Confirm. This page will sign you in by itself.",
+    "telegramWaiting": "In the bot, press Start, then Confirm. If the bot asks, join our channels and tap “Check again”. This page will sign you in by itself.",
     "telegramExpired": "The sign-in link has expired. Please try again.",
-    "telegramRetry": "Try again with Telegram"
+    "telegramRetry": "Try again with Telegram",
+    "leadTelegram": "Sign in with your Telegram account.",
+    "channelsNote": "Speaking Easy is free. To use it, join these Telegram channels (the bot checks when you sign in):"
   },
   "onboarding": {
     "title": "Welcome!",
@@ -609,5 +609,15 @@
   "offline": {
     "banner": "You are offline. You can keep practising: your time is kept on this phone and sent when the internet is back.",
     "waiting": "{n, plural, one {# practice session} other {# practice sessions}} from offline waiting to be saved…"
+  },
+  "ownerLogin": {
+    "title": "Owner sign-in",
+    "lead": "Enter the owner email. We will send a one-time sign-in link.",
+    "email": "Email",
+    "submit": "Send sign-in link",
+    "sent": "If this is the owner email, a sign-in link is on its way. Open it on this device.",
+    "invalid": "Please enter a valid email address.",
+    "error": "Could not send the link. Please try again later.",
+    "back": "Back to Telegram sign-in"
   }
 }

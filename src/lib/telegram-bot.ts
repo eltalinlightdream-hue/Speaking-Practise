@@ -29,6 +29,21 @@ export async function telegramApi<T = unknown>(method: string, body: Record<stri
   };
 }
 
+export type TelegramLoginInfo = { login_email: string; role: "student" | "admin" | "owner" | null };
+
+/**
+ * Which account this Telegram user signs in to, and its role (null = no account yet).
+ * The owner's Telegram id (private.app_config 'owner_telegram_id') leads to the
+ * owner's email account, so the owner has ONE account for email and Telegram.
+ */
+export async function telegramLoginInfo(telegramId: number): Promise<TelegramLoginInfo | null> {
+  const admin = createAdminClient();
+  if (!admin) return null;
+  const { data, error } = await admin.rpc("telegram_login_info", { p_telegram_id: telegramId }).single<TelegramLoginInfo>();
+  if (error) console.warn("telegram_login_info failed:", error.message);
+  return data ?? null;
+}
+
 /**
  * Signs THIS browser in as the given Telegram user:
  * creates the Supabase account the first time, then makes a one-time sign-in
@@ -39,22 +54,27 @@ export async function signInTelegramUser(tg: TelegramProfile): Promise<string | 
   const admin = createAdminClient();
   if (!admin) return "not configured";
 
-  const email = telegramEmail(tg.id);
+  const info = await telegramLoginInfo(tg.id);
+  if (!info) return "login info failed";
+  const email = info.login_email;
+  const isTelegramAccount = email === telegramEmail(tg.id);
   const fullName = [tg.first_name, tg.last_name].filter(Boolean).join(" ").trim();
 
   // First visit: create the account. Later visits: it already exists.
-  const created = await admin.auth.admin.createUser({
-    email,
-    email_confirm: true,
-    user_metadata: { full_name: fullName, telegram_id: tg.id, telegram_username: tg.username ?? null },
-    app_metadata: { provider: "telegram" },
-  });
-  if (created.error && created.error.code !== "email_exists" && created.error.status !== 422) {
-    return `create user: ${created.error.message}`;
-  }
-  if (created.data.user) {
-    // Don't show the made-up address anywhere.
-    await admin.from("profiles").update({ email: null }).eq("id", created.data.user.id);
+  if (info.role === null) {
+    const created = await admin.auth.admin.createUser({
+      email,
+      email_confirm: true,
+      user_metadata: { full_name: fullName, telegram_id: tg.id, telegram_username: tg.username ?? null },
+      app_metadata: { provider: isTelegramAccount ? "telegram" : "email" },
+    });
+    if (created.error && created.error.code !== "email_exists" && created.error.status !== 422) {
+      return `create user: ${created.error.message}`;
+    }
+    if (created.data.user && isTelegramAccount) {
+      // Don't show the made-up address anywhere.
+      await admin.from("profiles").update({ email: null }).eq("id", created.data.user.id);
+    }
   }
 
   const link = await admin.auth.admin.generateLink({ type: "magiclink", email });

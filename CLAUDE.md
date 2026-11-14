@@ -135,6 +135,15 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   `src/lib/telegram-bot.ts`: `telegram-<id>@users.invalid`, profile email null, server-made magic-link token).
   Helpers + tests: `src/lib/telegram-auth.ts`. Webhook is set from `/owner` ("Connect bot").
   Secrets `TELEGRAM_BOT_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` live only in Vercel. Setup steps: README.
+- Required channels (Telegram-only login): students must join the channels in `src/config/telegram-channels.ts`.
+  The webhook checks on Confirm with `getChatMember` (`src/lib/telegram-channels.ts`, tested); missing → the bot
+  shows Join buttons + "Check again" (same Confirm data). Admins/owner skip it. A channel the bot cannot check
+  (bot not admin there) is skipped and logged, never blocks. Check happens only at login (owner's choice).
+- `public.telegram_login_info(tg_id)` and `public.is_owner_email(email)` (service role only, migration
+  `20261114000400`): the owner's Telegram id (`private.app_config` key `owner_telegram_id`) signs in to the
+  owner's email account. Owner-only email magic link at `/login/owner` (unlinked). Supabase `disable_signup` is
+  ON (set via the Management API) so email/Google cannot create accounts that skip the channel check.
+- Google button hidden unless `NEXT_PUBLIC_GOOGLE_LOGIN=on` (code kept). `/login/*` share `src/app/login/layout.tsx`.
 - Manifest + icons (`src/app/manifest.ts`, `public/icons/`), `not-found.tsx`, `error.tsx`.
 
 ## Added after Step 5
