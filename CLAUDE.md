@@ -188,7 +188,7 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
 
 ## Build progress
 
-- [x] Step 0/1: repo, Next.js app, design system, uz/en, Supabase clients, Google login, first-time setup,
+- [x] Step 0/1: repo, Next.js app, design system, uz/en, Supabase clients, Google login (now hidden), first-time setup,
   roles + RLS, role-based navigation. Telegram login waits until the site has a public domain (Step 5 deploy).
 - [x] Step 2: topics/questions/mock sets tables + RLS, `question-audio` storage bucket, content loaded
   (34 IELTS mocks, 29 Part 1 topics, 34 cue cards, 40 Part 3 topics, CEFR placeholders), admin pages
@@ -199,11 +199,16 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
   device check, recordings in IndexedDB (latest 10 / 300 MB), finish screen with download, real minutes on home.
 - [x] Step 4: `mock_history` + Mock Test flow (rotation by cycle, no replay, auto-advance, half-done mocks
   do not count), shared streak function with unit tests, My progress, My recordings, Settings.
-- [ ] Step 5: admin analytics, privacy, Telegram login, polish, Vercel launch.
-  Migration `20261113000200_admin_daily_totals.sql` is applied to the Supabase project.
-  `/admin/reports` (+ CSV), `/admin/students`, `/admin/students/[id]` and `/owner` were live-tested at
-  375px and on desktop with temporary accounts (created with SQL, signed in with @supabase/ssr, driven
-  with Playwright, deleted afterwards): numbers, streaks, group filter, week picker, CSV, kept mark,
-  owner-only role switch and delete all behave. Live on Vercel at https://speaking-practise.vercel.app. STILL TO DO: check the Supabase Auth URLs, enable the Google provider in Supabase (it is still off, so sign-in
-  cannot work yet), then Telegram end-to-end (bot @speaking_easy_with_bot exists; migration
-  `20261114000100_telegram_login_requests.sql` applied; owner must press Connect bot on `/owner`).
+- [x] Step 5: admin analytics, privacy, Telegram login, polish, Vercel launch.
+  Live on Vercel at https://speaking-practise.vercel.app (deployed from `main`). All migrations up to
+  `20261114000400_telegram_channels_owner_login.sql` are applied. Admin pages were live-tested at 375px and on
+  desktop with temporary accounts (created with SQL, signed in with @supabase/ssr, driven with Playwright, deleted
+  afterwards). Sign-in confirmed working by the owner (2026-11-14): students use Telegram only (bot
+  @speaking_easy_with_bot, webhook connected, channel check on Confirm); the owner signs in with Telegram or at
+  `/login/owner` by email. Google is hidden and new sign-ups are off in Supabase. Old student accounts were deleted.
+
+## Still to do
+
+- Turn Hojiakbar's channel back on in `src/config/telegram-channels.ts` once the bot is an admin there.
+- CEFR format and content (placeholders until the owner sends it).
+- More IELTS question sets when the owner sends them.
