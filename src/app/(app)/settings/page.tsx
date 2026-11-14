@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { requireProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { GROUP_COLUMNS, type LessonGroup } from "@/lib/groups";
 import { ProfileForm } from "./profile-form";
 import { DeleteAccount } from "./delete-account";
 
@@ -16,10 +17,10 @@ export default async function SettingsPage() {
   const tr = await getTranslations("roles");
 
   const supabase = await createClient();
-  const { data: groups } = await supabase.from("lesson_groups").select("id, name, active").order("name");
+  const { data: groups } = await supabase.from("lesson_groups").select(GROUP_COLUMNS).order("sort_order").order("name");
   // Students can only see active groups. If their own group was disabled,
   // show "Choose your group" instead of quietly picking another one.
-  const options = (groups ?? []).filter((g) => g.active || g.id === profile.lesson_group_id);
+  const options = ((groups ?? []) as LessonGroup[]).filter((g) => g.active || g.id === profile.lesson_group_id);
   const groupId = options.some((g) => g.id === profile.lesson_group_id) ? (profile.lesson_group_id ?? "") : "";
 
   return (

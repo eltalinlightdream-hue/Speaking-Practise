@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { loadWeeklyReport } from "@/lib/admin/queries";
 import { addDays } from "@/lib/practice/streak";
 import { formatDay, formatDayRange } from "@/lib/format-date";
-import { cn } from "@/lib/utils";
+import { GroupFilter } from "@/components/group-filter";
 import { readReportParams, reportHref } from "./params";
 
 export default async function ReportsPage({ searchParams }: PageProps<"/admin/reports">) {
@@ -59,24 +59,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
       </div>
 
       {/* Group filter */}
-      <nav aria-label={t("group")} className="flex flex-wrap gap-2">
-        {[{ id: null as string | null, name: t("allGroups") }, ...groups.filter((g) => g.active || g.id === group)].map((g) => {
-          const selected = g.id === group;
-          return (
-            <Link
-              key={g.id ?? "all"}
-              href={reportHref("/admin/reports", monday, g.id)}
-              aria-current={selected ? "page" : undefined}
-              className={cn(
-                "inline-flex min-h-11 items-center rounded-full border-2 px-4 text-sm font-semibold transition-colors",
-                selected ? "border-primary bg-surface text-surface-foreground" : "border-border bg-card text-primary hover:bg-muted",
-              )}
-            >
-              {g.name}
-            </Link>
-          );
-        })}
-      </nav>
+      <GroupFilter groups={groups.filter((g) => g.active || g.id === group)} value={group} path="/admin/reports" params={{ week: monday }} />
 
       {/* Totals */}
       <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">

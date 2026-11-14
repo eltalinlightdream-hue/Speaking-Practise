@@ -10,7 +10,7 @@ import { buildWeeklyReport } from "@/lib/admin/report";
 import { weekStart } from "@/lib/practice/calendar";
 import { addDays, tashkentDay } from "@/lib/practice/streak";
 import { formatDay } from "@/lib/format-date";
-import { cn } from "@/lib/utils";
+import { GroupFilter } from "@/components/group-filter";
 
 const LIMIT = 200;
 
@@ -50,13 +50,6 @@ export default async function StudentsPage({ searchParams }: PageProps<"/admin/s
   const report = buildWeeklyReport(rows, groups, totals, weekStart(today));
   const stats = new Map(report.students.map((s) => [s.id, s]));
   const groupName = (id: string | null) => groups.find((g) => g.id === id)?.name ?? tr("noGroup");
-  const href = (g: string | null) => {
-    const p = new URLSearchParams();
-    if (q) p.set("q", q);
-    if (g) p.set("group", g);
-    const s = p.toString();
-    return s ? `/admin/students?${s}` : "/admin/students";
-  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -76,24 +69,7 @@ export default async function StudentsPage({ searchParams }: PageProps<"/admin/s
         </Button>
       </form>
 
-      <nav aria-label={t("group")} className="flex flex-wrap gap-2">
-        {[{ id: null as string | null, name: tr("allGroups") }, ...groups.filter((g) => g.active || g.id === group)].map((g) => {
-          const selected = g.id === group;
-          return (
-            <Link
-              key={g.id ?? "all"}
-              href={href(g.id)}
-              aria-current={selected ? "page" : undefined}
-              className={cn(
-                "inline-flex min-h-11 items-center rounded-full border-2 px-4 text-sm font-semibold transition-colors",
-                selected ? "border-primary bg-surface text-surface-foreground" : "border-border bg-card text-primary hover:bg-muted",
-              )}
-            >
-              {g.name}
-            </Link>
-          );
-        })}
-      </nav>
+      <GroupFilter groups={groups.filter((g) => g.active || g.id === group)} value={group} path="/admin/students" params={q ? { q } : {}} />
 
       <div className="flex flex-col gap-2">
         <p className="text-sm text-muted-foreground">

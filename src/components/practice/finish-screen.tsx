@@ -12,6 +12,7 @@ import { recordingFileName, type StoredRecording } from "@/lib/practice/recordin
 export function FinishScreen({
   activeSeconds,
   savedSeconds,
+  queued = false,
   recording,
   recordingError,
   onAgain,
@@ -21,6 +22,8 @@ export function FinishScreen({
 }: {
   activeSeconds: number;
   savedSeconds: number | null;
+  /** Not saved yet, but kept on this phone until the internet is back. */
+  queued?: boolean;
   recording: StoredRecording | null;
   recordingError: boolean;
   onAgain: () => void;
@@ -73,6 +76,11 @@ export function FinishScreen({
           <p className="text-3xl font-semibold tabular-nums text-primary">{t("minutes", { m, s })}</p>
           {savedSeconds !== null ? (
             <p className="text-sm text-muted-foreground">{t("saved")}</p>
+          ) : queued ? (
+            <p className="flex items-center gap-2 text-sm text-muted-foreground" role="status">
+              <WifiOff className="size-4 shrink-0" aria-hidden />
+              {t("savedLater")}
+            </p>
           ) : (
             <p className="flex items-center gap-2 text-sm text-destructive" role="alert">
               <WifiOff className="size-4" aria-hidden />

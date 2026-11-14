@@ -1,7 +1,3 @@
--- Example lesson groups. Safe to run more than once.
-insert into public.lesson_groups (name) values
-  ('IELTS Morning A'),
-  ('IELTS Evening B'),
-  ('CEFR Group 1'),
-  ('Individual')
-on conflict (name) do nothing;
+-- Lesson groups are created by migration 20261114000200_teacher_groups_admin_edit.sql
+-- (3 teachers x even/odd days x 5 times). Nothing else to seed here.
+select 1;

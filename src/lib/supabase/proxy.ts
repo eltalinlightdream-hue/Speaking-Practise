@@ -31,11 +31,14 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  // Do not put code between createServerClient and getUser().
-  let user = null;
+  // Do not put code between createServerClient and getClaims().
+  // getClaims() checks the login token's signature on this server (the
+  // project uses asymmetric signing keys), so most requests no longer wait
+  // for a round trip to Supabase Auth. It still refreshes expired tokens.
+  let user: { sub: string } | null = null;
   try {
-    const { data } = await supabase.auth.getUser();
-    user = data.user;
+    const { data } = await supabase.auth.getClaims();
+    user = data?.claims?.sub ? { sub: data.claims.sub } : null;
   } catch {
     user = null;
   }

@@ -10,12 +10,15 @@ import { TimerRing } from "@/components/timer-ring";
 import { playQuestion, speak, stopSpeaking } from "@/lib/speech";
 import { SessionRecorder } from "@/lib/practice/recorder";
 import type { SessionPlan, Step } from "@/lib/practice/types";
+import { dropPending, flushQueue, pendingSessions, queueProgress } from "@/lib/practice/offline-queue";
 
 export type SessionOutcome = {
   /** True only when the student reached the end (not "End session" halfway). */
   completed: boolean;
   activeSeconds: number;
   savedSeconds: number | null;
+  /** Not saved yet, but kept on this phone and sent when the internet is back. */
+  queued: boolean;
   recording: Blob | null;
   mimeType: string;
 };
@@ -29,16 +32,41 @@ function phaseLimit(p: Phase, s: Step) {
   return s.kind === "question" ? (p === "answering" ? s.seconds : 0) : p === "prep" ? s.prepSeconds : p === "speak" ? s.speakSeconds : 0;
 }
 
-function sendProgress(sessionId: string, seconds: number, finished: boolean, beacon = false, completed = false) {
-  const body = JSON.stringify({ sessionId, seconds, finished, completed });
-  if (beacon && typeof navigator.sendBeacon === "function") {
-    navigator.sendBeacon("/api/practice/progress", new Blob([body], { type: "text/plain" }));
-    return Promise.resolve(null);
+/**
+ * Save practice time. Offline sessions, failed saves and saves made while the
+ * phone has no internet go into the offline queue, which is sent later.
+ * Resolves with the seconds the server saved, or null if not saved yet.
+ */
+async function sendProgress(plan: SessionPlan, seconds: number, finished: boolean, beacon = false, completed = false): Promise<number | null> {
+  const entry = { id: plan.sessionId, start: plan.pendingStart, seconds, finished, completed };
+  if (plan.pendingStart) {
+    queueProgress(entry);
+    if (beacon || !navigator.onLine) return null;
+    const r = await flushQueue();
+    return r.saved[plan.sessionId] ?? null;
   }
-  return fetch("/api/practice/progress", { method: "POST", body, keepalive: true, headers: { "Content-Type": "application/json" } })
-    .then((r) => (r.ok ? r.json() : null))
-    .then((j: { savedSeconds?: number } | null) => (typeof j?.savedSeconds === "number" ? j.savedSeconds : null))
-    .catch(() => null);
+  const body = JSON.stringify({ sessionId: plan.sessionId, seconds, finished, completed });
+  if (beacon && typeof navigator.sendBeacon === "function") {
+    if (!navigator.onLine || !navigator.sendBeacon("/api/practice/progress", new Blob([body], { type: "text/plain" }))) queueProgress(entry);
+    return null;
+  }
+  try {
+    const r = await fetch("/api/practice/progress", { method: "POST", body, keepalive: true, headers: { "Content-Type": "application/json" } });
+    if (r.ok) {
+      const j = (await r.json()) as { savedSeconds?: number };
+      if (typeof j.savedSeconds === "number") {
+        dropPending(plan.sessionId);
+        return j.savedSeconds;
+      }
+      return null;
+    }
+    // Server trouble or an expired login: keep it and try again later.
+    if (r.status >= 500 || r.status === 401) queueProgress(entry);
+    return null;
+  } catch {
+    queueProgress(entry);
+    return null;
+  }
 }
 
 /**
@@ -155,15 +183,17 @@ export function SessionRunner({
   // ---- Save progress every 30 s, and when the page is closed ----
   useEffect(() => {
     const id = window.setInterval(() => {
-      if (!done.current) void sendProgress(plan.sessionId, Math.floor(activeMs.current / 1000), false);
+      if (!done.current) void sendProgress(plan, Math.floor(activeMs.current / 1000), false);
     }, HEARTBEAT_MS);
+    // An offline session is written down at once, so even a closed tab keeps it.
+    if (plan.pendingStart) queueProgress({ id: plan.sessionId, start: plan.pendingStart, seconds: 0, finished: false, completed: false });
     const onHide = () => {
       if (!done.current && document.visibilityState === "hidden") {
-        sendProgress(plan.sessionId, Math.floor(activeMs.current / 1000), false, true);
+        void sendProgress(plan, Math.floor(activeMs.current / 1000), false, true);
       }
     };
     const onPageHide = () => {
-      if (!done.current) sendProgress(plan.sessionId, Math.floor(activeMs.current / 1000), false, true);
+      if (!done.current) void sendProgress(plan, Math.floor(activeMs.current / 1000), false, true);
     };
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       if (done.current) return;
@@ -179,7 +209,7 @@ export function SessionRunner({
       window.removeEventListener("pagehide", onPageHide);
       window.removeEventListener("beforeunload", onBeforeUnload);
     };
-  }, [plan.sessionId]);
+  }, [plan]);
 
   /** completed = the student went through every step (a mock only counts then). */
   const finish = useCallback(async (completed: boolean) => {
@@ -190,11 +220,12 @@ export function SessionRunner({
     token.current++;
     const activeSeconds = Math.floor(activeMs.current / 1000);
     const [savedSeconds, blob] = await Promise.all([
-      sendProgress(plan.sessionId, activeSeconds, true, false, completed),
+      sendProgress(plan, activeSeconds, true, false, completed),
       recorder.current ? recorder.current.stop() : Promise.resolve(null),
     ]);
-    onFinished({ completed, activeSeconds, savedSeconds, recording: blob, mimeType: recorder.current?.mimeType || blob?.type || "" });
-  }, [plan.sessionId, onFinished]);
+    const queued = savedSeconds === null && pendingSessions().some((e) => e.id === plan.sessionId);
+    onFinished({ completed, activeSeconds, savedSeconds, queued, recording: blob, mimeType: recorder.current?.mimeType || blob?.type || "" });
+  }, [plan, onFinished]);
 
   const next = useCallback(() => {
     if (isLast) {

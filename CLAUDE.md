@@ -153,6 +153,25 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Small phones (checked at 320px and 375px): the session top bar shows a mic icon instead of the word "recording" so
   the end button always fits; login buttons may wrap; practice steps scroll to the top; a hint explains a grey Start.
 
+## Groups, admin edit, offline, speed (added 2026-11-14)
+
+- Lesson groups: 3 teachers (Abduraimov Erkinjon, Hojiakbar, Murodjon) x even/odd days x 08:00, 10:00, 13:00, 15:00,
+  17:00 = 30 groups (migration `20261114000200_teacher_groups_admin_edit.sql`, applied). Columns `teacher`, `day_pattern`,
+  `start_time`, `sort_order`; the old example groups are disabled. Labels are translated with `src/lib/groups.ts`;
+  dropdowns use `GroupSelect` (one section per teacher), admin lists use `GroupFilter`.
+- Admins edit a student's name and group on `/admin/students/[id]` via `admin_update_profile` (admins edit students,
+  only the owner edits admins).
+- Offline: `public/sw.js` (service worker, production only, registered by `src/components/offline/connectivity.tsx`)
+  keeps static files and visited/main pages; `/offline.html` when a page was never saved; saved pages are deleted on
+  sign-out. `experimental.useOffline` retries page changes and form saves when the internet returns; an offline banner shows.
+- Offline practice: the General Training page saves the question pools (`/api/practice/content`) in localStorage;
+  the mock page brings its set's steps along. Without internet (or if starting takes over 12 s) the session runs with a
+  phone-made id (`src/lib/practice/offline-start.ts`). Time goes into a localStorage queue (`offline-queue.ts`, per user),
+  sent to `/api/practice/sync` -> `start_offline_session` (migration `20261114000300_offline_sessions.sql`, applied;
+  sessions up to 7 days old, real start time) + `practice_session_progress`. Failed online saves use the same queue.
+- Speed: `getClaims()` instead of `getUser()` in the proxy and `getCurrentProfile` (token checked locally, ES256 keys),
+  `vercel.json` region `fra1` (next to Supabase eu-central-1), `staleTimes.dynamic = 30`.
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).

@@ -26,6 +26,17 @@ export type CueCardStep = {
 
 export type Step = QuestionStep | CueCardStep;
 
+/** A session started without internet: the server creates it later (see offline-queue.ts). */
+export type PendingStart = {
+  mode: "general" | "mock";
+  exam: ExamCode;
+  parts: number[];
+  recordingType: RecordingType;
+  mockSetId: string | null;
+  /** ISO time the session started on the phone. */
+  startedAt: string;
+};
+
 export type SessionPlan = {
   sessionId: string;
   exam: ExamCode;
@@ -39,4 +50,6 @@ export type SessionPlan = {
   /** "Unlimited" General Training: no total shown, the student ends it with Finish. */
   unlimited?: boolean;
   recordingType: RecordingType;
+  /** Set when the session was started offline; its time is kept on the phone until it is sent. */
+  pendingStart?: PendingStart;
 };

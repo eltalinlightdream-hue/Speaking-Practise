@@ -22,6 +22,30 @@ export async function setKept(userId: string, kept: boolean) {
   return error ? { error: error.message } : {};
 }
 
+export type EditState = { ok?: boolean; error?: "name" | "save"; message?: string };
+
+/** Change a student's name and group (admin_update_profile checks who may do it). */
+export async function updateStudent(_prev: EditState, formData: FormData): Promise<EditState> {
+  await requireAdmin();
+  const userId = String(formData.get("user_id") ?? "");
+  const fullName = String(formData.get("full_name") ?? "").replace(/\s+/g, " ").trim();
+  const groupId = String(formData.get("lesson_group_id") ?? "");
+  if (!UUID.test(userId) || (groupId && !UUID.test(groupId))) return { error: "save", message: "bad input" };
+  if (fullName.length < 2 || fullName.length > 100) return { error: "name" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("admin_update_profile", {
+    p_user_id: userId,
+    p_full_name: fullName,
+    p_lesson_group_id: groupId || null,
+  });
+  if (error) return { error: "save", message: error.message };
+  revalidatePath(`/admin/students/${userId}`);
+  revalidatePath("/admin/students");
+  revalidatePath("/admin/reports");
+  return { ok: true };
+}
+
 export async function setRole(userId: string, role: "student" | "admin") {
   await requireAdmin();
   if (!UUID.test(userId) || !["student", "admin"].includes(role)) return { error: "bad input" };

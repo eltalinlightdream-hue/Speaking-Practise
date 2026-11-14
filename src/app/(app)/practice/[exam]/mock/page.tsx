@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { EXAMS, isExamCode } from "@/config/exams";
 import { requireProfile } from "@/lib/auth";
-import { findNextMock } from "@/lib/practice/mock";
+import { buildMockSteps, findNextMock } from "@/lib/practice/mock";
 import { MockTest } from "./mock-test";
 
 export default async function MockTestPage({ params }: PageProps<"/practice/[exam]/mock">) {
@@ -15,6 +15,9 @@ export default async function MockTestPage({ params }: PageProps<"/practice/[exa
   const profile = await requireProfile();
   const t = await getTranslations("practice");
   const next = await findNextMock(profile.id, exam);
+  // The questions come along with the page, so this mock can also run without internet.
+  const offline = next ? await buildMockSteps(exam, next.set.id) : null;
+  const steps = offline && offline.missingParts.length === 0 ? offline.steps : [];
 
   return (
     <div className="flex flex-col gap-4">
@@ -23,7 +26,7 @@ export default async function MockTestPage({ params }: PageProps<"/practice/[exa
         {t("back")}
       </Link>
       {next ? (
-        <MockTest exam={exam} next={next} />
+        <MockTest exam={exam} next={next} steps={steps} />
       ) : (
         <div className="flex flex-col gap-6">
           <h1 className="text-2xl">{t("mockTitle", { exam: EXAMS[exam].label })}</h1>

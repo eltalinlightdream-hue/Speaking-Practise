@@ -4,13 +4,14 @@ import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input, NativeSelect } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
+import { GroupSelect } from "@/components/group-select";
+import type { LessonGroup } from "@/lib/groups";
 import { Label } from "@/components/ui/label";
 import { updateProfile, type ProfileState } from "./actions";
 
-type Group = { id: string; name: string };
 
-export function ProfileForm({ groups, fullName, groupId }: { groups: Group[]; fullName: string; groupId: string }) {
+export function ProfileForm({ groups, fullName, groupId }: { groups: LessonGroup[]; fullName: string; groupId: string }) {
   const t = useTranslations("onboarding");
   const ts = useTranslations("settings");
   const tc = useTranslations("common");
@@ -41,16 +42,17 @@ export function ProfileForm({ groups, fullName, groupId }: { groups: Group[]; fu
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="lesson_group_id">{t("group")}</Label>
-        <NativeSelect id="lesson_group_id" name="lesson_group_id" value={group} onChange={(e) => setGroup(e.target.value)} aria-invalid={state.error === "group" || undefined} required>
-          <option value="" disabled>
-            {t("groupPlaceholder")}
-          </option>
-          {groups.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
-            </option>
-          ))}
-        </NativeSelect>
+        <GroupSelect
+          id="lesson_group_id"
+          name="lesson_group_id"
+          groups={groups}
+          placeholder={t("groupPlaceholder")}
+          placeholderDisabled
+          value={group}
+          onChange={(e) => setGroup(e.target.value)}
+          aria-invalid={state.error === "group" || undefined}
+          required
+        />
       </div>
       {errorText && (
         <p role="alert" className="rounded-button border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">

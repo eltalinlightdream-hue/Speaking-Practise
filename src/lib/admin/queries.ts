@@ -1,16 +1,20 @@
 import "server-only";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
+import { GROUP_COLUMNS, groupLabel, type LessonGroup } from "@/lib/groups";
 import { addDays, tashkentDay, type Day } from "@/lib/practice/streak";
 import { buildWeeklyReport, type DailyTotal, type GroupRef, type StudentRef } from "./report";
 
 /** How far back to look for the current streak. */
 const STREAK_DAYS = 400;
 
-export async function loadGroups(): Promise<(GroupRef & { active: boolean })[]> {
+/** Every group (also disabled ones), sorted, with `name` in the page language. */
+export async function loadGroups(): Promise<(GroupRef & LessonGroup)[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("lesson_groups").select("id, name, active").order("name");
+  const t = await getTranslations("groups");
+  const { data, error } = await supabase.from("lesson_groups").select(GROUP_COLUMNS).order("sort_order").order("name");
   if (error) throw new Error(error.message);
-  return data ?? [];
+  return ((data ?? []) as LessonGroup[]).map((g) => ({ ...g, name: groupLabel(g, (p) => t(p)) }));
 }
 
 /** Students only (admins and the owner are not in the reports). */

@@ -14,6 +14,7 @@ import { unlockSpeech } from "@/lib/speech";
 import { saveSessionOutcome, type FinishedSession } from "@/lib/practice/save-outcome";
 import type { RecordingType, SessionPlan } from "@/lib/practice/types";
 import { cn } from "@/lib/utils";
+import { offlineGeneralPlan, refreshQuestionPack, withTimeout } from "@/lib/practice/offline-start";
 import { startGeneralTraining } from "../../actions";
 
 type Stage = "choose" | "record" | "running" | "finished";
@@ -38,6 +39,11 @@ export function GeneralTraining({ exam }: { exam: ExamCode }) {
     window.scrollTo({ top: 0 });
   }, [stage]);
 
+  // Keep a copy of the questions on this phone for practising without internet.
+  useEffect(() => {
+    void refreshQuestionPack(exam);
+  }, [exam]);
+
   // Release the microphone/camera when leaving the page.
   useEffect(() => () => stopStream(stream), [stream]);
 
@@ -46,11 +52,28 @@ export function GeneralTraining({ exam }: { exam: ExamCode }) {
   const needsStream = recordingType !== "none";
   const canStart = !needsStream || !!stream;
 
+  /** No internet: build the session from the questions saved on this phone. */
+  function startOffline() {
+    const p = offlineGeneralPlan({ exam, optionId, count, recordingType });
+    if (p === "nopack") return setError(t("offline.noPack"));
+    if (p === "empty") return setError(t("empty"));
+    setPlan(p);
+    setStage("running");
+  }
+
   function start() {
     unlockSpeech();
     setError(null);
+    if (!navigator.onLine) return startOffline();
     startTransition(async () => {
-      const res = await startGeneralTraining({ exam, optionId, count, recordingType });
+      let res: Awaited<ReturnType<typeof startGeneralTraining>> | "timeout";
+      try {
+        res = await withTimeout(startGeneralTraining({ exam, optionId, count, recordingType }));
+      } catch {
+        res = "timeout";
+      }
+      // The internet is too slow or gone: practise offline instead of waiting.
+      if (res === "timeout") return startOffline();
       if (res.error || !res.plan) {
         setError(res.error === "empty" ? t("empty") : res.error ?? "error");
         return;
@@ -78,6 +101,7 @@ export function GeneralTraining({ exam }: { exam: ExamCode }) {
       <FinishScreen
         activeSeconds={result.outcome.activeSeconds}
         savedSeconds={result.outcome.savedSeconds}
+        queued={result.outcome.queued}
         recording={result.saved}
         recordingError={result.recordingError}
         onAgain={() => {

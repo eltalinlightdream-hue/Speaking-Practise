@@ -4,6 +4,7 @@ import { BottomNav, TopNav } from "@/components/app-nav";
 import { Logo } from "@/components/logo";
 import { CompactFooter, SiteFooter } from "@/components/site-footer";
 import { FooterByPage } from "@/components/footer-by-page";
+import { Connectivity } from "@/components/offline/connectivity";
 
 // Every page in this group needs a signed-in user who finished first-time setup.
 export default async function AppLayout({ children }: LayoutProps<"/">) {
@@ -19,6 +20,7 @@ export default async function AppLayout({ children }: LayoutProps<"/">) {
           <TopNav role={profile.role} />
         </div>
       </header>
+      <Connectivity userId={profile.id} />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-12 sm:px-6">{children}</main>
       {/* On phones the fixed bottom tab bar would cover the end of the footer. */}
       <FooterByPage

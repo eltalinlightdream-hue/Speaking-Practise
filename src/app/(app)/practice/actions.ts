@@ -2,49 +2,11 @@
 
 import { requireProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { EXAMS, isExamCode, partConfig, type ExamCode } from "@/config/exams";
-import { pickAcrossTopics, shuffle } from "@/lib/practice/random";
+import { isExamCode } from "@/config/exams";
+import { buildGeneralSteps, readChoice, type PoolTopic } from "@/lib/practice/general-plan";
+import { loadPool } from "@/lib/practice/pool";
 import { allowedMock, buildMockSteps } from "@/lib/practice/mock";
-import type { RecordingType, SessionPlan, Step } from "@/lib/practice/types";
-
-type TopicWithQuestions = {
-  id: string;
-  title: string;
-  part: number;
-  related_topic_id: string | null;
-  cue_bullets: string[];
-  cue_explain: string | null;
-  questions: { text: string; audio_url: string | null; active: boolean; sort_order: number }[];
-};
-
-// 0 means "unlimited": every question in the pool, until the student taps Finish.
-const COUNTS = [3, 5, 8, 10, 0];
-/** With "unlimited" in Part 1 + Part 3, Part 1 stops here so Part 3 is reached. */
-const UNLIMITED_PART1_WITH_PART3 = 12;
-
-async function loadTopics(exam: ExamCode, part: number) {
-  const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("topics")
-    .select("id, title, part, related_topic_id, cue_bullets, cue_explain, questions(text, audio_url, active, sort_order)")
-    .eq("exam", exam)
-    .eq("part", part)
-    .eq("active", true);
-  if (error) throw new Error(error.message);
-  return ((data ?? []) as TopicWithQuestions[]).map((t) => ({
-    ...t,
-    questions: t.questions.filter((q) => q.active).sort((a, b) => a.sort_order - b.sort_order),
-  }));
-}
-
-function questionSteps(exam: ExamCode, part: number, topics: TopicWithQuestions[], count: number, perTopic: number): Step[] {
-  const seconds = partConfig(exam, part)?.secondsPerQuestion ?? 45;
-  return pickAcrossTopics(
-    topics.map((t) => ({ topic: t.title, items: t.questions })),
-    count,
-    perTopic,
-  ).map(({ topic, item }) => ({ kind: "question", part, topic, text: item.text, audioUrl: item.audio_url, seconds }));
-}
+import type { RecordingType, SessionPlan } from "@/lib/practice/types";
 
 export type StartResult = { plan?: SessionPlan; error?: "empty" | "taken" | string };
 
@@ -61,52 +23,15 @@ export async function startGeneralTraining(input: {
   await requireProfile();
   if (!isExamCode(input.exam)) return { error: "invalid exam" };
   const exam = input.exam;
-  const option = EXAMS[exam].generalTraining.find((o) => o.id === input.optionId);
-  if (!option) return { error: "invalid option" };
-  const unlimited = input.count === 0 && option.parts.some((p) => partConfig(exam, p)?.kind === "questions");
-  const count = unlimited ? Infinity : COUNTS.includes(input.count) ? input.count : EXAMS[exam].defaultQuestionCount;
   const recordingType: RecordingType = ["none", "audio", "video"].includes(input.recordingType) ? input.recordingType : "none";
+  const choice = readChoice({ exam, optionId: input.optionId, count: input.count });
+  if (!choice) return { error: "invalid option" };
 
-  const steps: Step[] = [];
-  let linkedCueId: string | null = null;
-
-  for (const part of option.parts) {
-    const cfg = partConfig(exam, part);
-    if (!cfg) continue;
-    const topics = await loadTopics(exam, part);
-
-    if (cfg.kind === "cue-card") {
-      const cards = topics.filter((t) => t.cue_bullets.length > 0 || t.cue_explain);
-      const card = shuffle(cards)[0];
-      if (!card) continue;
-      linkedCueId = card.id;
-      steps.push({
-        kind: "cue-card",
-        part,
-        title: card.title,
-        bullets: card.cue_bullets,
-        explain: card.cue_explain,
-        prepSeconds: cfg.prepSeconds ?? 60,
-        speakSeconds: cfg.speakSeconds ?? 120,
-      });
-    } else if (cfg.linkedToPart) {
-      // Part 3: questions from ONE discussion topic (linked to the cue card when
-      // there is one), topped up from other topics if that topic is short.
-      const linked = linkedCueId ? topics.filter((t) => t.related_topic_id === linkedCueId) : [];
-      const main = shuffle(linked.length ? linked : topics)[0];
-      const ordered = main ? [main, ...shuffle(topics.filter((t) => t.id !== main.id))] : [];
-      const picked: Step[] = [];
-      for (const t of ordered) {
-        for (const s of questionSteps(exam, part, [t], count - picked.length, count)) picked.push(s);
-        if (picked.length >= count) break;
-      }
-      steps.push(...picked);
-    } else {
-      // Part 1: a few questions from each of several random topics.
-      const p1Count = unlimited && option.parts.length > 1 ? UNLIMITED_PART1_WITH_PART3 : count;
-      steps.push(...questionSteps(exam, part, topics, p1Count, 4));
-    }
-  }
+  const pools = new Map<number, PoolTopic[]>();
+  for (const p of choice.option.parts) pools.set(p, await loadPool(exam, p));
+  const built = buildGeneralSteps({ exam, optionId: input.optionId, count: input.count }, (p) => pools.get(p) ?? []);
+  if (!built) return { error: "invalid option" };
+  const { option, unlimited, steps, label } = built;
 
   if (steps.length === 0) return { error: "empty" };
 
@@ -124,7 +49,7 @@ export async function startGeneralTraining(input: {
       sessionId: sessionId as string,
       exam,
       mode: "general",
-      label: option.parts.map((p) => `Part ${p}`).join(" + "),
+      label,
       steps,
       allowReplay: true,
       autoAdvance: false,

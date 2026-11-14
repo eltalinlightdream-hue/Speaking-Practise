@@ -288,7 +288,9 @@
       "deleteConfirmButton": "Yes, delete this account",
       "cannotDeleteOwner": "The owner account cannot be deleted.",
       "cannotDeleteAdmin": "Only the owner can delete an admin.",
-      "error": "That did not work: {message}"
+      "error": "That did not work: {message}",
+      "editTitle": "Edit name and group",
+      "saved": "Saved."
     }
   },
   "owner": {
@@ -404,7 +406,8 @@
       "again": "Practise again",
       "home": "Home",
       "recordingFailed": "The recording could not be saved on this device.",
-      "stoppedTitle": "Session ended"
+      "stoppedTitle": "Session ended",
+      "savedLater": "No internet: your time is kept on this phone and will be saved automatically when the internet is back."
     },
     "modes": {
       "general": "General Training",
@@ -427,7 +430,11 @@
       "another": "Next mock test"
     },
     "unlimited": "Unlimited",
-    "unlimitedHelp": "Questions keep coming until you tap “Finish” or the pool runs out."
+    "unlimitedHelp": "Questions keep coming until you tap “Finish” or the pool runs out.",
+    "offline": {
+      "noPack": "To practise without internet, open this page once while you are online.",
+      "mockWaiting": "You finished this mock test offline. The next one will be ready when the internet is back."
+    }
   },
   "progress": {
     "title": "My progress",
@@ -593,5 +600,14 @@
     "week": "Week",
     "thisWeek": "this week",
     "download": "Download PDF"
+  },
+  "groups": {
+    "even": "Even days",
+    "odd": "Odd days",
+    "other": "Other"
+  },
+  "offline": {
+    "banner": "You are offline. You can keep practising: your time is kept on this phone and sent when the internet is back.",
+    "waiting": "{n, plural, one {# practice session} other {# practice sessions}} from offline waiting to be saved…"
   }
 }

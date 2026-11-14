@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { AlertTriangle, Clock, Play } from "lucide-react";
@@ -16,12 +16,23 @@ import type { NextMock } from "@/lib/practice/mock-rotation";
 import { stopStream } from "@/lib/practice/recorder";
 import { saveSessionOutcome, type FinishedSession } from "@/lib/practice/save-outcome";
 import { unlockSpeech } from "@/lib/speech";
-import type { RecordingType, SessionPlan } from "@/lib/practice/types";
+import type { RecordingType, SessionPlan, Step } from "@/lib/practice/types";
+import { offlineMockPlan, withTimeout } from "@/lib/practice/offline-start";
+import { onPendingChange, pendingSessions } from "@/lib/practice/offline-queue";
 import { startMockTest } from "../../actions";
 
 type Stage = "ready" | "running" | "finished";
 
-export function MockTest({ exam, next }: { exam: ExamCode; next: NextMock }) {
+/** True while a finished mock of this set still waits on this phone to be sent. */
+function useDoneOffline(mockSetId: string) {
+  return useSyncExternalStore(
+    onPendingChange,
+    () => pendingSessions().some((e) => e.completed && e.start?.mockSetId === mockSetId),
+    () => false,
+  );
+}
+
+export function MockTest({ exam, next, steps }: { exam: ExamCode; next: NextMock; steps: Step[] }) {
   const t = useTranslations("practice");
   const router = useRouter();
   const cfg = EXAMS[exam];
@@ -41,13 +52,28 @@ export function MockTest({ exam, next }: { exam: ExamCode; next: NextMock }) {
   // Release the microphone/camera when leaving the page.
   useEffect(() => () => stopStream(stream), [stream]);
 
-  const canStart = recordingType === "none" || !!stream;
+  const doneOffline = useDoneOffline(next.set.id);
+  const canStart = (recordingType === "none" || !!stream) && !doneOffline;
+
+  /** No internet: run the set with the questions this page brought along. */
+  function startOffline() {
+    if (steps.length === 0) return setError(t("mock.broken"));
+    setPlan(offlineMockPlan({ exam, mockSetId: next.set.id, name: next.set.name, steps, recordingType }));
+    setStage("running");
+  }
 
   function start() {
     unlockSpeech();
     setError(null);
+    if (!navigator.onLine) return startOffline();
     startTransition(async () => {
-      const res = await startMockTest({ exam, mockSetId: next.set.id, recordingType });
+      let res: Awaited<ReturnType<typeof startMockTest>> | "timeout";
+      try {
+        res = await withTimeout(startMockTest({ exam, mockSetId: next.set.id, recordingType }));
+      } catch {
+        res = "timeout";
+      }
+      if (res === "timeout") return startOffline();
       if (res.error || !res.plan) {
         if (res.error === "taken") {
           // Finished on another device meanwhile: load the next set.
@@ -84,6 +110,7 @@ export function MockTest({ exam, next }: { exam: ExamCode; next: NextMock }) {
       <FinishScreen
         activeSeconds={result.outcome.activeSeconds}
         savedSeconds={result.outcome.savedSeconds}
+        queued={result.outcome.queued}
         recording={result.saved}
         recordingError={result.recordingError}
         stoppedEarly={!completed}
@@ -154,9 +181,16 @@ export function MockTest({ exam, next }: { exam: ExamCode; next: NextMock }) {
         </p>
       )}
 
-      <StartHint recordingType={recordingType} show={!canStart} />
+      {doneOffline && (
+        <p role="status" className="flex items-start gap-2 rounded-button bg-muted px-3 py-2 text-sm">
+          <Clock className="mt-0.5 size-4 shrink-0 text-secondary" aria-hidden />
+          {t("offline.mockWaiting")}
+        </p>
+      )}
 
-      <Button type="button" size="lg" onClick={start} disabled={!canStart || pending} className="self-start" aria-describedby={canStart ? undefined : START_HINT_ID}>
+      <StartHint recordingType={recordingType} show={!canStart && !doneOffline} />
+
+      <Button type="button" size="lg" onClick={start} disabled={!canStart || pending} className="self-start" aria-describedby={canStart || doneOffline ? undefined : START_HINT_ID}>
         <Play aria-hidden />
         {pending ? t("starting") : t("mock.start")}
       </Button>

@@ -288,7 +288,9 @@
       "deleteConfirmButton": "Ha, bu hisobni oʻchirish",
       "cannotDeleteOwner": "Egasining hisobini oʻchirib boʻlmaydi.",
       "cannotDeleteAdmin": "Adminni faqat ega oʻchira oladi.",
-      "error": "Bajarilmadi: {message}"
+      "error": "Bajarilmadi: {message}",
+      "editTitle": "Ism va guruhni oʻzgartirish",
+      "saved": "Saqlandi."
     }
   },
   "owner": {
@@ -404,7 +406,8 @@
       "again": "Yana mashq qilish",
       "home": "Bosh sahifa",
       "recordingFailed": "Yozuvni bu qurilmada saqlab boʻlmadi.",
-      "stoppedTitle": "Mashq toʻxtatildi"
+      "stoppedTitle": "Mashq toʻxtatildi",
+      "savedLater": "Internet yoʻq: vaqtingiz telefonda saqlandi va internet qaytganda avtomatik yuboriladi."
     },
     "modes": {
       "general": "Umumiy mashq",
@@ -427,7 +430,11 @@
       "another": "Keyingi mock test"
     },
     "unlimited": "Cheksiz",
-    "unlimitedHelp": "Savollar tugamaguncha yoki siz “Tugatish”ni bosguningizcha davom etadi."
+    "unlimitedHelp": "Savollar tugamaguncha yoki siz “Tugatish”ni bosguningizcha davom etadi.",
+    "offline": {
+      "noPack": "Internetsiz mashq qilish uchun bu sahifani avval internet bor paytda bir marta oching.",
+      "mockWaiting": "Siz bu mock testni internetsiz tugatdingiz. Internet qaytganda keyingisi tayyor boʻladi."
+    }
   },
   "progress": {
     "title": "Mening natijalarim",
@@ -593,5 +600,14 @@
     "week": "Hafta",
     "thisWeek": "shu hafta",
     "download": "PDF yuklab olish"
+  },
+  "groups": {
+    "even": "Juft kunlar",
+    "odd": "Toq kunlar",
+    "other": "Boshqa"
+  },
+  "offline": {
+    "banner": "Internet yoʻq. Mashq qilishda davom etishingiz mumkin: vaqtingiz telefonda saqlanadi va internet qaytganda yuboriladi.",
+    "waiting": "Internetsiz qilingan {n} ta mashq saqlanmoqda…"
   }
 }

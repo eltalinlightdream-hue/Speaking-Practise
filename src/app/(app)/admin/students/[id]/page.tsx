@@ -11,7 +11,8 @@ import { createClient } from "@/lib/supabase/server";
 import { loadProgress } from "@/lib/practice/progress-data";
 import { weekDays, weekStart } from "@/lib/practice/calendar";
 import { formatDay } from "@/lib/format-date";
-import { DeleteUser, KeptToggle, RoleSwitch } from "../student-actions";
+import { loadGroups } from "@/lib/admin/queries";
+import { DeleteUser, EditStudent, KeptToggle, RoleSwitch } from "../student-actions";
 
 type Target = {
   id: string;
@@ -20,7 +21,7 @@ type Target = {
   role: "student" | "admin" | "owner";
   kept: boolean;
   created_at: string;
-  lesson_groups: { name: string } | null;
+  lesson_group_id: string | null;
 };
 
 export default async function StudentPage({ params, searchParams }: PageProps<"/admin/students/[id]">) {
@@ -36,7 +37,7 @@ export default async function StudentPage({ params, searchParams }: PageProps<"/
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, full_name, email, role, kept, created_at, lesson_groups(name)")
+    .select("id, full_name, email, role, kept, created_at, lesson_group_id")
     .eq("id", id)
     .maybeSingle();
   if (error) throw new Error(error.message);
@@ -44,11 +45,14 @@ export default async function StudentPage({ params, searchParams }: PageProps<"/
   const target = data as unknown as Target;
   const name = target.full_name || target.email || "—";
 
-  const progress = await loadProgress(target.id, (await searchParams).month);
+  const [progress, groups] = await Promise.all([loadProgress(target.id, (await searchParams).month), loadGroups()]);
+  const groupName = groups.find((g) => g.id === target.lesson_group_id)?.name ?? tr("noGroup");
   const weekSeconds = weekDays(weekStart(progress.summary.today)).reduce((sum, d) => sum + (progress.summary.secondsByDay.get(d) ?? 0), 0);
 
   const isSelf = target.id === viewer.id;
   const viewerIsOwner = viewer.role === "owner";
+  // Same rule as the database: admins edit students, the owner edits everyone.
+  const canEdit = target.role === "student" || viewerIsOwner || isSelf;
   const deleteNote =
     target.role === "owner" ? t("cannotDeleteOwner") : target.role === "admin" && !viewerIsOwner ? t("cannotDeleteAdmin") : null;
 
@@ -69,7 +73,7 @@ export default async function StudentPage({ params, searchParams }: PageProps<"/
           <dl className="grid gap-x-6 gap-y-3 sm:grid-cols-2">
             {[
               { label: t("email"), value: target.email ?? "—" },
-              { label: t("group"), value: target.lesson_groups?.name ?? tr("noGroup") },
+              { label: t("group"), value: groupName },
               { label: t("joined"), value: formatDay(target.created_at.slice(0, 10), locale) },
               { label: t("thisWeek"), value: tr("minutesValue", { m: Math.floor(weekSeconds / 60) }) },
             ].map((row) => (
@@ -81,6 +85,22 @@ export default async function StudentPage({ params, searchParams }: PageProps<"/
           </dl>
         </CardContent>
       </Card>
+
+      {canEdit && (
+        <Card>
+          <CardHeader>
+            <CardTitle>{t("editTitle")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EditStudent
+              userId={target.id}
+              fullName={target.full_name ?? ""}
+              groupId={target.lesson_group_id ?? ""}
+              groups={groups.filter((g) => g.active || g.id === target.lesson_group_id)}
+            />
+          </CardContent>
+        </Card>
+      )}
 
       <ProgressView data={progress} basePath={`/admin/students/${target.id}`} showStart={false} />
       <WeeklyReportDownload userId={target.id} />
