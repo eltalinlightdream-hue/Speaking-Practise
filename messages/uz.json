@@ -361,7 +361,9 @@
       "notFound": "Bu qurilmada mikrofon yoki kamera topilmadi.",
       "unsupported": "Bu brauzer yozib ololmaydi. Chrome yoki Safarining soʻnggi versiyasini sinab koʻring yoki “Yozmaslik”ni tanlang.",
       "error": "Mikrofonni ishga tushirib boʻlmadi: {message}",
-      "level": "Mikrofon darajasi"
+      "level": "Mikrofon darajasi",
+      "needed": "Boshlash uchun avval mikrofonni tekshiring.",
+      "neededVideo": "Boshlash uchun avval kamera va mikrofonni tekshiring."
     },
     "start": "Mashqni boshlash",
     "starting": "Boshlanmoqda…",

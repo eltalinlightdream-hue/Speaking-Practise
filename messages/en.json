@@ -361,7 +361,9 @@
       "notFound": "No microphone or camera was found on this device.",
       "unsupported": "This browser cannot record. Try the latest Chrome or Safari, or choose “No recording”.",
       "error": "Could not start the microphone: {message}",
-      "level": "Microphone level"
+      "level": "Microphone level",
+      "needed": "Check your microphone first, then you can start.",
+      "neededVideo": "Check your camera and microphone first, then you can start."
     },
     "start": "Start practice",
     "starting": "Starting…",

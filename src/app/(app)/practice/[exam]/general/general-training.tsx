@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { AlertTriangle, ChevronRight, Infinity as InfinityIcon, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RecordingChoice } from "@/components/practice/recording-choice";
+import { StartHint, START_HINT_ID } from "@/components/practice/start-hint";
 import { SessionRunner, type SessionOutcome } from "@/components/practice/session-runner";
 import { FinishScreen } from "@/components/practice/finish-screen";
 import { EXAMS, type ExamCode } from "@/config/exams";
@@ -31,6 +32,11 @@ export function GeneralTraining({ exam }: { exam: ExamCode }) {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<FinishedSession | null>(null);
   const [pending, startTransition] = useTransition();
+
+  // Each new step starts at the top of the page (on a phone the last tap was near the bottom).
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [stage]);
 
   // Release the microphone/camera when leaving the page.
   useEffect(() => () => stopStream(stream), [stream]);
@@ -163,11 +169,13 @@ export function GeneralTraining({ exam }: { exam: ExamCode }) {
             </p>
           )}
 
+          <StartHint recordingType={recordingType} show={!canStart} />
+
           <div className="flex flex-wrap gap-3">
             <Button type="button" variant="ghost" onClick={() => setStage("choose")}>
               {t("back")}
             </Button>
-            <Button type="button" size="lg" onClick={start} disabled={!canStart || pending}>
+            <Button type="button" size="lg" onClick={start} disabled={!canStart || pending} aria-describedby={canStart ? undefined : START_HINT_ID}>
               <Play aria-hidden />
               {pending ? t("starting") : t("start")}
             </Button>

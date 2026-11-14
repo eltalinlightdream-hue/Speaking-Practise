@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronRight, Flag, RotateCcw, Volume2, X } from "lucide-react";
+import { ChevronRight, Flag, Mic, RotateCcw, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/input";
@@ -223,16 +223,18 @@ export function SessionRunner({
     <div className="fixed inset-0 z-50 flex flex-col overflow-y-auto bg-background">
       {/* Top bar: progress, recording dot, end */}
       <div className="sticky top-0 z-10 border-b border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-3xl items-center gap-3 px-4 py-2">
+        <div className="mx-auto flex w-full max-w-3xl items-center gap-2 px-3 py-2 sm:gap-3 sm:px-4">
           <Badge variant="outline" className="shrink-0 whitespace-nowrap">{t("part", { part: step.part })}</Badge>
-          <span className="whitespace-nowrap text-sm font-semibold text-muted-foreground tabular-nums">
+          <span className="min-w-0 truncate text-sm font-semibold text-muted-foreground tabular-nums">
             {plan.unlimited ? t("questionN", { n: index + 1 }) : t("question", { n: index + 1, total: plan.steps.length })}
           </span>
           <span className="flex-1" />
           {isRecording && !finishing && (
-            <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-sm font-semibold text-destructive">
+            <span className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-destructive" title={t("recording")}>
               <span className="size-3 animate-pulse rounded-full bg-destructive" aria-hidden />
-              {t("recording")}
+              {/* Small phones: the mic icon says "recording" without the word, so the end button always fits. */}
+              <Mic className="size-4 sm:hidden" aria-hidden />
+              <span className="sr-only sm:not-sr-only">{t("recording")}</span>
             </span>
           )}
           <Button type="button" variant="ghost" size="icon" onClick={() => {
@@ -240,7 +242,7 @@ export function SessionRunner({
               if (plan.mode === "mock" && !window.confirm(t("quitMockConfirm"))) return;
               void finish(false);
             }}
-            disabled={finishing} aria-label={t("quit")} title={t("quit")}>
+            disabled={finishing} aria-label={t("quit")} title={t("quit")} className="shrink-0">
             <X aria-hidden />
           </Button>
         </div>
