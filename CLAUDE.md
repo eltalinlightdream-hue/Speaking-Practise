@@ -189,7 +189,7 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
 ## Build progress
 
 - [x] Step 0/1: repo, Next.js app, design system, uz/en, Supabase clients, Google login (now hidden), first-time setup,
-  roles + RLS, role-based navigation. Telegram login waits until the site has a public domain (Step 5 deploy).
+  roles + RLS, role-based navigation. (Telegram login came in Step 5.)
 - [x] Step 2: topics/questions/mock sets tables + RLS, `question-audio` storage bucket, content loaded
   (34 IELTS mocks, 29 Part 1 topics, 34 cue cards, 40 Part 3 topics, CEFR placeholders), admin pages
   (overview, topics, add questions with voice preview + duplicate check, mock set editor, JSON import/export).
