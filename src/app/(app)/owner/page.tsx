@@ -1,11 +1,24 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import { Crown, Info, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { requireOwner } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { telegramApi } from "@/lib/telegram-bot";
 import { RoleSwitch } from "../admin/students/student-actions";
+import { TelegramBotCard, type BotStatus } from "./telegram-bot-card";
+
+/** Asks Telegram where the bot's messages go, to show "connected" or not. */
+async function loadBotStatus(): Promise<BotStatus> {
+  if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME) return { state: "off" };
+  const h = await headers();
+  const expected = `https://${h.get("x-forwarded-host") ?? h.get("host")}/auth/telegram/webhook`;
+  const info = await telegramApi<{ url?: string; last_error_message?: string }>("getWebhookInfo", {}).catch(() => null);
+  const url = info?.result?.url;
+  return url === expected ? { state: "connected", url, lastError: info?.result?.last_error_message } : { state: "notConnected", url };
+}
 
 export default async function OwnerPage() {
   const owner = await requireOwner();
@@ -22,6 +35,7 @@ export default async function OwnerPage() {
   if (error) throw new Error(error.message);
   const people = data ?? [];
   const admins = people.filter((p) => p.role === "admin");
+  const botStatus = await loadBotStatus();
 
   return (
     <div className="flex flex-col gap-6">
@@ -65,6 +79,8 @@ export default async function OwnerPage() {
           {admins.length === 0 && <p className="text-muted-foreground">{t("noAdmins")}</p>}
         </CardContent>
       </Card>
+
+      <TelegramBotCard status={botStatus} />
 
       <div className="flex flex-col items-start gap-3">
         <p className="flex items-start gap-2 text-sm text-muted-foreground">

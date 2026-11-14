@@ -1,48 +1,83 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { telegramEmail, telegramHash, verifyTelegramLogin } from "./telegram-auth.ts";
+import {
+  confirmData,
+  hashSecret,
+  isStartCommand,
+  isValidCode,
+  parseConfirmData,
+  parseStartCode,
+  randomToken,
+  safeEqual,
+  safeNext,
+  telegramEmail,
+  webhookSecret,
+} from "./telegram-auth.ts";
 
-const TOKEN = "123456:TEST-token-for-unit-tests";
-const NOW = 1_800_000_000;
+const CODE = "abcDEF123_-abcDEF123_-ab";
 
-function signed(fields: Record<string, string>) {
-  return { ...fields, hash: telegramHash(fields, TOKEN) };
-}
-
-const base = { id: "42", first_name: "Aziza", last_name: "Karimova", username: "aziza", auth_date: String(NOW - 10) };
-
-test("a correctly signed, fresh answer is accepted", () => {
-  const user = verifyTelegramLogin(signed(base), TOKEN, NOW);
-  assert.deepEqual(user, { id: 42, first_name: "Aziza", last_name: "Karimova", username: "aziza", photo_url: undefined, auth_date: NOW - 10 });
+test("random tokens are valid start codes and differ", () => {
+  const a = randomToken();
+  const b = randomToken();
+  assert.ok(isValidCode(a));
+  assert.ok(isValidCode(b));
+  assert.notEqual(a, b);
 });
 
-test("our own ?next= is ignored by the check", () => {
-  assert.ok(verifyTelegramLogin({ ...signed(base), next: "/home" }, TOKEN, NOW));
+test("codes: only URL-safe characters, 20 to 64 long", () => {
+  assert.ok(isValidCode(CODE));
+  assert.equal(isValidCode("short"), false);
+  assert.equal(isValidCode("x".repeat(65)), false);
+  assert.equal(isValidCode("abc def ghi jkl mno pqr"), false);
+  assert.equal(isValidCode(undefined), false);
 });
 
-test("a changed field is rejected", () => {
-  assert.equal(verifyTelegramLogin({ ...signed(base), id: "43" }, TOKEN, NOW), null);
-  assert.equal(verifyTelegramLogin({ ...signed(base), first_name: "Someone" }, TOKEN, NOW), null);
+test("/start with a code gives the code", () => {
+  assert.equal(parseStartCode(`/start ${CODE}`), CODE);
+  assert.equal(parseStartCode(`/start@speaking_easy_with_bot ${CODE}`), CODE);
 });
 
-test("a hash made with another bot's token is rejected", () => {
-  const other = { ...base, hash: telegramHash(base, "999:other") };
-  assert.equal(verifyTelegramLogin(other, TOKEN, NOW), null);
+test("/start without a code, or other text, gives null", () => {
+  assert.equal(parseStartCode("/start"), null);
+  assert.equal(parseStartCode("hello"), null);
+  assert.equal(parseStartCode(`/start bad code`), null);
+  assert.equal(parseStartCode(undefined), null);
+  assert.ok(isStartCommand("/start"));
+  assert.ok(isStartCommand(`/start ${CODE}`));
+  assert.equal(isStartCommand("/started"), false);
 });
 
-test("an old answer is rejected", () => {
-  const old = signed({ ...base, auth_date: String(NOW - 2 * 60 * 60) });
-  assert.equal(verifyTelegramLogin(old, TOKEN, NOW), null);
+test("confirm button data round-trips", () => {
+  assert.equal(parseConfirmData(confirmData(CODE)), CODE);
+  assert.ok(confirmData(CODE).length <= 64, "Telegram allows 64 bytes of button data");
+  assert.equal(parseConfirmData("no:" + CODE), null);
+  assert.equal(parseConfirmData("ok:bad"), null);
+  assert.equal(parseConfirmData(undefined), null);
 });
 
-test("missing or broken fields are rejected", () => {
-  assert.equal(verifyTelegramLogin({ ...signed(base), hash: "abc" }, TOKEN, NOW), null);
-  const noId: Record<string, string> = { ...base };
-  delete noId.id;
-  assert.equal(verifyTelegramLogin(signed(noId), TOKEN, NOW), null);
-  assert.equal(verifyTelegramLogin(signed(base), "", NOW), null);
+test("secret hash and webhook secret are stable hex", () => {
+  assert.equal(hashSecret("s"), hashSecret("s"));
+  assert.notEqual(hashSecret("s"), hashSecret("t"));
+  const w = webhookSecret("123:TOKEN");
+  assert.match(w, /^[0-9a-f]{64}$/);
+  assert.equal(w, webhookSecret("123:TOKEN"));
+  assert.notEqual(w, webhookSecret("123:OTHER"));
 });
 
-test("made-up email for Supabase", () => {
+test("safeEqual", () => {
+  assert.ok(safeEqual("abc", "abc"));
+  assert.equal(safeEqual("abc", "abd"), false);
+  assert.equal(safeEqual("abc", "abcd"), false);
+});
+
+test("next: only our own paths", () => {
+  assert.equal(safeNext("/progress"), "/progress");
+  assert.equal(safeNext("//evil.com"), "/home");
+  assert.equal(safeNext("/\\evil.com"), "/home");
+  assert.equal(safeNext("https://evil.com"), "/home");
+  assert.equal(safeNext(undefined), "/home");
+});
+
+test("made-up email on the reserved .invalid domain", () => {
   assert.equal(telegramEmail(42), "telegram-42@users.invalid");
 });

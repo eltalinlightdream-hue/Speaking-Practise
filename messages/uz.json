@@ -30,7 +30,12 @@
     "error": "Kirish amalga oshmadi. Iltimos, qaytadan urinib koʻring.",
     "or": "yoki",
     "telegramError": "Telegram orqali kirib boʻlmadi. Qaytadan urinib koʻring yoki Google orqali kiring.",
-    "leadBoth": "Davom etish uchun Google yoki Telegram hisobingizdan foydalaning."
+    "leadBoth": "Davom etish uchun Google yoki Telegram hisobingizdan foydalaning.",
+    "telegramStart": "Telegram orqali davom etish",
+    "telegramOpen": "Telegramni ochish",
+    "telegramWaiting": "Botda «Start», soʻng «Tasdiqlash» tugmasini bosing. Bu sahifa sizni oʻzi kiritadi.",
+    "telegramExpired": "Kirish havolasi eskirdi. Qaytadan urinib koʻring.",
+    "telegramRetry": "Telegram orqali qayta urinish"
   },
   "onboarding": {
     "title": "Xush kelibsiz!",
@@ -293,7 +298,17 @@
     "noAdmins": "Hali adminlar yoʻq.",
     "howTo": "Kimnidir admin qilish uchun uni Admin → Oʻquvchilar boʻlimida toping, sahifasini oching va “Admin qilish” tugmasini bosing.",
     "openStudents": "Oʻquvchilarni ochish",
-    "you": "siz"
+    "you": "siz",
+    "telegram": {
+      "title": "Telegram bot",
+      "off": "Telegram orqali kirish oʻchiq: bot sozlamalari hali Vercelda yoʻq.",
+      "connected": "Bot shu saytga ulangan. Talabalar Telegram orqali kira oladi.",
+      "notConnected": "Bot hali shu saytga ulanmagan. Tugmani bir marta bosing.",
+      "connect": "Botni ulash",
+      "reconnect": "Qayta ulash",
+      "lastError": "Telegramning oxirgi xatosi: {message}",
+      "error": "Ulab boʻlmadi: {message}"
+    }
   },
   "roles": {
     "student": "Oʻquvchi",

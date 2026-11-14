@@ -75,14 +75,17 @@ After opening Claude Code in this folder, approve the project tools, then type `
 
 ## Telegram login (one-time setup)
 
-Telegram login stays hidden until these steps are done.
+Students sign in through the bot: on `/login` they tap **Continue with Telegram**, the bot opens, they press
+**Start** and then **Confirm**, and the login page signs them in by itself. Telegram login stays hidden until
+these steps are done.
 
 1. In Telegram, open **@BotFather**, send `/newbot`, and follow the questions (name: *Speaking Easy*).
    BotFather gives you a **token**. Keep it secret: never paste it into chat or into the code.
-2. Still in @BotFather, send `/setdomain`, choose your bot and send your site address without `https://`
-   (for example `speaking-easy.vercel.app`). Telegram only shows the button on that address.
-3. In Vercel → Project → **Settings → Environment Variables**, add:
+2. In Vercel → Project → **Settings → Environment Variables**, add:
    - `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME`: the bot's username, without `@`
    - `TELEGRAM_BOT_TOKEN`: the token from step 1
    - `SUPABASE_SERVICE_ROLE_KEY`: Supabase → **Project Settings → API Keys** → the secret (service_role) key
-4. Redeploy (Vercel → Deployments → ⋯ → Redeploy). The Telegram button appears on `/login`.
+3. Redeploy (Vercel → Deployments → ⋯ → Redeploy). The Telegram button appears on `/login`.
+4. Sign in as the owner, open **`/owner`** and press **Connect bot** in the "Telegram bot" card. This tells
+   Telegram to send the bot's messages to `https://<your-address>/auth/telegram/webhook`. Press it again
+   if the site address or the bot token ever changes.

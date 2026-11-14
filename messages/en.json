@@ -30,7 +30,12 @@
     "error": "Sign-in did not work. Please try again.",
     "or": "or",
     "telegramError": "Telegram sign-in did not work. Please try again, or use Google.",
-    "leadBoth": "Use your Google or Telegram account to continue."
+    "leadBoth": "Use your Google or Telegram account to continue.",
+    "telegramStart": "Continue with Telegram",
+    "telegramOpen": "Open Telegram",
+    "telegramWaiting": "In the bot, press Start, then Confirm. This page will sign you in by itself.",
+    "telegramExpired": "The sign-in link has expired. Please try again.",
+    "telegramRetry": "Try again with Telegram"
   },
   "onboarding": {
     "title": "Welcome!",
@@ -293,7 +298,17 @@
     "noAdmins": "There are no admins yet.",
     "howTo": "To make someone an admin, find them in Admin → Students, open their page and press “Make admin”.",
     "openStudents": "Open students",
-    "you": "you"
+    "you": "you",
+    "telegram": {
+      "title": "Telegram bot",
+      "off": "Telegram sign-in is off: the bot settings are not in Vercel yet.",
+      "connected": "The bot is connected to this site. Students can sign in with Telegram.",
+      "notConnected": "The bot is not connected to this site yet. Press the button once.",
+      "connect": "Connect bot",
+      "reconnect": "Connect again",
+      "lastError": "Telegram's last error: {message}",
+      "error": "Could not connect: {message}"
+    }
   },
   "roles": {
     "student": "Student",

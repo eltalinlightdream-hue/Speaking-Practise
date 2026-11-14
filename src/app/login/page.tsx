@@ -5,7 +5,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { SiteFooter } from "@/components/site-footer";
 import { GoogleButton } from "./google-button";
-import { TelegramButton } from "./telegram-button";
+import { TelegramLogin } from "./telegram-login";
 
 export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   const params = await searchParams;
@@ -41,7 +41,17 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
                 <p className="flex items-center gap-3 text-sm text-muted-foreground before:h-px before:flex-1 before:bg-border after:h-px after:flex-1 after:bg-border">
                   {t("or")}
                 </p>
-                <TelegramButton bot={telegramBot} next={next} />
+                <TelegramLogin
+                  next={next}
+                  labels={{
+                    start: t("telegramStart"),
+                    open: t("telegramOpen"),
+                    waiting: t("telegramWaiting"),
+                    expired: t("telegramExpired"),
+                    error: t("telegramError"),
+                    retry: t("telegramRetry"),
+                  }}
+                />
               </>
             ) : (
               <p className="text-center text-sm text-muted-foreground">{t("telegram")}</p>
