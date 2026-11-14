@@ -69,3 +69,40 @@ export async function deleteUser(_prev: DangerState, formData: FormData): Promis
   revalidatePath("/admin/students");
   redirect("/admin/students");
 }
+
+export type RowResult = { ok?: boolean; error?: "name" | "save"; message?: string };
+
+/**
+ * From the ⋮ menu in the Students list: change name and/or group.
+ * admin_update_profile checks who may do it (admins: students; owner: everyone).
+ */
+export async function editStudentFromList(userId: string, fullName: string, groupId: string | null): Promise<RowResult> {
+  await requireAdmin();
+  const name = fullName.replace(/\s+/g, " ").trim();
+  if (!UUID.test(userId) || (groupId && !UUID.test(groupId))) return { error: "save", message: "bad input" };
+  if (name.length < 2 || name.length > 100) return { error: "name" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("admin_update_profile", {
+    p_user_id: userId,
+    p_full_name: name,
+    p_lesson_group_id: groupId || null,
+  });
+  if (error) return { error: "save", message: error.message };
+  revalidatePath("/admin/students");
+  revalidatePath(`/admin/students/${userId}`);
+  revalidatePath("/admin/reports");
+  return { ok: true };
+}
+
+/** From the ⋮ menu: delete an account and stay on the list (admin_delete_user checks the rules). */
+export async function deleteStudentFromList(userId: string, confirmed: boolean): Promise<RowResult> {
+  await requireAdmin();
+  if (!confirmed || !UUID.test(userId)) return { error: "save", message: "not confirmed" };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("admin_delete_user", { p_user_id: userId });
+  if (error) return { error: "save", message: error.message };
+  revalidatePath("/admin/students");
+  revalidatePath("/admin/reports");
+  return { ok: true };
+}

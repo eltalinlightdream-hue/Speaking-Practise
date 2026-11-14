@@ -10,12 +10,13 @@ export async function GET(request: Request) {
   if (!profile || !isAdmin(profile)) return NextResponse.json({ error: "forbidden" }, { status: 403 });
 
   const url = new URL(request.url);
-  const { monday, group } = readReportParams(Object.fromEntries(url.searchParams));
-  const { groups, report } = await loadWeeklyReport(monday, group);
+  const { monday, filter } = readReportParams(Object.fromEntries(url.searchParams));
+  const { groups, report } = await loadWeeklyReport(monday, filter);
   const names = new Map(groups.map((g) => [g.id, g.name]));
   const csv = reportCsv(report, (id) => (id ? (names.get(id) ?? "") : ""));
 
-  const groupPart = group ? `_${(names.get(group) ?? "group").replace(/[^\p{L}\p{N}]+/gu, "-")}` : "";
+  const label = filter.group ? (names.get(filter.group) ?? "group") : filter.teacher;
+  const groupPart = label ? `_${label.replace(/[^\p{L}\p{N}]+/gu, "-")}` : "";
   return new NextResponse(csv, {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",

@@ -1,7 +1,7 @@
 import "server-only";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
-import { GROUP_COLUMNS, groupLabel, type LessonGroup } from "@/lib/groups";
+import { GROUP_COLUMNS, groupIdsFor, groupLabel, type GroupFilterValue, type LessonGroup } from "@/lib/groups";
 import { addDays, tashkentDay, type Day } from "@/lib/practice/streak";
 import { buildWeeklyReport, type DailyTotal, type GroupRef, type StudentRef } from "./report";
 
@@ -17,11 +17,11 @@ export async function loadGroups(): Promise<(GroupRef & LessonGroup)[]> {
   return ((data ?? []) as LessonGroup[]).map((g) => ({ ...g, name: groupLabel(g, (p) => t(p)) }));
 }
 
-/** Students only (admins and the owner are not in the reports). */
-export async function loadStudents(groupId?: string | null): Promise<StudentRef[]> {
+/** Students only (admins and the owner are not in the reports); `groupIds` null = all groups. */
+export async function loadStudents(groupIds: string[] | null = null): Promise<StudentRef[]> {
   const supabase = await createClient();
   let q = supabase.from("profiles").select("id, full_name, email, lesson_group_id").eq("role", "student");
-  if (groupId) q = q.eq("lesson_group_id", groupId);
+  if (groupIds) q = q.in("lesson_group_id", groupIds);
   const { data, error } = await q.order("full_name");
   if (error) throw new Error(error.message);
   return data ?? [];
@@ -35,13 +35,16 @@ export async function loadDailyTotals(from: Day, to: Day): Promise<DailyTotal[]>
   return (data ?? []) as DailyTotal[];
 }
 
-export async function loadWeeklyReport(monday: Day, groupId: string | null) {
+/** The week's report for all groups, one teacher's groups, or one group. */
+export async function loadWeeklyReport(monday: Day, filter: GroupFilterValue) {
   const today = tashkentDay();
   const sunday = addDays(monday, 6);
   const from = addDays(monday < today ? monday : today, -STREAK_DAYS);
   const to = sunday > today ? sunday : today;
-  const [groups, students, totals] = await Promise.all([loadGroups(), loadStudents(groupId), loadDailyTotals(from, to)]);
+  const [groups, totals] = await Promise.all([loadGroups(), loadDailyTotals(from, to)]);
+  const ids = groupIdsFor(groups, filter);
+  const students = await loadStudents(ids);
   // Every group (also disabled ones), so no student lands under "No group" by mistake.
-  const shownGroups = groupId ? groups.filter((g) => g.id === groupId) : groups;
+  const shownGroups = ids ? groups.filter((g) => ids.includes(g.id)) : groups;
   return { groups, report: buildWeeklyReport(students, shownGroups, totals, monday) };
 }

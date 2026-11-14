@@ -47,3 +47,39 @@ export function groupsByTeacher<T extends LessonGroup>(groups: T[]): { teacher: 
   }
   return out.sort((a, b) => (a.teacher === null ? 1 : 0) - (b.teacher === null ? 1 : 0));
 }
+
+// ---------------------------------------------------------------------------
+// Admin list filter: pick a teacher first, then (optionally) one of their groups.
+// URL: ?teacher=<name> for all of a teacher's groups, ?group=<id> for one group.
+// ---------------------------------------------------------------------------
+
+export type GroupFilterValue = { group: string | null; teacher: string | null };
+
+const UUID = /^[0-9a-f-]{36}$/i;
+
+/** Read ?group= and ?teacher= safely (a group wins over a teacher). */
+export function readGroupFilter(sp: { group?: string | string[]; teacher?: string | string[] }): GroupFilterValue {
+  const group = typeof sp.group === "string" && UUID.test(sp.group) ? sp.group : null;
+  const teacher = !group && typeof sp.teacher === "string" ? sp.teacher.replace(/\s+/g, " ").trim().slice(0, 60) || null : null;
+  return { group, teacher };
+}
+
+/** The teacher whose groups are open: the chosen group's teacher, or the chosen teacher if it exists. */
+export function selectedTeacher(groups: Pick<LessonGroup, "id" | "teacher">[], f: GroupFilterValue): string | null {
+  if (f.group) return groups.find((g) => g.id === f.group)?.teacher ?? null;
+  return f.teacher && groups.some((g) => g.teacher === f.teacher) ? f.teacher : null;
+}
+
+/** Group ids to show, or null for "all groups". */
+export function groupIdsFor(groups: Pick<LessonGroup, "id" | "teacher">[], f: GroupFilterValue): string[] | null {
+  if (f.group) return [f.group];
+  const teacher = selectedTeacher(groups, f);
+  return teacher ? groups.filter((g) => g.teacher === teacher).map((g) => g.id) : null;
+}
+
+/** The filter as search params (only the part that is set). */
+export function groupFilterParams(f: GroupFilterValue): Record<string, string> {
+  if (f.group) return { group: f.group };
+  if (f.teacher) return { teacher: f.teacher };
+  return {};
+}

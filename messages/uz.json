@@ -255,7 +255,8 @@
       "daysValue": "{n}/7",
       "minutesValue": "{m} daq.",
       "streakValue": "{n} kun",
-      "pdf": "Haftalik PDF hisobot"
+      "pdf": "Haftalik PDF hisobot",
+      "teacher": "Oʻqituvchi"
     },
     "students": {
       "title": "Oʻquvchilar",
@@ -290,7 +291,13 @@
       "cannotDeleteAdmin": "Adminni faqat ega oʻchira oladi.",
       "error": "Bajarilmadi: {message}",
       "editTitle": "Ism va guruhni oʻzgartirish",
-      "saved": "Saqlandi."
+      "saved": "Saqlandi.",
+      "menu": "{name}: amallar",
+      "menuShort": "Amallar",
+      "changeName": "Ismni oʻzgartirish",
+      "changeNameHelp": "Yangi toʻliq ism-familiyani yozing.",
+      "changeGroup": "Guruhni oʻzgartirish",
+      "needNameFirst": "Bu hisobda hali ism yoʻq. Avval “Ismni oʻzgartirish” orqali ism kiriting."
     }
   },
   "owner": {

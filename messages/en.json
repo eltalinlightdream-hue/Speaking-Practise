@@ -255,7 +255,8 @@
       "daysValue": "{n}/7",
       "minutesValue": "{m} min",
       "streakValue": "{n, plural, one {# day} other {# days}}",
-      "pdf": "Weekly PDF report"
+      "pdf": "Weekly PDF report",
+      "teacher": "Teacher"
     },
     "students": {
       "title": "Students",
@@ -290,7 +291,13 @@
       "cannotDeleteAdmin": "Only the owner can delete an admin.",
       "error": "That did not work: {message}",
       "editTitle": "Edit name and group",
-      "saved": "Saved."
+      "saved": "Saved.",
+      "menu": "{name}: actions",
+      "menuShort": "Actions",
+      "changeName": "Change name",
+      "changeNameHelp": "Type the new full name.",
+      "changeGroup": "Change group",
+      "needNameFirst": "This account has no name yet. Add one first with “Change name”."
     }
   },
   "owner": {

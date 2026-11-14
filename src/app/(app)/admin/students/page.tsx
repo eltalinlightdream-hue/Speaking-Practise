@@ -11,6 +11,9 @@ import { weekStart } from "@/lib/practice/calendar";
 import { addDays, tashkentDay } from "@/lib/practice/streak";
 import { formatDay } from "@/lib/format-date";
 import { GroupFilter } from "@/components/group-filter";
+import { requireAdmin } from "@/lib/auth";
+import { groupIdsFor, readGroupFilter, selectedTeacher } from "@/lib/groups";
+import { StudentMenuGroups, StudentRowMenu } from "./student-row-menu";
 
 const LIMIT = 200;
 
@@ -24,6 +27,7 @@ type Row = {
 };
 
 export default async function StudentsPage({ searchParams }: PageProps<"/admin/students">) {
+  const viewer = await requireAdmin();
   const t = await getTranslations("admin.students");
   const tr = await getTranslations("admin.reports");
   const tRoles = await getTranslations("roles");
@@ -31,18 +35,20 @@ export default async function StudentsPage({ searchParams }: PageProps<"/admin/s
   const sp = await searchParams;
   // Keep only letters, numbers, spaces, dots, @ and dashes: safe inside the filter below.
   const q = (typeof sp.q === "string" ? sp.q : "").replace(/[^\p{L}\p{N}\s.@ʻʼ'-]/gu, "").trim().slice(0, 60);
-  const group = typeof sp.group === "string" && /^[0-9a-f-]{36}$/i.test(sp.group) ? sp.group : null;
+  const viewerIsOwner = viewer.role === "owner";
+  const filter = readGroupFilter(sp);
+  const group = filter.group;
 
   const supabase = await createClient();
+  const today = tashkentDay();
+  const [groups, totals] = await Promise.all([loadGroups(), loadDailyTotals(addDays(today, -400), today)]);
+  const ids = groupIdsFor(groups, filter);
+  const teacher = selectedTeacher(groups, filter);
+
   let query = supabase.from("profiles").select("id, full_name, email, lesson_group_id, role, kept", { count: "exact" });
   if (q) query = query.or(`full_name.ilike.%${q}%,email.ilike.%${q}%`);
-  if (group) query = query.eq("lesson_group_id", group);
-  const today = tashkentDay();
-  const [profiles, groups, totals] = await Promise.all([
-    query.order("full_name", { nullsFirst: false }).limit(LIMIT),
-    loadGroups(),
-    loadDailyTotals(addDays(today, -400), today),
-  ]);
+  if (ids) query = query.in("lesson_group_id", ids);
+  const profiles = await query.order("full_name", { nullsFirst: false }).limit(LIMIT);
   if (profiles.error) throw new Error(profiles.error.message);
   const rows = (profiles.data ?? []) as Row[];
   const total = profiles.count ?? rows.length;
@@ -60,6 +66,7 @@ export default async function StudentsPage({ searchParams }: PageProps<"/admin/s
 
       <form method="get" action="/admin/students" className="flex gap-2" role="search">
         {group && <input type="hidden" name="group" value={group} />}
+        {!group && teacher && <input type="hidden" name="teacher" value={teacher} />}
         <label htmlFor="q" className="sr-only">
           {t("search")}
         </label>
@@ -69,7 +76,7 @@ export default async function StudentsPage({ searchParams }: PageProps<"/admin/s
         </Button>
       </form>
 
-      <GroupFilter groups={groups.filter((g) => g.active || g.id === group)} value={group} path="/admin/students" params={q ? { q } : {}} />
+      <GroupFilter groups={groups.filter((g) => g.active || g.id === group)} value={filter} path="/admin/students" params={q ? { q } : {}} />
 
       <div className="flex flex-col gap-2">
         <p className="text-sm text-muted-foreground">
@@ -79,12 +86,13 @@ export default async function StudentsPage({ searchParams }: PageProps<"/admin/s
         {rows.length === 0 ? (
           <p className="text-muted-foreground">{t("empty")}</p>
         ) : (
+          <StudentMenuGroups groups={groups}>
           <ul className="flex flex-col divide-y divide-border overflow-hidden rounded-card border border-border bg-card">
             {rows.map((r) => {
               const s = stats.get(r.id);
               return (
-                <li key={r.id}>
-                  <Link href={`/admin/students/${r.id}`} className="flex items-center gap-3 px-4 py-3 hover:bg-muted">
+                <li key={r.id} className="flex items-center hover:bg-muted">
+                  <Link href={`/admin/students/${r.id}`} className="flex min-w-0 flex-1 items-center gap-3 py-3 pr-1 pl-4">
                     <div className="flex min-w-0 flex-1 flex-col">
                       <span className="flex flex-wrap items-center gap-2">
                         <span className="min-w-0 truncate font-semibold text-primary">{r.full_name || r.email}</span>
@@ -106,10 +114,21 @@ export default async function StudentsPage({ searchParams }: PageProps<"/admin/s
                     </div>
                     <ChevronRight className="size-5 shrink-0 text-muted-foreground" aria-hidden />
                   </Link>
+                  <div className="pr-2">
+                    <StudentRowMenu
+                      userId={r.id}
+                      displayName={r.full_name || r.email || "—"}
+                      fullName={r.full_name ?? ""}
+                      groupId={r.lesson_group_id}
+                      canEdit={r.role === "student" || viewerIsOwner || r.id === viewer.id}
+                      canDelete={r.id !== viewer.id && r.role !== "owner" && (r.role === "student" || viewerIsOwner)}
+                    />
+                  </div>
                 </li>
               );
             })}
           </ul>
+          </StudentMenuGroups>
         )}
       </div>
     </div>

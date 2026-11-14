@@ -16,5 +16,5 @@ export const ENGINEER: Person = {
 
 export const CONTRIBUTORS: Person[] = [
   { name: "Hojiakbar Odilov", links: [{ kind: "telegram", href: "https://t.me/Hojiakbar_Odilov20", handle: "@Hojiakbar_Odilov20" }] },
-  { name: "Murodjon", links: [{ kind: "telegram", href: "https://t.me/Murodjonielts", handle: "@Murodjonielts" }] },
+  { name: "Murodjon Maʼmurjonov", links: [{ kind: "telegram", href: "https://t.me/Murodjonielts", handle: "@Murodjonielts" }] },
 ];

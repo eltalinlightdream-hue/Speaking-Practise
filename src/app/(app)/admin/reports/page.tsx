@@ -12,8 +12,9 @@ import { readReportParams, reportHref } from "./params";
 export default async function ReportsPage({ searchParams }: PageProps<"/admin/reports">) {
   const t = await getTranslations("admin.reports");
   const locale = await getLocale();
-  const { monday, thisMonday, group } = readReportParams(await searchParams);
-  const { groups, report } = await loadWeeklyReport(monday, group);
+  const { monday, thisMonday, filter } = readReportParams(await searchParams);
+  const { groups, report } = await loadWeeklyReport(monday, filter);
+  const group = filter.group;
 
   const groupName = (id: string | null) => (id ? (groups.find((g) => g.id === id)?.name ?? t("noGroup")) : t("noGroup"));
   const minutes = (s: number) => t("minutesValue", { m: Math.floor(s / 60) });
@@ -37,7 +38,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
       {/* Week picker */}
       <div className="flex items-center gap-2">
         <Button asChild variant="outline" size="icon">
-          <Link href={reportHref("/admin/reports", addDays(monday, -7), group)} aria-label={t("prevWeek")} title={t("prevWeek")}>
+          <Link href={reportHref("/admin/reports", addDays(monday, -7), filter)} aria-label={t("prevWeek")} title={t("prevWeek")}>
             <ChevronLeft aria-hidden />
           </Link>
         </Button>
@@ -51,7 +52,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
           </Button>
         ) : (
           <Button asChild variant="outline" size="icon">
-            <Link href={reportHref("/admin/reports", addDays(monday, 7), group)} aria-label={t("nextWeek")} title={t("nextWeek")}>
+            <Link href={reportHref("/admin/reports", addDays(monday, 7), filter)} aria-label={t("nextWeek")} title={t("nextWeek")}>
               <ChevronRight aria-hidden />
             </Link>
           </Button>
@@ -59,7 +60,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
       </div>
 
       {/* Group filter */}
-      <GroupFilter groups={groups.filter((g) => g.active || g.id === group)} value={group} path="/admin/reports" params={{ week: monday }} />
+      <GroupFilter groups={groups.filter((g) => g.active || g.id === group)} value={filter} path="/admin/reports" params={{ week: monday }} />
 
       {/* Totals */}
       <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -96,7 +97,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
                       <tr key={g.groupId ?? "none"} className="border-b border-border last:border-0">
                         <th scope="row" className="py-2 pr-3 font-semibold text-primary">
                           {g.groupId ? (
-                            <Link href={reportHref("/admin/reports", monday, g.groupId)} className="underline-offset-4 hover:underline">
+                            <Link href={reportHref("/admin/reports", monday, { group: g.groupId, teacher: null })} className="underline-offset-4 hover:underline">
                               {g.name}
                             </Link>
                           ) : (
@@ -123,7 +124,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/admin/re
           {report.students.length > 0 && (
             <div className="flex flex-col items-start gap-1 sm:items-end">
               <Button asChild>
-                <a href={reportHref("/admin/reports/csv", monday, group)} download>
+                <a href={reportHref("/admin/reports/csv", monday, filter)} download>
                   <Download aria-hidden />
                   {t("download")}
                 </a>
