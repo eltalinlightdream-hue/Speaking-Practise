@@ -30,6 +30,21 @@ function PersonLinks({ person }: { person: Person }) {
   );
 }
 
+/** One short line: free for everyone + privacy link. Used on phones away from the home page. */
+export async function CompactFooter({ className }: { className?: string }) {
+  const t = await getTranslations("footer");
+  return (
+    <footer className={cn("border-t border-border bg-card", className)}>
+      <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-4 px-4 py-2 text-sm text-muted-foreground sm:px-6">
+        <p>{t("free")}</p>
+        <Link href="/privacy" className="inline-flex min-h-11 items-center font-semibold text-primary underline underline-offset-4 hover:no-underline">
+          {t("privacy")}
+        </Link>
+      </div>
+    </footer>
+  );
+}
+
 /** Bottom of every page: who built the site, why, when it started, and links. */
 export async function SiteFooter({ className }: { className?: string }) {
   const t = await getTranslations("footer");

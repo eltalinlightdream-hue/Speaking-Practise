@@ -227,17 +227,20 @@ export async function ProgressView({
               return (
                 <li key={s.id} className="flex items-center gap-3 px-4 py-3">
                   <div className="flex min-w-0 flex-1 flex-col">
-                    <span className="font-semibold text-primary">
-                      {exam} · {tModes(s.mode)}
-                    </span>
+                    {/* Title and badge share a line when there is room; on narrow phones the badge drops below. */}
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                      <span className="whitespace-nowrap font-semibold text-primary">
+                        {exam} · {tModes(s.mode)}
+                      </span>
+                      {s.mode === "mock" && (
+                        <Badge variant={s.completed ? "surface" : "outline"}>{s.completed ? t("completed") : t("notFinished")}</Badge>
+                      )}
+                    </div>
                     <span className="text-sm text-muted-foreground">
                       {formatDayTime(new Date(s.started_at), locale, TIME_ZONE)}
                       {detail && ` · ${detail}`}
                     </span>
                   </div>
-                  {s.mode === "mock" && (
-                    <Badge variant={s.completed ? "surface" : "outline"}>{s.completed ? t("completed") : t("notFinished")}</Badge>
-                  )}
                   <span className="shrink-0 text-sm font-semibold tabular-nums">
                     {t("minutesShort", { m: Math.floor(s.duration_seconds / 60) })}
                   </span>

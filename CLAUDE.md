@@ -148,6 +148,11 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Page changes: `(app)/loading.tsx` shows a skeleton instantly; `(app)/template.tsx` wraps pages in a React
   `<ViewTransition>` (fade + small rise, CSS in `globals.css`, off for reduced motion). Header and tab bar stay still.
 
+- Footer on phones: the full footer only on `/home` (and login, privacy, landing); other signed-in pages show the
+  one-line `CompactFooter` below `md` (`src/components/footer-by-page.tsx`). Computers always get the full footer.
+- Small phones (checked at 320px and 375px): the session top bar shows a mic icon instead of the word "recording" so
+  the end button always fits; login buttons may wrap; practice steps scroll to the top; a hint explains a grey Start.
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).
