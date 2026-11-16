@@ -12,9 +12,9 @@ export type RequiredChannel = {
 
 export const REQUIRED_CHANNELS: RequiredChannel[] = [
   { username: "abduraimov_erkinjon", name: "Erkinjon Abduraimov" },
-  // Turned off until the bot is an admin in this channel:
-  // { username: "Hojiakbar_Odilov20", name: "Hojiakbar Odilov" },
+  { username: "Hojiakbar_Odilov20", name: "Hojiakbar Odilov" },
   { username: "Murodjonielts", name: "Murodjon IELTS" },
+  { username: "multilevelinsider", name: "Multilevel Insider" },
 ];
 
 export function channelUrl(username: string) {
