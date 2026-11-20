@@ -2,30 +2,28 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CalendarDays, Code, Users } from "lucide-react";
 import { Logo } from "@/components/logo";
-import { TelegramIcon, YouTubeIcon } from "@/components/brand-icons";
+import { YouTubeIcon } from "@/components/brand-icons";
 import { CONTRIBUTORS, ENGINEER, SITE_STARTED, type Person } from "@/config/site";
 import { cn } from "@/lib/utils";
 
 function PersonLinks({ person }: { person: Person }) {
+  if (person.links.length === 0) return null;
   return (
     <ul className="flex flex-wrap gap-2">
-      {person.links.map((l) => {
-        const Icon = l.kind === "telegram" ? TelegramIcon : YouTubeIcon;
-        return (
-          <li key={l.href}>
-            <a
-              href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 rounded-button border border-primary-foreground/25 px-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-foreground/10"
-            >
-              <Icon className="size-4 shrink-0" />
-              <span>{l.kind === "telegram" ? "Telegram" : "YouTube"}</span>
-              <span className="sr-only">: {person.name} ({l.handle})</span>
-            </a>
-          </li>
-        );
-      })}
+      {person.links.map((l) => (
+        <li key={l.href}>
+          <a
+            href={l.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex min-h-11 items-center gap-2 rounded-button border border-primary-foreground/25 px-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-foreground/10"
+          >
+            <YouTubeIcon className="size-4 shrink-0" />
+            <span>YouTube</span>
+            <span className="sr-only">: {person.name} ({l.handle})</span>
+          </a>
+        </li>
+      ))}
     </ul>
   );
 }

@@ -31,11 +31,10 @@
     "telegramError": "Telegram sign-in did not work. Please try again.",
     "telegramStart": "Continue with Telegram",
     "telegramOpen": "Open Telegram",
-    "telegramWaiting": "In the bot, press Start, then Confirm. If the bot asks, join our channels and tap “Check again”. This page will sign you in by itself.",
+    "telegramWaiting": "In the bot, press Start, then Confirm. This page will sign you in by itself.",
     "telegramExpired": "The sign-in link has expired. Please try again.",
     "telegramRetry": "Try again with Telegram",
-    "leadTelegram": "Sign in with your Telegram account.",
-    "channelsNote": "Speaking Easy is free. To use it, join these Telegram channels (the bot checks when you sign in):"
+    "leadTelegram": "Sign in with your Telegram account."
   },
   "onboarding": {
     "title": "Welcome!",

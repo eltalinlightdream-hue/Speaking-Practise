@@ -9,19 +9,13 @@ import {
   safeEqual,
   webhookSecret,
 } from "@/lib/telegram-auth";
-import { telegramApi, telegramLoginInfo } from "@/lib/telegram-bot";
-import { checkChannels } from "@/lib/telegram-channels";
-import { REQUIRED_CHANNELS, channelUrl } from "@/config/telegram-channels";
+import { telegramApi } from "@/lib/telegram-bot";
 
 // Telegram calls this for every message to the bot (set up once on /owner).
 // The secret header proves the call really comes from Telegram.
 //
 // "/start <code>"  -> the bot asks "Confirm sign-in?" with a button.
-// button pressed   -> students must have joined every channel in
-//                     src/config/telegram-channels.ts (admins and the owner skip
-//                     this). If they have not, the bot shows "Join" buttons and
-//                     "Check again" (the same Confirm button). Once they have,
-//                     the request is marked as confirmed for that Telegram user;
+// button pressed   -> the request is marked as confirmed for that Telegram user;
 //                     the login page notices and signs the browser in.
 
 type TgUser = { id: number; is_bot?: boolean; first_name: string; last_name?: string; username?: string };
@@ -44,12 +38,6 @@ const TEXT = {
   done: "✅ Tayyor! Saytga qayting — u sizni oʻzi kiritadi.\n✅ Done! Go back to the site — it will sign you in.",
   expired:
     "⏳ Bu havola eskirgan. Saytga qaytib, qaytadan urinib koʻring.\n⏳ This link has expired. Go back to the site and try again.",
-  join:
-    "Kirish uchun quyidagi Telegram kanallarimizga aʼzo boʻling, soʻng «Tekshirish» tugmasini bosing.\n" +
-    "To sign in, join our Telegram channels below, then tap “Check again”.",
-  joinButton: (name: string) => `➕ ${name}`,
-  checkAgain: "🔄 Tekshirish / Check again",
-  notYet: "Hali hammasiga aʼzo boʻlmagansiz / Not all joined yet",
   hello: (site: string) =>
     "Salom! Kirish uchun saytda «Telegram orqali kirish» tugmasini bosing.\n" +
     "Hi! To sign in, tap “Continue with Telegram” on the site.\n\n" +
@@ -102,7 +90,7 @@ export async function POST(request: Request) {
       const code = parseConfirmData(cb.data);
       let confirmed = false;
       if (code && admin && !cb.from.is_bot && cb.message?.chat.type === "private") {
-        // Is the request still open? (Do not check channels for old buttons.)
+        // Is the request still open?
         const { data: open } = await admin
           .from("telegram_login_requests")
           .select("code")
@@ -110,27 +98,6 @@ export async function POST(request: Request) {
           .is("confirmed_at", null)
           .gte("created_at", freshSince())
           .maybeSingle();
-
-        let missing: string[] = [];
-        if (open) {
-          const info = await telegramLoginInfo(cb.from.id);
-          const staff = info?.role === "admin" || info?.role === "owner";
-          if (!staff) missing = (await checkChannels(cb.from.id, REQUIRED_CHANNELS, token)).missing;
-        }
-
-        if (open && missing.length > 0) {
-          await telegramApi("answerCallbackQuery", { callback_query_id: cb.id, text: TEXT.notYet });
-          const rows = REQUIRED_CHANNELS.filter((c) => missing.includes(c.username)).map((c) => [
-            { text: TEXT.joinButton(c.name), url: channelUrl(c.username) },
-          ]);
-          await telegramApi("editMessageText", {
-            chat_id: cb.message.chat.id,
-            message_id: cb.message.message_id,
-            text: TEXT.join,
-            reply_markup: { inline_keyboard: [...rows, [{ text: TEXT.checkAgain, callback_data: confirmData(code) }]] },
-          });
-          return NextResponse.json({ ok: true });
-        }
 
         if (open) {
           const { data } = await admin

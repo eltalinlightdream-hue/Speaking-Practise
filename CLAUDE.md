@@ -138,15 +138,14 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   `src/lib/telegram-bot.ts`: `telegram-<id>@users.invalid`, profile email null, server-made magic-link token).
   Helpers + tests: `src/lib/telegram-auth.ts`. Webhook is set from `/owner` ("Connect bot").
   Secrets `TELEGRAM_BOT_TOKEN` and `SUPABASE_SERVICE_ROLE_KEY` live only in Vercel. Setup steps: README.
-- Required channels (Telegram-only login): students must join the channels in `src/config/telegram-channels.ts`.
-  The webhook checks on Confirm with `getChatMember` (`src/lib/telegram-channels.ts`, tested); missing → the bot
-  shows Join buttons + "Check again" (same Confirm data). Admins/owner skip it. Four channels since 2026-11-16
-  (Erkinjon, Hojiakbar, Murodjon, multilevelinsider); owner_telegram_id is set in the database. A channel the bot cannot check
-  (bot not admin there) is skipped and logged, never blocks. Check happens only at login (owner's choice).
+- No Telegram channels anywhere (deleted 2026-11-20 at the owner's request): the old required-channels check
+  (`getChatMember`, `src/config/telegram-channels.ts`, `src/lib/telegram-channels.ts`) and the channel links on
+  `/login` and in the footer are gone. The only link in the footer is the owner's YouTube channel
+  (`src/config/site.ts`); Telegram is still the way students sign in.
 - `public.telegram_login_info(tg_id)` and `public.is_owner_email(email)` (service role only, migration
   `20261114000400`): the owner's Telegram id (`private.app_config` key `owner_telegram_id`) signs in to the
   owner's email account. Owner-only email magic link at `/login/owner` (unlinked). Supabase `disable_signup` is
-  ON (set via the Management API) so email/Google cannot create accounts that skip the channel check.
+  ON (set via the Management API) so email/Google cannot create accounts.
 - Google button hidden unless `NEXT_PUBLIC_GOOGLE_LOGIN=on` (code kept). `/login/*` share `src/app/login/layout.tsx`.
 - Manifest + icons (`src/app/manifest.ts`, `public/icons/`), `not-found.tsx`, `error.tsx`.
 
@@ -157,7 +156,8 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Weekly PDF report: `/progress/report?week=YYYY-MM-DD[&user=id]` (route handler, pdf-lib + Inter TTF in
   `src/assets/fonts`, shipped via `outputFileTracingIncludes`; code in `src/lib/report/`). Students pick a week
   and download on `/progress`; admins on `/admin/students/[id]` and per row on `/admin/reports`.
-- Footer on every page (`src/components/site-footer.tsx`); names, links and start date live in `src/config/site.ts`.
+- Footer on every page (`src/components/site-footer.tsx`); names, the YouTube link and the start date live in
+  `src/config/site.ts` (contributors are listed by name, with no links).
 - Page changes: `(app)/loading.tsx` shows a skeleton instantly; `(app)/template.tsx` wraps pages in a React
   `<ViewTransition>` (fade + small rise, CSS in `globals.css`, off for reduced motion). Header and tab bar stay still.
 
@@ -211,7 +211,7 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
   `20261114000400_telegram_channels_owner_login.sql` are applied. Admin pages were live-tested at 375px and on
   desktop with temporary accounts (created with SQL, signed in with @supabase/ssr, driven with Playwright, deleted
   afterwards). Sign-in confirmed working by the owner (2026-11-14): students use Telegram only (bot
-  @speaking_easy_with_bot, webhook connected, channel check on Confirm); the owner signs in with Telegram or at
+  @speaking_easy_with_bot, webhook connected); the owner signs in with Telegram or at
   `/login/owner` by email. Google is hidden and new sign-ups are off in Supabase. Old student accounts were deleted.
 
 ## Still to do

@@ -31,11 +31,10 @@
     "telegramError": "Telegram orqali kirib boʻlmadi. Iltimos, qaytadan urinib koʻring.",
     "telegramStart": "Telegram orqali davom etish",
     "telegramOpen": "Telegramni ochish",
-    "telegramWaiting": "Botda Start, soʻng Tasdiqlash tugmasini bosing. Bot soʻrasa, kanallarimizga aʼzo boʻlib «Tekshirish»ni bosing. Bu sahifa sizni oʻzi kiritadi.",
+    "telegramWaiting": "Botda Start, soʻng Tasdiqlash tugmasini bosing. Bu sahifa sizni oʻzi kiritadi.",
     "telegramExpired": "Kirish havolasi eskirdi. Qaytadan urinib koʻring.",
     "telegramRetry": "Telegram orqali qayta urinish",
-    "leadTelegram": "Telegram hisobingiz orqali kiring.",
-    "channelsNote": "Speaking Easy bepul. Undan foydalanish uchun quyidagi Telegram kanallariga aʼzo boʻling (bot kirish paytida tekshiradi):"
+    "leadTelegram": "Telegram hisobingiz orqali kiring."
   },
   "onboarding": {
     "title": "Xush kelibsiz!",
