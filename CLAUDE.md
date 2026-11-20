@@ -188,6 +188,8 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   sessions up to 7 days old, real start time) + `practice_session_progress`. Failed online saves use the same queue.
 - Speed: `getClaims()` instead of `getUser()` in the proxy and `getCurrentProfile` (token checked locally, ES256 keys),
   `vercel.json` region `fra1` (next to Supabase eu-central-1), `staleTimes.dynamic = 30`.
+- Session screen shows "Mashq vaqti m:ss" (practice time so far): the same visible-only clock (`activeMs`) that is
+  saved, so it matches the finish screen. Labelled `role="timer"` so it is not confused with the question countdown.
 
 ## Not in version 1
 

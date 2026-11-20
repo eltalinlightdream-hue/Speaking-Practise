@@ -402,7 +402,8 @@
       "leaveWarning": "Mashq hali davom etmoqda. Baribir chiqasizmi?",
       "quit": "Mashqni tugatish",
       "quitMockConfirm": "Mock testni hozir tugatasizmi? U bajarilgan deb hisoblanmaydi.",
-      "questionN": "{n}-savol"
+      "questionN": "{n}-savol",
+      "practiceTime": "Mashq vaqti"
     },
     "finish": {
       "title": "Barakalla!",

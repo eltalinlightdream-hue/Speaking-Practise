@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronRight, Flag, Mic, RotateCcw, Volume2, X } from "lucide-react";
+import { ChevronRight, Clock, Flag, Mic, RotateCcw, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/input";
@@ -86,6 +86,7 @@ export function SessionRunner({
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("listening");
   const [phaseElapsed, setPhaseElapsed] = useState(0); // seconds in the current timed phase
+  const [activeSeconds, setActiveSeconds] = useState(0); // practice time shown to the student (same clock that is saved)
   const [hidden, setHidden] = useState(false);
   const [finishing, setFinishing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -157,6 +158,7 @@ export function SessionRunner({
       if (lastTick.current !== null && visible) {
         const dt = now - lastTick.current;
         activeMs.current += dt;
+        setActiveSeconds(Math.floor(activeMs.current / 1000));
         if (["answering", "prep", "speak"].includes(phaseRef.current)) {
           phaseMs.current += dt;
           const elapsed = Math.floor(phaseMs.current / 1000);
@@ -282,7 +284,17 @@ export function SessionRunner({
         </div>
       </div>
 
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-8 px-4 py-8 text-center">
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-5 px-4 py-5 text-center sm:gap-8 sm:py-8">
+        {/* How long this session has counted so far (pauses while the page is hidden, like the saved time). */}
+        <p
+          role="timer"
+          aria-label={`${t("practiceTime")}: ${formatClock(activeSeconds)}`}
+          className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1 text-sm font-semibold text-muted-foreground"
+        >
+          <Clock className="size-4 shrink-0" aria-hidden />
+          {t("practiceTime")}
+          <span className="text-foreground tabular-nums">{formatClock(activeSeconds)}</span>
+        </p>
         {step.kind === "question" ? (
           <>
             <p className="text-sm font-semibold text-muted-foreground">{step.topic}</p>
@@ -368,4 +380,12 @@ export function SessionRunner({
       </div>
     </div>
   );
+}
+
+/** 75 -> "1:15", 3725 -> "1:02:05". */
+function formatClock(total: number): string {
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = String(total % 60).padStart(2, "0");
+  return h > 0 ? `${h}:${String(m).padStart(2, "0")}:${s}` : `${m}:${s}`;
 }

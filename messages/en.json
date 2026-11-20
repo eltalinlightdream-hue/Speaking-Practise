@@ -402,7 +402,8 @@
       "leaveWarning": "Your session is still running. Leave anyway?",
       "quit": "End session",
       "quitMockConfirm": "End the mock test now? It will not count as done.",
-      "questionN": "Question {n}"
+      "questionN": "Question {n}",
+      "practiceTime": "Practice time"
     },
     "finish": {
       "title": "Well done!",
