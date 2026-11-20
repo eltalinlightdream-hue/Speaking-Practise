@@ -6,7 +6,7 @@ import { ChevronRight, Clock, Flag, Mic, RotateCcw, Volume2, X } from "lucide-re
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/input";
-import { TimerRing, formatClock } from "@/components/timer-ring";
+import { TimerRing } from "@/components/timer-ring";
 import { CueCardView } from "@/components/practice/cue-card-view";
 import { ExamPictures } from "@/components/practice/exam-pictures";
 import { partConfig, partLabel } from "@/config/exams";
@@ -14,7 +14,6 @@ import { playQuestion, speak, stopSpeaking } from "@/lib/speech";
 import { SessionRecorder } from "@/lib/practice/recorder";
 import type { SessionPlan, Step } from "@/lib/practice/types";
 import { dropPending, flushQueue, pendingSessions, queueProgress } from "@/lib/practice/offline-queue";
-import { cn } from "@/lib/utils";
 
 export type SessionOutcome = {
   /** True only when the student reached the end (not "End session" halfway). */
@@ -96,6 +95,7 @@ export function SessionRunner({
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("listening");
   const [phaseElapsed, setPhaseElapsed] = useState(0); // seconds in the current timed phase
+  const [activeSeconds, setActiveSeconds] = useState(0); // practice time shown to the student (same clock that is saved)
   const [hidden, setHidden] = useState(false);
   const [finishing, setFinishing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -172,6 +172,7 @@ export function SessionRunner({
       if (lastTick.current !== null && visible) {
         const dt = now - lastTick.current;
         activeMs.current += dt;
+        setActiveSeconds(Math.floor(activeMs.current / 1000));
         if (["answering", "prep", "speak"].includes(phaseRef.current)) {
           phaseMs.current += dt;
           const elapsed = Math.floor(phaseMs.current / 1000);
@@ -276,8 +277,8 @@ export function SessionRunner({
             {plan.unlimited ? t("questionN", { n: index + 1 }) : t("question", { n: index + 1, total: plan.steps.length })}
           </span>
           <span className="flex-1" />
-          {/* A long card can push the big timer off a phone screen: keep the time visible up here. */}
-          {step.kind === "cue-card" && (phase === "prep" || phase === "speak") && (
+          {/* Cards and pictures can push the big timer off a phone screen: keep the time visible up here. */}
+          {(step.kind === "cue-card" || !!step.images?.length) && limit > 0 && (
             <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-primary tabular-nums" aria-hidden>
               <Clock className="size-4" />
               {formatClock(remaining)}
@@ -305,12 +306,17 @@ export function SessionRunner({
         </div>
       </div>
 
-      <main
-        className={cn(
-          "mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4 text-center",
-          step.images?.length || step.kind === "cue-card" ? "gap-5 py-5 sm:gap-8 sm:py-8" : "gap-8 py-8",
-        )}
-      >
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-5 px-4 py-5 text-center sm:gap-8 sm:py-8">
+        {/* How long this session has counted so far (pauses while the page is hidden, like the saved time). */}
+        <p
+          role="timer"
+          aria-label={`${t("practiceTime")}: ${formatClock(activeSeconds)}`}
+          className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1 text-sm font-semibold text-muted-foreground"
+        >
+          <Clock className="size-4 shrink-0" aria-hidden />
+          {t("practiceTime")}
+          <span className="text-foreground tabular-nums">{formatClock(activeSeconds)}</span>
+        </p>
         {step.kind === "question" ? (
           <>
             {!hideTopic && <p className="text-sm font-semibold text-muted-foreground">{step.topic}</p>}
@@ -393,4 +399,12 @@ export function SessionRunner({
       </div>
     </div>
   );
+}
+
+/** 75 -> "1:15", 3725 -> "1:02:05". */
+function formatClock(total: number): string {
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = String(total % 60).padStart(2, "0");
+  return h > 0 ? `${h}:${String(m).padStart(2, "0")}:${s}` : `${m}:${s}`;
 }
