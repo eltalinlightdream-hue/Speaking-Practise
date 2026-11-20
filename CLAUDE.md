@@ -57,11 +57,11 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 
 ## Exam content (decided with the owner)
 
-- Source: `content/ielts/mock-sets.json`, parsed from the SPEAKING-1..40 PDFs by
+- Source: `content/ielts/mock-sets.json`, parsed from the SPEAKING-1..50 PDFs by
   `scripts/content/parse_speaking_pdfs.py` (raw text kept in `content/ielts/raw/`). Typo fixes are listed in the JSON.
 - **Each file is one IELTS mock set**: one Part 1 topic with its questions, one Part 2 cue card, one Part 3 topic
   with its questions. Run the mock exactly as the set is. Part 1 topics may repeat between mocks.
-- Sets 20–25 have no Part 2 cue card: **do not include them as mock tests** (34 active mocks).
+- Sets 20–25 have no Part 2 cue card: **do not include them as mock tests** (44 active mocks).
   Their Part 1 and Part 3 questions **are still used in General Training**.
 - **General Training (IELTS)**: the student picks Part 1 only, Part 2 only, Part 3 only, or Part 1 + Part 3.
   Questions come from the pools built from all sets. Replay allowed.
@@ -110,7 +110,7 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
 - [x] Step 0/1: repo, Next.js app, design system, uz/en, Supabase clients, Google login, first-time setup,
   roles + RLS, role-based navigation. Telegram login waits until the site has a public domain (Step 5 deploy).
 - [x] Step 2: topics/questions/mock sets tables + RLS, `question-audio` storage bucket, content loaded
-  (34 IELTS mocks, 29 Part 1 topics, 34 cue cards, 40 Part 3 topics, CEFR placeholders), admin pages
+  (44 IELTS mocks, 36 Part 1 topics, 44 cue cards, 50 Part 3 topics, CEFR placeholders), admin pages
   (overview, topics, add questions with voice preview + duplicate check, mock set editor, JSON import/export).
 - [x] Step 3: `practice_sessions` (written only through `start_practice_session` / `practice_session_progress`,
   time capped at real elapsed time, max 3 h), General Training (`/practice/[exam]/general`), reusable
