@@ -102,6 +102,24 @@ for (const s of sections) {
   body.push(sectionTable(s.ids));
 }
 
+// Option B: record everything in two long takes; the import script cuts them at the 2-second pauses.
+const BREAK = ' <break time="2s" />';
+const SPLIT = listed.indexOf("p1-next");
+const takes = [
+  { file: "examiner-a.mp3", ids: listed.slice(0, SPLIT) },
+  { file: "examiner-b.mp3", ids: listed.slice(SPLIT) },
+];
+const mono = (text) => new Paragraph({ spacing: { after: 40 }, children: [new TextRun({ text, font: "Courier New", size: 19 })] });
+body.push(new Paragraph({ heading: HeadingLevel.HEADING_1, pageBreakBefore: true, children: [new TextRun({ text: "Option B: two long recordings", font: FONT })] }));
+body.push(p("Instead of 36 separate clips, you can make two long recordings. The break tags make ElevenLabs pause for 2 seconds between lines, and the app's import script cuts the recordings at those pauses."));
+body.push(bullet("Copy each block below exactly, in this order, into ElevenLabs (same voice and settings as above)."));
+body.push(bullet("Save the results as examiner-a.mp3 and examiner-b.mp3."));
+body.push(bullet("Listen once. If the voice speeds up or skips a pause, split that block into smaller pieces, keep the order, and name them examiner-a1.mp3, examiner-a2.mp3, and so on."));
+for (const t of takes) {
+  body.push(new Paragraph({ heading: HeadingLevel.HEADING_2, children: [new TextRun({ text: `${t.file} (${t.ids.length} lines)`, font: FONT })] }));
+  t.ids.forEach((id, i) => body.push(mono(byId[id].text + (i < t.ids.length - 1 ? BREAK : ""))));
+}
+
 const doc = new Document({
   creator: "Speaking Easy with Practise",
   title: "IELTS Examiner Lines",
