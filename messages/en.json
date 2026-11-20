@@ -144,7 +144,15 @@
       "noQuestions": "No questions yet.",
       "details": "Topic details",
       "cuePreview": "Cue card preview",
-      "youShouldSay": "You should say:"
+      "youShouldSay": "You should say:",
+      "statement": "Statement",
+      "cardQuestions": "Questions on the card (one per line)",
+      "pictures": "Pictures (one per line: address | what the picture shows)",
+      "picturesHelp": "This part needs {count, plural, one {# picture} other {# pictures}}. Put the files in public/content/ (a new name for every new picture) or use an https link.",
+      "pointsFor": "Points for (one per line)",
+      "pointsAgainst": "Points against (one per line)",
+      "cardPreview": "Card preview",
+      "picturesTitle": "Pictures"
     },
     "question": {
       "edit": "Edit",
@@ -231,7 +239,8 @@
     "errors": {
       "generic": "Something went wrong: {message}",
       "duplicateTitle": "A topic with this title already exists in this part.",
-      "required": "Please fill in the title."
+      "required": "Please fill in the title.",
+      "badPicture": "This picture line has no usable address: {line}"
     },
     "reports": {
       "title": "Weekly report",
@@ -341,13 +350,23 @@
       "p1": "Part 1 only",
       "p2": "Part 2 only",
       "p3": "Part 3 only",
-      "p1p3": "Part 1 + Part 3"
+      "p1p3": "Part 1 + Part 3",
+      "cefr11": "Part 1.1 only",
+      "cefr12": "Part 1.2 only (pictures)",
+      "cefr1": "Part 1.1 + Part 1.2",
+      "cefr2": "Part 2 only",
+      "cefr3": "Part 3 only (for and against)"
     },
     "optionHelp": {
       "p1": "Short questions about you and familiar topics",
       "p2": "One cue card: 1 minute to prepare, up to 2 minutes to speak",
       "p3": "Discussion questions on one topic",
-      "p1p3": "Part 1 first, then Part 3, like the real exam"
+      "p1p3": "Part 1 first, then Part 3, like the real exam",
+      "cefr11": "Short questions about you, 30 seconds each",
+      "cefr12": "Two pictures and three questions: 45 seconds, then 30 seconds each",
+      "cefr1": "Part 1.1 first, then Part 1.2, like the real exam",
+      "cefr2": "A picture and three questions: 1 minute to prepare, up to 2 minutes to speak",
+      "cefr3": "A statement with points for and against: 1 minute to prepare, up to 2 minutes to speak"
     },
     "howMany": "Questions per part",
     "next": "Next",
@@ -403,7 +422,10 @@
       "leaveWarning": "Your session is still running. Leave anyway?",
       "quit": "End session",
       "quitMockConfirm": "End the mock test now? It will not count as done.",
-      "questionN": "Question {n}"
+      "questionN": "Question {n}",
+      "for": "For",
+      "against": "Against",
+      "debateHelp": "Talk about both sides, then give your own opinion."
     },
     "finish": {
       "title": "Well done!",
@@ -432,20 +454,24 @@
       "p1": "Questions about you, about {s} seconds each",
       "p2": "Cue card: {prep} min to prepare, up to {speak} min to speak",
       "p3": "Discussion questions, about {s} seconds each",
-      "rules": "Like the real exam: questions move on by themselves when the time is up, and you cannot replay them. A mock test only counts as done when you finish all three parts.",
+      "rules": "Like the real exam: questions move on by themselves when the time is up, and you cannot replay them. A mock test only counts as done when you finish every part.",
       "start": "Start mock test",
       "taken": "This mock test is already done. The next one has been loaded.",
       "broken": "This mock test is not ready yet. Please tell your teacher.",
       "doneNote": "{name} is done. You will get a different mock test next time.",
       "stoppedNote": "You stopped before the end, so this mock test does not count as done. It can come again later.",
-      "another": "Next mock test"
+      "another": "Next mock test",
+      "pictures": "Two pictures and three questions: about {first} seconds, then {s} seconds each",
+      "cardPicture": "A picture and three questions: {prep} min to prepare, up to {speak} min to speak",
+      "debate": "A statement with points for and against: {prep} min to prepare, up to {speak} min to speak"
     },
     "unlimited": "Unlimited",
     "unlimitedHelp": "Questions keep coming until you tap “Finish” or the pool runs out.",
     "offline": {
       "noPack": "To practise without internet, open this page once while you are online.",
       "mockWaiting": "You finished this mock test offline. The next one will be ready when the internet is back."
-    }
+    },
+    "wholeTopicsHelp": "Picture questions come in groups of three: one group for each pair of pictures."
   },
   "progress": {
     "title": "My progress",
@@ -591,7 +617,7 @@
     "general": "General Training sessions",
     "mock": "Mock test sessions",
     "mockCompleted": "Mock tests finished",
-    "part": "Part {n} (sessions)",
+    "part": "{exam} Part {n} (sessions)",
     "partsNone": "No practice this week",
     "note": "A day counts when you practise 15 minutes or more (Tashkent time). Practice time is time inside an active session.",
     "unitH": "h",

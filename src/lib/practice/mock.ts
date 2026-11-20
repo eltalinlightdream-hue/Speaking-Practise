@@ -2,6 +2,8 @@ import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { EXAMS, type ExamCode } from "@/config/exams";
 import { chooseNextMock, remainingInCycle, type NextMock } from "./mock-rotation";
+import { topicSteps } from "./general-plan";
+import { readPictures } from "./pictures";
 import type { Step } from "./types";
 
 // Server helpers for Mock Tests: find the student's next mock set and turn
@@ -43,20 +45,26 @@ type SetTopic = {
     title: string;
     cue_bullets: string[];
     cue_explain: string | null;
+    images: unknown;
+    points_for: string[];
+    points_against: string[];
     questions: { text: string; audio_url: string | null; active: boolean; sort_order: number }[];
   } | null;
 };
 
 /**
  * The steps of one mock set, exactly as the set is: every part in exam
- * order, the set's own topic for that part, its questions in their order.
+ * order, the set's own topic for that part, its questions in their order
+ * (pictures, card style and timers come from topicSteps and the exam config).
  * Returns the parts that are missing so the caller can refuse a broken set.
  */
 export async function buildMockSteps(exam: ExamCode, mockSetId: string): Promise<{ steps: Step[]; missingParts: number[] }> {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("mock_set_topics")
-    .select("part, sort_order, topics(title, cue_bullets, cue_explain, questions(text, audio_url, active, sort_order))")
+    .select(
+      "part, sort_order, topics(title, cue_bullets, cue_explain, images, points_for, points_against, questions(text, audio_url, active, sort_order))",
+    )
     .eq("mock_set_id", mockSetId);
   if (error) throw new Error(error.message);
   const rows = ((data ?? []) as unknown as SetTopic[]).sort((a, b) => a.sort_order - b.sort_order);
@@ -70,28 +78,16 @@ export async function buildMockSteps(exam: ExamCode, mockSetId: string): Promise
     const before = steps.length;
 
     for (const topic of topics) {
-      if (cfg.kind === "cue-card") {
-        steps.push({
-          kind: "cue-card",
-          part: cfg.part,
-          title: topic.title,
-          bullets: topic.cue_bullets,
-          explain: topic.cue_explain,
-          prepSeconds: cfg.prepSeconds ?? 60,
-          speakSeconds: cfg.speakSeconds ?? 120,
-        });
-      } else {
-        for (const q of topic.questions.filter((x) => x.active).sort((a, b) => a.sort_order - b.sort_order)) {
-          steps.push({
-            kind: "question",
-            part: cfg.part,
-            topic: topic.title,
-            text: q.text,
-            audioUrl: q.audio_url,
-            seconds: cfg.secondsPerQuestion ?? 45,
-          });
-        }
-      }
+      steps.push(
+        ...topicSteps(cfg, {
+          ...topic,
+          images: readPictures(topic.images),
+          questions: topic.questions
+            .filter((x) => x.active)
+            .sort((a, b) => a.sort_order - b.sort_order)
+            .map((q) => ({ text: q.text, audio_url: q.audio_url })),
+        }),
+      );
     }
     if (steps.length === before) missingParts.push(cfg.part);
   }

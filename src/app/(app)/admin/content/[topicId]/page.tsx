@@ -4,13 +4,15 @@ import { getTranslations } from "next-intl/server";
 import { ChevronLeft } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EXAMS, partConfig } from "@/config/exams";
+import { EXAMS, partConfig, partLabel } from "@/config/exams";
 import { getTopic, getTopicQuestions } from "@/lib/content/queries";
 import { createClient } from "@/lib/supabase/server";
 import { TopicForm } from "../topic-form";
 import { QuestionList } from "../question-list";
 import { AddQuestions } from "../add-questions";
 import { loadLinkOptions } from "../link-options";
+import { CueCardView } from "@/components/practice/cue-card-view";
+import { ExamPictures } from "@/components/practice/exam-pictures";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -44,7 +46,7 @@ export default async function TopicPage({ params }: PageProps<"/admin/content/[t
       <div className="flex flex-col gap-2">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline">{EXAMS[topic.exam].label}</Badge>
-          <Badge variant="outline">{t("stats.part", { part: topic.part })}</Badge>
+          <Badge variant="outline">{t("stats.part", { part: partLabel(topic.exam, topic.part) })}</Badge>
           {!topic.active && <Badge variant="destructive">{t("topic.disabled")}</Badge>}
           {topic.is_placeholder && <Badge variant="warning">{t("content.placeholder")}</Badge>}
         </div>
@@ -70,6 +72,9 @@ export default async function TopicPage({ params }: PageProps<"/admin/content/[t
                 cue_bullets: topic.cue_bullets,
                 cue_explain: topic.cue_explain,
                 related_topic_id: topic.related_topic_id,
+                images: topic.images,
+                points_for: topic.points_for,
+                points_against: topic.points_against,
               }}
             />
           </CardContent>
@@ -78,23 +83,35 @@ export default async function TopicPage({ params }: PageProps<"/admin/content/[t
         {isCue ? (
           <Card>
             <CardHeader>
-              <CardTitle>{t("topic.cuePreview")}</CardTitle>
+              <CardTitle>{cfg?.cardStyle === "ielts" || !cfg?.cardStyle ? t("topic.cuePreview") : t("topic.cardPreview")}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div lang="en" className="rounded-card bg-surface/40 p-5">
-                <p className="text-lg font-semibold text-primary">{topic.title}</p>
-                <p className="mt-3 font-semibold">{t("topic.youShouldSay")}</p>
-                <ul className="mt-1 list-disc pl-6">
-                  {topic.cue_bullets.map((b) => (
-                    <li key={b}>{b}</li>
-                  ))}
-                </ul>
-                {topic.cue_explain && <p className="mt-1">{topic.cue_explain}</p>}
-              </div>
+            <CardContent className="flex justify-center rounded-card bg-muted/60 py-4">
+              {/* The same card the students see. */}
+              <CueCardView
+                card={{
+                  title: topic.title,
+                  bullets: topic.cue_bullets,
+                  explain: topic.cue_explain,
+                  style: cfg?.cardStyle,
+                  images: topic.images,
+                  pointsFor: topic.points_for,
+                  pointsAgainst: topic.points_against,
+                }}
+              />
             </CardContent>
           </Card>
         ) : (
           <div className="flex flex-col gap-6">
+            {topic.images.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t("topic.picturesTitle")}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ExamPictures pictures={topic.images} />
+                </CardContent>
+              </Card>
+            )}
             <Card>
               <CardHeader>
                 <CardTitle>{t("add.title")}</CardTitle>

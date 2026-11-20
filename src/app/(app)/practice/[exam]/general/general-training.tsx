@@ -49,6 +49,7 @@ export function GeneralTraining({ exam }: { exam: ExamCode }) {
 
   const option = cfg.generalTraining.find((o) => o.id === optionId)!;
   const onlyCueCard = option.parts.every((p) => cfg.parts.find((x) => x.part === p)?.kind === "cue-card");
+  const hasWholeTopics = option.parts.some((p) => cfg.parts.find((x) => x.part === p)?.wholeTopics);
   const needsStream = recordingType !== "none";
   const canStart = !needsStream || !!stream;
 
@@ -167,6 +168,7 @@ export function GeneralTraining({ exam }: { exam: ExamCode }) {
                 ))}
               </div>
               {count === 0 && <p className="text-sm text-muted-foreground">{t("unlimitedHelp")}</p>}
+              {hasWholeTopics && <p className="text-sm text-muted-foreground">{t("wholeTopicsHelp")}</p>}
             </section>
           )}
 

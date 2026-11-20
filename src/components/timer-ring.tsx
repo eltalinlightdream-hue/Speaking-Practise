@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 
-function format(seconds: number) {
+/** "1:05" */
+export function formatClock(seconds: number) {
   const s = Math.max(0, Math.round(seconds));
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
 }
@@ -29,7 +30,7 @@ export function TimerRing({
       className={cn("relative inline-flex items-center justify-center", className)}
       style={{ width: size, height: size }}
       role="timer"
-      aria-label={label ? `${label}: ${format(remaining)}` : format(remaining)}
+      aria-label={label ? `${label}: ${formatClock(remaining)}` : formatClock(remaining)}
     >
       <svg width={size} height={size} className="-rotate-90" aria-hidden>
         <circle cx={size / 2} cy={size / 2} r={r} strokeWidth={stroke} className="fill-none stroke-border" />
@@ -45,7 +46,7 @@ export function TimerRing({
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="text-3xl font-semibold tabular-nums text-foreground">{format(remaining)}</span>
+        <span className="text-3xl font-semibold tabular-nums text-foreground">{formatClock(remaining)}</span>
         {label && <span className="text-sm text-muted-foreground">{label}</span>}
       </div>
     </div>

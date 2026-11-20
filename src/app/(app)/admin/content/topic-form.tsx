@@ -5,7 +5,9 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input, NativeSelect, Textarea } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { EXAMS, EXAM_CODES, type ExamCode } from "@/config/exams";
+import { EXAMS, EXAM_CODES, partLabel, type ExamCode } from "@/config/exams";
+import { pictureLines } from "@/lib/practice/pictures";
+import type { Picture } from "@/lib/practice/types";
 import { createTopic, updateTopic, type ActionResult } from "./actions";
 
 type Option = { id: string; title: string };
@@ -20,6 +22,10 @@ export type TopicFormValues = {
   cue_bullets: string[];
   cue_explain: string | null;
   related_topic_id: string | null;
+  /** CEFR: pictures, and arguments for and against (Part 3). */
+  images: Picture[];
+  points_for: string[];
+  points_against: string[];
 };
 
 export function TopicForm({
@@ -38,6 +44,7 @@ export function TopicForm({
 
   const cfg = EXAMS[exam].parts.find((p) => p.part === part) ?? EXAMS[exam].parts[0];
   const isCue = cfg.kind === "cue-card";
+  const cardStyle = cfg.cardStyle ?? "ielts";
   const linkPart = cfg.linkedToPart;
   const options = linkPart ? linkOptions[`${exam}:${linkPart}`] ?? [] : [];
 
@@ -46,7 +53,9 @@ export function TopicForm({
       ? t("errors.required")
       : state.error === "duplicateTitle"
         ? t("errors.duplicateTitle")
-        : t("errors.generic", { message: state.error })
+        : state.error === "badPicture"
+          ? t("errors.badPicture", { line: state.detail ?? "" })
+          : t("errors.generic", { message: state.error })
     : null;
 
   return (
@@ -70,7 +79,7 @@ export function TopicForm({
             <NativeSelect id="t-part" name="part" value={part} onChange={(e) => setPart(Number(e.target.value))}>
               {EXAMS[exam].parts.map((p) => (
                 <option key={p.part} value={p.part}>
-                  {t("stats.part", { part: p.part })}
+                  {t("stats.part", { part: partLabel(exam, p.part) })}
                 </option>
               ))}
             </NativeSelect>
@@ -79,11 +88,41 @@ export function TopicForm({
       )}
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="t-title">{t("topic.title")}</Label>
+        <Label htmlFor="t-title">{cardStyle === "debate" && isCue ? t("topic.statement") : t("topic.title")}</Label>
         <Input id="t-title" name="title" defaultValue={initial.title} required maxLength={300} />
       </div>
 
-      {isCue && (
+      {cfg.pictures && (
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="t-images">{t("topic.pictures")}</Label>
+          <Textarea id="t-images" name="images" defaultValue={pictureLines(initial.images)} rows={3} aria-describedby="t-images-help" />
+          <p id="t-images-help" className="text-sm text-muted-foreground">
+            {t("topic.picturesHelp", { count: cfg.pictures })}
+          </p>
+        </div>
+      )}
+
+      {isCue && cardStyle === "questions" && (
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="t-bullets">{t("topic.cardQuestions")}</Label>
+          <Textarea id="t-bullets" name="cue_bullets" defaultValue={initial.cue_bullets.join("\n")} rows={4} />
+        </div>
+      )}
+
+      {isCue && cardStyle === "debate" && (
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="t-for">{t("topic.pointsFor")}</Label>
+            <Textarea id="t-for" name="points_for" defaultValue={initial.points_for.join("\n")} rows={4} />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="t-against">{t("topic.pointsAgainst")}</Label>
+            <Textarea id="t-against" name="points_against" defaultValue={initial.points_against.join("\n")} rows={4} />
+          </div>
+        </div>
+      )}
+
+      {isCue && cardStyle === "ielts" && (
         <>
           <div className="flex flex-col gap-2">
             <Label htmlFor="t-bullets">{t("topic.bullets")}</Label>

@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ArrowRight, CalendarDays, FileJson, Layers, ListPlus, ListTree, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { EXAMS, EXAM_CODES } from "@/config/exams";
+import { EXAMS, EXAM_CODES, partLabel } from "@/config/exams";
 import { contentStats } from "@/lib/content/queries";
 
 export default async function AdminOverviewPage() {
@@ -62,7 +62,7 @@ export default async function AdminOverviewPage() {
                       <li key={part}>
                         <Link href={`/admin/content?exam=${exam}&part=${part}`}>
                           <Badge variant="surface" className="hover:bg-surface/80">
-                            {t("stats.part", { part })}: {n}
+                            {t("stats.part", { part: partLabel(exam, part) })}: {n}
                           </Badge>
                         </Link>
                       </li>

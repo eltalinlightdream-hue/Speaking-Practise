@@ -2,15 +2,19 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronRight, Flag, Mic, RotateCcw, Volume2, X } from "lucide-react";
+import { ChevronRight, Clock, Flag, Mic, RotateCcw, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/input";
-import { TimerRing } from "@/components/timer-ring";
+import { TimerRing, formatClock } from "@/components/timer-ring";
+import { CueCardView } from "@/components/practice/cue-card-view";
+import { ExamPictures } from "@/components/practice/exam-pictures";
+import { partConfig, partLabel } from "@/config/exams";
 import { playQuestion, speak, stopSpeaking } from "@/lib/speech";
 import { SessionRecorder } from "@/lib/practice/recorder";
 import type { SessionPlan, Step } from "@/lib/practice/types";
 import { dropPending, flushQueue, pendingSessions, queueProgress } from "@/lib/practice/offline-queue";
+import { cn } from "@/lib/utils";
 
 export type SessionOutcome = {
   /** True only when the student reached the end (not "End session" halfway). */
@@ -30,6 +34,12 @@ const HEARTBEAT_MS = 30_000;
 /** Seconds allowed in a timed phase (0 = not timed). */
 function phaseLimit(p: Phase, s: Step) {
   return s.kind === "question" ? (p === "answering" ? s.seconds : 0) : p === "prep" ? s.prepSeconds : p === "speak" ? s.speakSeconds : 0;
+}
+
+/** What is read aloud: the question, the card's title, or (CEFR Part 2) the card's questions. */
+function speechText(s: Step) {
+  if (s.kind === "question") return s.text;
+  return s.style === "questions" && s.bullets.length ? s.bullets.join(" ") : s.title;
 }
 
 /**
@@ -133,15 +143,20 @@ export function SessionRunner({
     (s: Step) => {
       const my = ++token.current;
       setPhaseBoth("listening");
-      const text = s.kind === "question" ? s.text : s.title;
       const audio = s.kind === "question" ? s.audioUrl : null;
-      playQuestion(text, audio).then(() => {
+      playQuestion(speechText(s), audio).then(() => {
         if (token.current !== my) return;
         setPhaseBoth(s.kind === "question" ? "answering" : "prep");
       });
     },
     [setPhaseBoth],
   );
+
+  // Load every picture of the session now, so each one shows at once when its question comes.
+  useEffect(() => {
+    const urls = new Set(plan.steps.flatMap((s) => s.images?.map((i) => i.url) ?? []));
+    for (const url of urls) new window.Image().src = url;
+  }, [plan.steps]);
 
   // Present the first step once the screen is shown.
   useEffect(() => {
@@ -246,6 +261,7 @@ export function SessionRunner({
     }
   }, [plan.autoAdvance, phase, next]);
 
+  const hideTopic = partConfig(plan.exam, step.part)?.hideTopic;
   const limit = phaseLimit(phase, step);
   const remaining = Math.max(0, limit - phaseElapsed);
   const progress = plan.unlimited ? 100 : ((index + (phase === "timeUp" ? 1 : 0)) / plan.steps.length) * 100;
@@ -255,11 +271,18 @@ export function SessionRunner({
       {/* Top bar: progress, recording dot, end */}
       <div className="sticky top-0 z-10 border-b border-border bg-card/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-3xl items-center gap-2 px-3 py-2 sm:gap-3 sm:px-4">
-          <Badge variant="outline" className="shrink-0 whitespace-nowrap">{t("part", { part: step.part })}</Badge>
+          <Badge variant="outline" className="shrink-0 whitespace-nowrap">{t("part", { part: partLabel(plan.exam, step.part) })}</Badge>
           <span className="min-w-0 truncate text-sm font-semibold text-muted-foreground tabular-nums">
             {plan.unlimited ? t("questionN", { n: index + 1 }) : t("question", { n: index + 1, total: plan.steps.length })}
           </span>
           <span className="flex-1" />
+          {/* A long card can push the big timer off a phone screen: keep the time visible up here. */}
+          {step.kind === "cue-card" && (phase === "prep" || phase === "speak") && (
+            <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-primary tabular-nums" aria-hidden>
+              <Clock className="size-4" />
+              {formatClock(remaining)}
+            </span>
+          )}
           {isRecording && !finishing && (
             <span className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-sm font-semibold text-destructive" title={t("recording")}>
               <span className="size-3 animate-pulse rounded-full bg-destructive" aria-hidden />
@@ -282,25 +305,22 @@ export function SessionRunner({
         </div>
       </div>
 
-      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center gap-8 px-4 py-8 text-center">
+      <main
+        className={cn(
+          "mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center px-4 text-center",
+          step.images?.length || step.kind === "cue-card" ? "gap-5 py-5 sm:gap-8 sm:py-8" : "gap-8 py-8",
+        )}
+      >
         {step.kind === "question" ? (
           <>
-            <p className="text-sm font-semibold text-muted-foreground">{step.topic}</p>
+            {!hideTopic && <p className="text-sm font-semibold text-muted-foreground">{step.topic}</p>}
+            {step.images && <ExamPictures pictures={step.images} className="max-w-2xl" />}
             <h1 lang="en" className="max-w-2xl text-2xl leading-snug sm:text-3xl">
               {step.text}
             </h1>
           </>
         ) : (
-          <div lang="en" className="w-full max-w-xl rounded-card border border-border bg-card p-6 text-left shadow-sm">
-            <p className="text-xl font-semibold text-primary sm:text-2xl">{step.title}</p>
-            <p className="mt-4 font-semibold">{t("youShouldSay")}</p>
-            <ul className="mt-1 list-disc pl-6">
-              {step.bullets.map((b) => (
-                <li key={b}>{b}</li>
-              ))}
-            </ul>
-            {step.explain && <p className="mt-1">{step.explain}</p>}
-          </div>
+          <CueCardView card={step} />
         )}
 
         <div className="flex flex-col items-center gap-3" aria-live="polite">
@@ -321,7 +341,12 @@ export function SessionRunner({
                 total={limit}
                 label={phase === "prep" ? t("prepare") : phase === "speak" ? t("speak") : t("answer")}
               />
-              {phase === "prep" && <p className="max-w-sm text-sm text-muted-foreground">{t("prepHelp")}</p>}
+              {phase === "prep" && (
+                <p className="max-w-sm text-sm text-muted-foreground">
+                  {t("prepHelp")}
+                  {step.kind === "cue-card" && step.style === "debate" && <> {t("debateHelp")}</>}
+                </p>
+              )}
             </>
           )}
           {hidden && <p className="text-sm text-warning">{t("paused")}</p>}

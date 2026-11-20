@@ -67,7 +67,8 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   Questions come from the pools built from all sets. Replay allowed.
 - **Mock Test**: never repeat a set until all active sets are done, then a new cycle starts. No replay.
   Default timers (one config file): Part 1 ~45 s per question; Part 2 60 s prep then up to 120 s; Part 3 ~60 s per question.
-- CEFR: format added later. Parts, topics, questions and timers are data, not code. Placeholder content until then.
+- CEFR (Multi-Level): four parts, added 2026-11-20 from the owner's booklet (see "CEFR format" below).
+  Parts, topics, questions and timers are data, not code.
 - The owner will send more question sets later.
 
 ## Content data model (Step 2)
@@ -189,6 +190,26 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Speed: `getClaims()` instead of `getUser()` in the proxy and `getCurrentProfile` (token checked locally, ES256 keys),
   `vercel.json` region `fra1` (next to Supabase eu-central-1), `staleTimes.dynamic = 30`.
 
+## CEFR format (added 2026-11-20)
+
+- Source: the booklet "Multi-Level Recent Speaking Questions" (10 tests from the real exam, 15-16 Sept 2026), typed into
+  `content/cefr/mock-sets.json`; pictures are WebP files in `public/content/cefr/2026-09/` (cached by the service worker;
+  a changed picture needs a new file name). `scripts/content/build_cefr_seed_sql.py` makes `supabase/seed_cefr_content.sql`
+  (safe to run again). Each test = one mock set `CEFR-1`..`CEFR-10`; all topics also feed General Training.
+- Part numbers in the database vs. labels people see (`label` in `src/config/exams.ts`, shown with `partLabel(exam, part)`):
+  1 = **Part 1.1** (3 questions, 30 s, no topic title shown), 2 = **Part 1.2** (2 pictures + 3 questions, 45 s then 30 s,
+  `wholeTopics`: a topic's questions stay together and in order), 3 = **Part 2** (card: 1 picture + 3 questions in
+  `cue_bullets`, read aloud, 60 s prep / 120 s speak, `cardStyle: "questions"`), 4 = **Part 3** (statement = topic title,
+  `points_for` / `points_against`, 60 s prep / 120 s speak, `cardStyle: "debate"`).
+- Migration `20261120000100_cefr_multilevel_format.sql` (applied): `topics.images` (jsonb `[{url, alt}]`), `points_for`,
+  `points_against`; export/import carry them; CEFR placeholders disabled; old CEFR sessions moved to the new part numbers.
+- One builder for both modes: `topicSteps()` in `src/lib/practice/general-plan.ts` (tested in `general-plan.test.ts`).
+  Cards render with `src/components/practice/cue-card-view.tsx` (session and admin preview), pictures with `exam-pictures.tsx`.
+  During card prep/speak the session top bar also shows the time (long cards push the big timer off a phone screen).
+- General Training options: Part 1.1, Part 1.2, Part 1.1 + 1.2, Part 2, Part 3. Part 1.2 counts in whole picture groups.
+- Admin topic form shows Pictures ("address | description" per line) for parts with `pictures`, and For/Against boxes for Part 3.
+- Weekly PDF report counts sessions per exam and part ("CEFR Part 1.2"). The offline question pack key is `v2`.
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).
@@ -208,7 +229,7 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
   do not count), shared streak function with unit tests, My progress, My recordings, Settings.
 - [x] Step 5: admin analytics, privacy, Telegram login, polish, Vercel launch.
   Live on Vercel at https://speaking-practise.vercel.app (deployed from `main`). All migrations up to
-  `20261114000400_telegram_channels_owner_login.sql` are applied. Admin pages were live-tested at 375px and on
+  `20261120000100_cefr_multilevel_format.sql` are applied (plus `seed_cefr_content.sql`). Admin pages were live-tested at 375px and on
   desktop with temporary accounts (created with SQL, signed in with @supabase/ssr, driven with Playwright, deleted
   afterwards). Sign-in confirmed working by the owner (2026-11-14): students use Telegram only (bot
   @speaking_easy_with_bot, webhook connected, channel check on Confirm); the owner signs in with Telegram or at
@@ -216,5 +237,5 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
 
 ## Still to do
 
-- CEFR format and content (placeholders until the owner sends it).
+- More CEFR tests when the owner sends them (add to `content/cefr/mock-sets.json`, run the script, apply the seed).
 - More IELTS question sets when the owner sends them.

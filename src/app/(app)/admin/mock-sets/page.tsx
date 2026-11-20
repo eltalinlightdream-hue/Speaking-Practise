@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ChevronRight, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { EXAMS, EXAM_CODES, isExamCode } from "@/config/exams";
+import { EXAMS, EXAM_CODES, isExamCode, partLabel } from "@/config/exams";
 import { createClient } from "@/lib/supabase/server";
 
 type Row = {
@@ -83,7 +83,7 @@ export default async function MockSetsPage({ searchParams }: PageProps<"/admin/m
                     {!s.active && <Badge variant="destructive">{t("mocks.disabled")}</Badge>}
                     {missing.map((p) => (
                       <Badge key={p} variant="warning">
-                        {t("mocks.missingPart", { part: p })}
+                        {t("mocks.missingPart", { part: partLabel(exam, p) })}
                       </Badge>
                     ))}
                     <ChevronRight className="size-5 text-muted-foreground" aria-hidden />
@@ -93,7 +93,7 @@ export default async function MockSetsPage({ searchParams }: PageProps<"/admin/m
                       .sort((a, b) => a.part - b.part || a.sort_order - b.sort_order)
                       .map((mt, i) => (
                         <li key={i} className="flex gap-2">
-                          <span className="w-14 shrink-0 font-semibold text-primary">{t("stats.part", { part: mt.part })}</span>
+                          <span className="w-14 shrink-0 font-semibold text-primary">{t("stats.part", { part: partLabel(exam, mt.part) })}</span>
                           <span className="min-w-0 break-words text-foreground">{mt.topics.title}</span>
                         </li>
                       ))}

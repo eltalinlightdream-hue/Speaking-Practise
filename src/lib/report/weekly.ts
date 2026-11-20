@@ -1,5 +1,6 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { EXAMS, isExamCode, partLabel } from "@/config/exams";
 import { DAY_GOAL_SECONDS, addDays, weekDays } from "./week";
 
 export type WeeklyDay = { date: string; seconds: number; sessions: number; goalMet: boolean };
@@ -15,11 +16,18 @@ export type WeeklyReport = {
   generalSessions: number;
   mockSessions: number;
   mockCompleted: number;
-  /** Sessions per part number, e.g. { 1: 4, 2: 1, 3: 3 } */
-  parts: Record<number, number>;
+  /** Sessions per exam part, IELTS first, in part order, e.g. { exam: "CEFR", part: "1.2", count: 3 } */
+  parts: { exam: string; part: string; count: number }[];
 };
 
-type SessionRow = { day_tashkent: string; duration_seconds: number; mode: "general" | "mock"; parts: number[]; completed: boolean };
+type SessionRow = {
+  day_tashkent: string;
+  duration_seconds: number;
+  mode: "general" | "mock";
+  exam: string;
+  parts: number[];
+  completed: boolean;
+};
 
 /**
  * Load one person's practice for the week starting on `monday`.
@@ -35,7 +43,7 @@ export async function loadWeeklyReport(userId: string, monday: string): Promise<
     supabase.from("profiles").select("id, full_name, email, lesson_groups(name)").eq("id", userId).maybeSingle(),
     supabase
       .from("practice_sessions")
-      .select("day_tashkent, duration_seconds, mode, parts, completed")
+      .select("day_tashkent, duration_seconds, mode, exam, parts, completed")
       .eq("user_id", userId)
       .gte("day_tashkent", monday)
       .lte("day_tashkent", sunday),
@@ -53,8 +61,20 @@ export async function loadWeeklyReport(userId: string, monday: string): Promise<
     return { date, seconds, sessions: mine.length, goalMet: seconds >= DAY_GOAL_SECONDS };
   });
 
-  const parts: Record<number, number> = {};
-  for (const s of sessions) for (const p of s.parts ?? []) parts[p] = (parts[p] ?? 0) + 1;
+  // Count per exam and part ("CEFR Part 1.2" is not "IELTS Part 2").
+  const counts = new Map<string, { exam: string; part: number; count: number }>();
+  for (const s of sessions) {
+    for (const p of s.parts ?? []) {
+      const key = `${s.exam}:${p}`;
+      const c = counts.get(key) ?? { exam: s.exam, part: p, count: 0 };
+      c.count++;
+      counts.set(key, c);
+    }
+  }
+  const examOrder = (e: string) => (isExamCode(e) ? Object.keys(EXAMS).indexOf(e) : 99);
+  const parts = [...counts.values()]
+    .sort((a, b) => examOrder(a.exam) - examOrder(b.exam) || a.part - b.part)
+    .map((c) => ({ exam: isExamCode(c.exam) ? EXAMS[c.exam].label : c.exam.toUpperCase(), part: partLabel(c.exam, c.part), count: c.count }));
 
   return {
     student: {

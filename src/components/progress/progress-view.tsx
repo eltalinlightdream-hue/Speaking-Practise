@@ -4,7 +4,7 @@ import { Check, ChevronLeft, ChevronRight, Flame, Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EXAMS, isExamCode } from "@/config/exams";
+import { EXAMS, isExamCode, partLabel } from "@/config/exams";
 import { DAY_GOAL_SECONDS, TIME_ZONE } from "@/lib/practice/streak";
 import { addMonths, monthGrid } from "@/lib/practice/calendar";
 import type { ProgressData } from "@/lib/practice/progress-data";
@@ -223,7 +223,7 @@ export async function ProgressView({
           <ul className="flex flex-col divide-y divide-border overflow-hidden rounded-card border border-border bg-card">
             {sessions.map((s) => {
               const exam = isExamCode(s.exam) ? EXAMS[s.exam].label : s.exam.toUpperCase();
-              const detail = s.mode === "mock" ? (s.mock_sets?.name ?? "") : s.parts.map((p) => `Part ${p}`).join(" + ");
+              const detail = s.mode === "mock" ? (s.mock_sets?.name ?? "") : s.parts.map((p) => `Part ${partLabel(s.exam, p)}`).join(" + ");
               return (
                 <li key={s.id} className="flex items-center gap-3 px-4 py-3">
                   <div className="flex min-w-0 flex-1 flex-col">

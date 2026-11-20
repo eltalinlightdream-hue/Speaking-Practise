@@ -7,7 +7,7 @@ import { ArrowDown, ArrowUp, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input, NativeSelect } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { EXAMS, type ExamCode } from "@/config/exams";
+import { EXAMS, partLabel, type ExamCode } from "@/config/exams";
 import { saveMockSet } from "./actions";
 
 type Option = { id: string; title: string; active: boolean };
@@ -98,8 +98,8 @@ export function MockSetEditor({
           const available = (options[part] ?? []).filter((o) => !list.includes(o.id));
           return (
             <fieldset key={part} className="flex flex-col gap-3 rounded-card border border-border bg-card p-4">
-              <legend className="px-1 font-semibold text-primary">{t("stats.part", { part })}</legend>
-              {list.length === 0 && <p className="text-sm text-warning">{t("mocks.missingPart", { part })}</p>}
+              <legend className="px-1 font-semibold text-primary">{t("stats.part", { part: partLabel(initial.exam, part) })}</legend>
+              {list.length === 0 && <p className="text-sm text-warning">{t("mocks.missingPart", { part: partLabel(initial.exam, part) })}</p>}
               <ol className="flex flex-col gap-2">
                 {list.map((id, i) => (
                   <li key={id} className="flex items-center gap-2 rounded-button bg-muted px-3 py-1">

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/ui/input";
-import { EXAMS, EXAM_CODES, type ExamCode } from "@/config/exams";
+import { EXAMS, EXAM_CODES, partLabel, type ExamCode } from "@/config/exams";
 import { NEW_TOPIC } from "./new-topic";
 
 /**
@@ -51,7 +51,7 @@ export function AddPicker({
         <NativeSelect id="a-part" value={String(part)} onChange={(e) => go(exam, Number(e.target.value), "")}>
           {EXAMS[exam].parts.map((p) => (
             <option key={p.part} value={p.part}>
-              {t("stats.part", { part: p.part })}
+              {t("stats.part", { part: partLabel(exam, p.part) })}
             </option>
           ))}
         </NativeSelect>

@@ -13,7 +13,9 @@ import type { RecordingType, SessionPlan, Step } from "./types";
 
 type Pack = { exam: ExamCode; savedAt: number; parts: Record<number, PoolTopic[]> };
 
-const packKey = (exam: ExamCode) => `se-question-pack-v1-${exam}`;
+// v2 (2026-11-20): CEFR got four parts with new numbers, so packs saved before are not used.
+const packKey = (exam: ExamCode) => `se-question-pack-v2-${exam}`;
+const OLD_PACK_KEYS = (exam: ExamCode) => [`se-question-pack-v1-${exam}`];
 const REFRESH_MS = 6 * 60 * 60 * 1000;
 /** How long the server gets to start a session before the phone starts one by itself. */
 export const ONLINE_START_TIMEOUT_MS = 12_000;
@@ -29,6 +31,11 @@ function readPack(exam: ExamCode): Pack | null {
 
 /** Download the question pools when the saved copy is missing or old. Never throws. */
 export async function refreshQuestionPack(exam: ExamCode) {
+  try {
+    for (const k of OLD_PACK_KEYS(exam)) window.localStorage.removeItem(k);
+  } catch {
+    // Storage blocked: nothing to clean.
+  }
   if (!navigator.onLine) return;
   const pack = readPack(exam);
   if (pack && Date.now() - pack.savedAt < REFRESH_MS) return;

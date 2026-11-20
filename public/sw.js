@@ -1,8 +1,9 @@
 /*
  * Speaking Easy service worker: lets the website open and work without internet.
  *
- * - Files that never change (/_next/static, icons, fonts): taken from the phone
- *   once saved ("cache first").
+ * - Files that never change (/_next/static, icons, fonts, exam pictures in
+ *   /content/): taken from the phone once saved ("cache first"). A changed
+ *   picture must get a new file name.
  * - Pages: always asked from the server first. A good answer is saved; without
  *   internet the saved copy is shown, or /offline.html if there is none.
  * - Page changes inside the app (RSC requests): without internet, if a saved copy
@@ -20,7 +21,16 @@ const OFFLINE_URL = "/offline.html";
 const MAX_STATIC = 400;
 
 // Pages a student needs offline; saved in the background (see "warm" below).
-const WARM_PAGES = ["/home", "/practice/ielts/general", "/practice/ielts/mock", "/progress", "/recordings", "/settings"];
+const WARM_PAGES = [
+  "/home",
+  "/practice/ielts/general",
+  "/practice/ielts/mock",
+  "/practice/cefr/general",
+  "/practice/cefr/mock",
+  "/progress",
+  "/recordings",
+  "/settings",
+];
 // Never saved: per-request or private to admins, or not useful offline.
 const NO_SAVE = ["/api/", "/auth/", "/admin", "/owner", "/progress/report", "/login", "/onboarding", "/design"];
 
@@ -46,6 +56,7 @@ function isStatic(url) {
   return (
     url.pathname.startsWith("/_next/static/") ||
     url.pathname.startsWith("/icons/") ||
+    url.pathname.startsWith("/content/") ||
     url.pathname === OFFLINE_URL ||
     url.pathname === "/favicon.ico" ||
     url.pathname === "/apple-icon.png" ||

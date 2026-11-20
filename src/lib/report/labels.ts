@@ -27,7 +27,7 @@ export async function reportLabels(): Promise<ReportLabels> {
     general: t("general"),
     mock: t("mock"),
     mockCompleted: t("mockCompleted"),
-    part: (n) => t("part", { n }),
+    part: (exam, n) => t("part", { exam, n }),
     partsNone: t("partsNone"),
     note: t("note"),
     units: { h: t("unitH"), min: t("unitMin") },

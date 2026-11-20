@@ -144,7 +144,15 @@
       "noQuestions": "Hali savol yoʻq.",
       "details": "Mavzu maʼlumotlari",
       "cuePreview": "Cue card koʻrinishi",
-      "youShouldSay": "You should say:"
+      "youShouldSay": "You should say:",
+      "statement": "Fikr (statement)",
+      "cardQuestions": "Kartadagi savollar (har biri yangi qatorda)",
+      "pictures": "Rasmlar (har biri yangi qatorda: manzil | rasmda nima borligi)",
+      "picturesHelp": "Bu qismga {count} ta rasm kerak. Fayllarni public/content/ papkasiga qoʻying (har bir yangi rasmga yangi nom) yoki https havola bering.",
+      "pointsFor": "Foydasiga dalillar (har biri yangi qatorda)",
+      "pointsAgainst": "Ziddiga dalillar (har biri yangi qatorda)",
+      "cardPreview": "Karta koʻrinishi",
+      "picturesTitle": "Rasmlar"
     },
     "question": {
       "edit": "Tahrirlash",
@@ -231,7 +239,8 @@
     "errors": {
       "generic": "Xatolik yuz berdi: {message}",
       "duplicateTitle": "Bu qismda shu nomli mavzu allaqachon bor.",
-      "required": "Iltimos, nomini kiriting."
+      "required": "Iltimos, nomini kiriting.",
+      "badPicture": "Bu rasm qatorida toʻgʻri manzil yoʻq: {line}"
     },
     "reports": {
       "title": "Haftalik hisobot",
@@ -341,13 +350,23 @@
       "p1": "Faqat 1-qism",
       "p2": "Faqat 2-qism",
       "p3": "Faqat 3-qism",
-      "p1p3": "1-qism + 3-qism"
+      "p1p3": "1-qism + 3-qism",
+      "cefr11": "Faqat 1.1-qism",
+      "cefr12": "Faqat 1.2-qism (rasmlar)",
+      "cefr1": "1.1-qism + 1.2-qism",
+      "cefr2": "Faqat 2-qism",
+      "cefr3": "Faqat 3-qism (foydasiga va ziddiga)"
     },
     "optionHelp": {
       "p1": "Oʻzingiz va tanish mavzular haqida qisqa savollar",
       "p2": "Bitta cue card: 1 daqiqa tayyorlanish, 2 daqiqagacha gapirish",
       "p3": "Bitta mavzu boʻyicha muhokama savollari",
-      "p1p3": "Avval 1-qism, keyin 3-qism, haqiqiy imtihondagidek"
+      "p1p3": "Avval 1-qism, keyin 3-qism, haqiqiy imtihondagidek",
+      "cefr11": "Oʻzingiz haqingizda qisqa savollar, har biriga 30 soniya",
+      "cefr12": "Ikki rasm va uchta savol: 45 soniya, keyin har biriga 30 soniya",
+      "cefr1": "Avval 1.1-qism, keyin 1.2-qism, haqiqiy imtihondagidek",
+      "cefr2": "Rasm va uchta savol: 1 daqiqa tayyorlanish, 2 daqiqagacha gapirish",
+      "cefr3": "Fikr va uning foydasiga hamda ziddiga dalillar: 1 daqiqa tayyorlanish, 2 daqiqagacha gapirish"
     },
     "howMany": "Har bir qismda savollar soni",
     "next": "Keyingisi",
@@ -403,7 +422,10 @@
       "leaveWarning": "Mashq hali davom etmoqda. Baribir chiqasizmi?",
       "quit": "Mashqni tugatish",
       "quitMockConfirm": "Mock testni hozir tugatasizmi? U bajarilgan deb hisoblanmaydi.",
-      "questionN": "{n}-savol"
+      "questionN": "{n}-savol",
+      "for": "For",
+      "against": "Against",
+      "debateHelp": "Ikkala tomon haqida gapiring, soʻng oʻz fikringizni bildiring."
     },
     "finish": {
       "title": "Barakalla!",
@@ -432,20 +454,24 @@
       "p1": "Oʻzingiz haqingizda savollar, har biriga taxminan {s} soniya",
       "p2": "Cue card: {prep} daqiqa tayyorlanish, {speak} daqiqagacha gapirish",
       "p3": "Muhokama savollari, har biriga taxminan {s} soniya",
-      "rules": "Haqiqiy imtihondagidek: vaqt tugashi bilan savollar oʻzi almashadi va ularni qayta eshitib boʻlmaydi. Mock test uchala qismni oxirigacha tugatgandagina bajarilgan hisoblanadi.",
+      "rules": "Haqiqiy imtihondagidek: vaqt tugashi bilan savollar oʻzi almashadi va ularni qayta eshitib boʻlmaydi. Mock test barcha qismlarni oxirigacha tugatgandagina bajarilgan hisoblanadi.",
       "start": "Mock testni boshlash",
       "taken": "Bu mock test allaqachon bajarilgan. Keyingisi yuklandi.",
       "broken": "Bu mock test hali tayyor emas. Iltimos, oʻqituvchingizga xabar bering.",
       "doneNote": "{name} bajarildi. Keyingi safar boshqa mock test beriladi.",
       "stoppedNote": "Siz oxirigacha yetmasdan toʻxtadingiz, shuning uchun bu mock test bajarilgan hisoblanmaydi. U keyinroq yana chiqishi mumkin.",
-      "another": "Keyingi mock test"
+      "another": "Keyingi mock test",
+      "pictures": "Ikki rasm va uchta savol: taxminan {first} soniya, keyin har biriga {s} soniya",
+      "cardPicture": "Rasm va uchta savol: {prep} daqiqa tayyorlanish, {speak} daqiqagacha gapirish",
+      "debate": "Fikr va uning foydasiga hamda ziddiga dalillar: {prep} daqiqa tayyorlanish, {speak} daqiqagacha gapirish"
     },
     "unlimited": "Cheksiz",
     "unlimitedHelp": "Savollar tugamaguncha yoki siz “Tugatish”ni bosguningizcha davom etadi.",
     "offline": {
       "noPack": "Internetsiz mashq qilish uchun bu sahifani avval internet bor paytda bir marta oching.",
       "mockWaiting": "Siz bu mock testni internetsiz tugatdingiz. Internet qaytganda keyingisi tayyor boʻladi."
-    }
+    },
+    "wholeTopicsHelp": "Rasmli savollar uchtadan beriladi: har bir juft rasmga uchta savol."
   },
   "progress": {
     "title": "Mening natijalarim",
@@ -591,7 +617,7 @@
     "general": "Umumiy mashq mashgʻulotlari",
     "mock": "Mock test mashgʻulotlari",
     "mockCompleted": "Tugatilgan mock testlar",
-    "part": "{n}-qism (mashgʻulotlar)",
+    "part": "{exam} {n}-qism (mashgʻulotlar)",
     "partsNone": "Bu hafta mashq qilinmagan",
     "note": "15 daqiqa yoki undan koʻp mashq qilingan kun hisobga olinadi (Toshkent vaqti). Mashq vaqti — faol mashgʻulot ichidagi vaqt.",
     "unitH": "soat",

@@ -11,7 +11,7 @@ import { RecordingChoice } from "@/components/practice/recording-choice";
 import { StartHint, START_HINT_ID } from "@/components/practice/start-hint";
 import { SessionRunner, type SessionOutcome } from "@/components/practice/session-runner";
 import { FinishScreen } from "@/components/practice/finish-screen";
-import { EXAMS, type ExamCode } from "@/config/exams";
+import { EXAMS, partLabel, type ExamCode, type PartConfig } from "@/config/exams";
 import type { NextMock } from "@/lib/practice/mock-rotation";
 import { stopStream } from "@/lib/practice/recorder";
 import { saveSessionOutcome, type FinishedSession } from "@/lib/practice/save-outcome";
@@ -127,10 +127,20 @@ export function MockTest({ exam, next, steps }: { exam: ExamCode; next: NextMock
     );
   }
 
-  const part = (n: number) => cfg.parts.find((p) => p.part === n);
-  const p1 = part(1);
-  const p2 = part(2);
-  const p3 = part(3);
+  /** One line per part, from the exam config (IELTS: 3 parts, CEFR: 4 parts with pictures and a debate). */
+  function describe(p: PartConfig) {
+    const prep = Math.round((p.prepSeconds ?? 60) / 60);
+    const speak = Math.round((p.speakSeconds ?? 120) / 60);
+    const s = p.secondsPerQuestion ?? 45;
+    if (p.kind === "cue-card") {
+      if (p.cardStyle === "debate") return t("mock.debate", { prep, speak });
+      if (p.cardStyle === "questions") return t("mock.cardPicture", { prep, speak });
+      return t("mock.p2", { prep, speak });
+    }
+    if (p.pictures) return t("mock.pictures", { first: p.firstQuestionSeconds ?? s, s });
+    if (p.linkedToPart) return t("mock.p3", { s });
+    return t("mock.p1", { s });
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -146,24 +156,12 @@ export function MockTest({ exam, next, steps }: { exam: ExamCode; next: NextMock
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <ul className="flex flex-col gap-2">
-            {p1 && (
-              <li className="flex items-start gap-3">
-                <span className="w-16 shrink-0 font-semibold text-primary">{t("session.part", { part: 1 })}</span>
-                <span>{t("mock.p1", { s: p1.secondsPerQuestion ?? 45 })}</span>
+            {cfg.parts.map((p) => (
+              <li key={p.part} className="flex items-start gap-3">
+                <span className="w-20 shrink-0 font-semibold text-primary">{t("session.part", { part: partLabel(exam, p.part) })}</span>
+                <span>{describe(p)}</span>
               </li>
-            )}
-            {p2 && (
-              <li className="flex items-start gap-3">
-                <span className="w-16 shrink-0 font-semibold text-primary">{t("session.part", { part: 2 })}</span>
-                <span>{t("mock.p2", { prep: Math.round((p2.prepSeconds ?? 60) / 60), speak: Math.round((p2.speakSeconds ?? 120) / 60) })}</span>
-              </li>
-            )}
-            {p3 && (
-              <li className="flex items-start gap-3">
-                <span className="w-16 shrink-0 font-semibold text-primary">{t("session.part", { part: 3 })}</span>
-                <span>{t("mock.p3", { s: p3.secondsPerQuestion ?? 60 })}</span>
-              </li>
-            )}
+            ))}
           </ul>
           <p className="flex items-start gap-2 rounded-button bg-muted px-3 py-2 text-sm">
             <Clock className="mt-0.5 size-4 shrink-0 text-secondary" aria-hidden />

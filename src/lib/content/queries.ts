@@ -1,6 +1,8 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import type { ExamCode } from "@/config/exams";
+import { readPictures } from "@/lib/practice/pictures";
+import type { Picture } from "@/lib/practice/types";
 
 export type TopicRow = {
   id: string;
@@ -13,6 +15,9 @@ export type TopicRow = {
   cue_explain: string | null;
   is_placeholder: boolean;
   active: boolean;
+  images: Picture[];
+  points_for: string[];
+  points_against: string[];
 };
 
 export type QuestionRow = {
@@ -26,7 +31,8 @@ export type QuestionRow = {
 
 export type MockSetRow = { id: string; exam: ExamCode; name: string; sort_order: number; active: boolean };
 
-const TOPIC_COLUMNS = "id, exam, part, title, is_core, related_topic_id, cue_bullets, cue_explain, is_placeholder, active";
+const TOPIC_COLUMNS =
+  "id, exam, part, title, is_core, related_topic_id, cue_bullets, cue_explain, is_placeholder, active, images, points_for, points_against";
 
 export async function listTopics(filter: { exam: ExamCode; part?: number; search?: string; includeDisabled?: boolean }) {
   const supabase = await createClient();
@@ -52,7 +58,7 @@ export async function getTopic(id: string) {
   const supabase = await createClient();
   const { data, error } = await supabase.from("topics").select(TOPIC_COLUMNS).eq("id", id).maybeSingle();
   if (error) throw new Error(error.message);
-  return data as TopicRow | null;
+  return data ? ({ ...data, images: readPictures(data.images) } as TopicRow) : null;
 }
 
 export async function getTopicQuestions(topicId: string) {

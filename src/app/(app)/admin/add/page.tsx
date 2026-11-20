@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { CheckCircle2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { EXAMS, isExamCode, partConfig } from "@/config/exams";
+import { EXAMS, isExamCode, partConfig, partLabel } from "@/config/exams";
 import { getTopic, listTopicTitles } from "@/lib/content/queries";
 import { AddQuestions } from "../content/add-questions";
 import { AddPicker } from "./add-picker";
@@ -44,7 +44,7 @@ export default async function AddQuestionsPage({ searchParams }: PageProps<"/adm
           <CardHeader>
             <CardTitle>{t("add.newTopicTitle")}</CardTitle>
             <p className="text-sm text-muted-foreground">
-              {EXAMS[exam].label} · {t("stats.part", { part })}. {t("add.newTopicLead")}
+              {EXAMS[exam].label} · {t("stats.part", { part: partLabel(exam, part) })}. {t("add.newTopicLead")}
             </p>
           </CardHeader>
           <CardContent>

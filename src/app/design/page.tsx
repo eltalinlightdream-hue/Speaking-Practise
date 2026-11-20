@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input, NativeSelect } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
+import { CueCardView } from "@/components/practice/cue-card-view";
+import { ExamPictures } from "@/components/practice/exam-pictures";
 import { DemoTimer } from "./demo-timer";
 
 // Hidden page to check the look of the design system. Not linked anywhere.
@@ -132,6 +134,41 @@ export default function DesignPage() {
             <p className="max-w-xl text-2xl font-semibold text-primary sm:text-3xl">Describe a place where you want to go to relax</p>
             <DemoTimer />
             <Button size="lg">Next question</Button>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl">CEFR cards</h2>
+        <p className="text-sm text-muted-foreground">Part 1.2 pictures, Part 2 card (picture + questions), Part 3 card (for and against).</p>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-8 py-8">
+            <ExamPictures
+              className="max-w-2xl"
+              pictures={[
+                { url: "/content/cefr/2026-09/t01-part12-a.webp", alt: "Friends having dinner together in a restaurant" },
+                { url: "/content/cefr/2026-09/t01-part12-b.webp", alt: "A family eating a meal together at home" },
+              ]}
+            />
+            <CueCardView
+              card={{
+                title: "A truly happy moment",
+                style: "questions",
+                explain: null,
+                images: [{ url: "/content/cefr/2026-09/t01-part2.webp", alt: "A person on a mountain top with arms raised" }],
+                bullets: ["Tell me about a time when you felt truly happy.", "What made that moment so special for you?"],
+              }}
+            />
+            <CueCardView
+              card={{
+                title: "Everyone should learn to play a musical instrument.",
+                style: "debate",
+                bullets: [],
+                explain: null,
+                pointsFor: ["improves memory, patience and concentration", "a healthy way to relax"],
+                pointsAgainst: ["lessons and good instruments are expensive", "takes time away from study or work"],
+              }}
+            />
           </CardContent>
         </Card>
       </section>

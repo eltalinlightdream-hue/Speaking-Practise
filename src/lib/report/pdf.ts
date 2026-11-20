@@ -42,7 +42,7 @@ export type ReportLabels = {
   general: string;
   mock: string;
   mockCompleted: string;
-  part: (n: number) => string;
+  part: (exam: string, part: string) => string;
   partsNone: string;
   note: string;
   units: { h: string; min: string };
@@ -181,12 +181,11 @@ export async function buildWeeklyPdf(r: WeeklyReport, L: ReportLabels, locale: s
   // ---- Breakdown ----
   text(page, L.breakdown, M, y, 14, bold, C.primary);
   y -= 22;
-  const partNumbers = Object.keys(r.parts).map(Number).sort((a, b) => a - b);
   const lines: [string, string][] = [
     [L.general, String(r.generalSessions)],
     [L.mock, String(r.mockSessions)],
     [L.mockCompleted, String(r.mockCompleted)],
-    ...(partNumbers.length ? partNumbers.map((p) => [L.part(p), String(r.parts[p])] as [string, string]) : [[L.partsNone, "—"] as [string, string]]),
+    ...(r.parts.length ? r.parts.map((p) => [L.part(p.exam, p.part), String(p.count)] as [string, string]) : [[L.partsNone, "—"] as [string, string]]),
   ];
   for (const [label, value] of lines) {
     text(page, label, M + 8, y, 10);

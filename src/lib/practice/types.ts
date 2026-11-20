@@ -4,6 +4,9 @@ import type { ExamCode } from "@/config/exams";
 
 export type RecordingType = "none" | "audio" | "video";
 
+/** A picture shown with a question or card (CEFR Part 1.2 and Part 2). */
+export type Picture = { url: string; alt: string };
+
 export type QuestionStep = {
   kind: "question";
   part: number;
@@ -12,6 +15,8 @@ export type QuestionStep = {
   audioUrl: string | null;
   /** Answer time in seconds. */
   seconds: number;
+  /** Pictures to look at while answering (CEFR Part 1.2). */
+  images?: Picture[];
 };
 
 export type CueCardStep = {
@@ -22,6 +27,13 @@ export type CueCardStep = {
   explain: string | null;
   prepSeconds: number;
   speakSeconds: number;
+  /** How the card looks (see cardStyle in src/config/exams.ts). Missing = "ielts". */
+  style?: "ielts" | "questions" | "debate";
+  /** Pictures on the card (CEFR Part 2). */
+  images?: Picture[];
+  /** CEFR Part 3: arguments for and against the statement in the title. */
+  pointsFor?: string[];
+  pointsAgainst?: string[];
 };
 
 export type Step = QuestionStep | CueCardStep;
