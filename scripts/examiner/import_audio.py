@@ -115,9 +115,12 @@ def main() -> None:
             length = b - a
             fade_out = max(0.0, length - 0.01)
             wav = Path(tmp) / f"{line['id']}.wav"
-            # Cut, fade the edges, then even out loudness so all clips sound the same.
+            # "tempo" in the script slows a rushed line down (0.8 = 20% slower) without changing the pitch.
+            tempo = float(line.get("tempo", 1.0))
+            slow = f"atempo={tempo:.3f}," if abs(tempo - 1.0) > 0.001 else ""
+            # Cut, fade the edges, (slow down,) then even out loudness so all clips sound the same.
             run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-ss", f"{a:.3f}", "-t", f"{length:.3f}", "-i", str(f),
-                 "-af", f"afade=t=in:d=0.01,afade=t=out:st={fade_out:.3f}:d=0.01,loudnorm=I=-16:TP=-1.5:LRA=11",
+                 "-af", f"afade=t=in:d=0.01,afade=t=out:st={fade_out:.3f}:d=0.01,{slow}loudnorm=I=-16:TP=-1.5:LRA=11",
                  "-ar", "44100", "-ac", "1", str(wav)])
             run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(wav),
                  "-codec:a", "libmp3lame", "-b:a", "64k", "-ac", "1", "-map_metadata", "-1", str(OUT_DIR / f"{line['id']}.mp3")])

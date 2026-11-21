@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Captions, CaptionsOff, ChevronRight, Clock, Flag, Mic, RotateCcw, Volume2, X } from "lucide-react";
+import { Captions, CaptionsOff, Check, ChevronRight, Clock, Flag, Mic, RotateCcw, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/input";
@@ -539,13 +539,25 @@ export function SessionRunner({
             <Button type="button" size="lg" onClick={() => prepDone(false)}>
               {t("startSpeaking")}
             </Button>
-          ) : (
-            !plan.autoAdvance && (
-              <Button type="button" size="lg" onClick={next} disabled={finishing || phase === "listening"}>
+          ) : plan.autoAdvance ? (
+            // Mock tests: the student can move on once they have finished answering
+            // (time limits are long), or end the Part 2 long turn early.
+            finishing ? null : phase === "answering" ? (
+              <Button type="button" size="lg" onClick={next}>
                 {isLast ? t("finish") : t("nextQuestion")}
                 {!isLast && <ChevronRight aria-hidden />}
               </Button>
-            )
+            ) : phase === "speak" ? (
+              <Button type="button" size="lg" onClick={speakDone}>
+                <Check aria-hidden />
+                {t("doneSpeaking")}
+              </Button>
+            ) : null
+          ) : (
+            <Button type="button" size="lg" onClick={next} disabled={finishing || phase === "listening"}>
+              {isLast ? t("finish") : t("nextQuestion")}
+              {!isLast && <ChevronRight aria-hidden />}
+            </Button>
           )}
         </div>
       </div>
