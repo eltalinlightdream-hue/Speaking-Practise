@@ -2,17 +2,18 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronRight, Clock, Flag, Mic, RotateCcw, Volume2, X } from "lucide-react";
+import { Captions, CaptionsOff, ChevronRight, Clock, Flag, Mic, RotateCcw, Volume2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/input";
 import { TimerRing } from "@/components/timer-ring";
 import { CueCardView } from "@/components/practice/cue-card-view";
 import { ExamPictures } from "@/components/practice/exam-pictures";
+import { ExaminerCaptions } from "@/components/practice/examiner-captions";
 import { partConfig, partLabel } from "@/config/exams";
-import { playQuestion, speak, stopSpeaking } from "@/lib/speech";
+import { playLines, preloadClips, speak, splitSentences, stopSpeaking } from "@/lib/speech";
 import { SessionRecorder } from "@/lib/practice/recorder";
-import type { SessionPlan, Step } from "@/lib/practice/types";
+import type { SessionPlan, SpokenLine, Step } from "@/lib/practice/types";
 import { dropPending, flushQueue, pendingSessions, queueProgress } from "@/lib/practice/offline-queue";
 
 export type SessionOutcome = {
@@ -26,19 +27,45 @@ export type SessionOutcome = {
   mimeType: string;
 };
 
-type Phase = "listening" | "answering" | "prep" | "speak" | "timeUp";
+/**
+ * listening: the examiner (or browser voice) is speaking, not timed
+ * pause:     a short silent wait after examiner lines (e.g. the ID check)
+ * answering / prep / speak: timed phases
+ */
+type Phase = "listening" | "pause" | "answering" | "prep" | "speak" | "timeUp";
 
 const HEARTBEAT_MS = 30_000;
+const SHOW_TEXT_KEY = "se.showExaminerText";
 
 /** Seconds allowed in a timed phase (0 = not timed). */
 function phaseLimit(p: Phase, s: Step) {
-  return s.kind === "question" ? (p === "answering" ? s.seconds : 0) : p === "prep" ? s.prepSeconds : p === "speak" ? s.speakSeconds : 0;
+  if (s.kind === "question") return p === "answering" ? s.seconds : 0;
+  if (s.kind === "cue-card") return p === "prep" ? s.prepSeconds : p === "speak" ? s.speakSeconds : 0;
+  return 0;
 }
 
-/** What is read aloud: the question, the card's title, or (CEFR Part 2) the card's questions. */
-function speechText(s: Step) {
-  if (s.kind === "question") return s.text;
+/** What is read aloud for a card: its title, or (CEFR Part 2) the card's questions. */
+function cardSpeech(s: Extract<Step, { kind: "cue-card" }>) {
   return s.style === "questions" && s.bullets.length ? s.bullets.join(" ") : s.title;
+}
+
+/** Recorded clips a plan uses, in the order they are needed. */
+function clipsInPlan(steps: Step[]) {
+  const urls: (string | null | undefined)[] = [];
+  for (const s of steps) {
+    if (s.kind === "examiner") urls.push(...s.lines.map((l) => l.clip));
+    else if (s.kind === "question") urls.push(s.audioUrl);
+    else urls.push(...(s.startLines ?? []).map((l) => l.clip), ...(s.endLines ?? []).map((l) => l.clip));
+  }
+  return urls;
+}
+
+function readShowText() {
+  try {
+    return window.localStorage.getItem(SHOW_TEXT_KEY) !== "0";
+  } catch {
+    return true;
+  }
 }
 
 /**
@@ -92,6 +119,7 @@ export function SessionRunner({
   onFinished: (o: SessionOutcome) => void;
 }) {
   const t = useTranslations("practice.session");
+  const tx = useTranslations("practice.examiner");
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("listening");
   const [phaseElapsed, setPhaseElapsed] = useState(0); // seconds in the current timed phase
@@ -99,6 +127,9 @@ export function SessionRunner({
   const [hidden, setHidden] = useState(false);
   const [finishing, setFinishing] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [captions, setCaptions] = useState<string[]>([]);
+  const [cardHidden, setCardHidden] = useState(false);
+  const [showText, setShowText] = useState(readShowText);
 
   const step: Step = plan.steps[index];
   const isLast = index === plan.steps.length - 1;
@@ -111,6 +142,11 @@ export function SessionRunner({
   const recorder = useRef<SessionRecorder | null>(null);
   const done = useRef(false);
   const stepRef = useRef<Step>(plan.steps[0]);
+  const indexRef = useRef(0);
+  // Latest versions of callbacks used from timers and speech promises.
+  const nextRef = useRef<() => void>(() => {});
+  const prepDoneRef = useRef<(fromTimer: boolean) => void>(() => {});
+  const speakDoneRef = useRef<() => void>(() => {});
 
   const setPhaseBoth = useCallback((p: Phase) => {
     phaseRef.current = p;
@@ -119,6 +155,20 @@ export function SessionRunner({
     setPhase(p);
   }, []);
 
+  /** Speak lines for the current step and add each sentence to the captions as it starts. */
+  const say = useCallback((lines: SpokenLine[], onSentence?: (s: string) => void) => {
+    const my = token.current;
+    const active = () => token.current === my;
+    return playLines(
+      lines,
+      (s) => {
+        if (!active()) return;
+        setCaptions((c) => [...c, s]);
+        onSentence?.(s);
+      },
+      active,
+    ).then(active);
+  }, []);
 
   // ---- Start recording once, when the session begins ----
   useEffect(() => {
@@ -138,24 +188,44 @@ export function SessionRunner({
     };
   }, [stream, plan.recordingType]);
 
-  // ---- Read the step aloud, then start its timer ----
+  // ---- Present a step: examiner lines, a question, or a card; then start its timer ----
   const present = useCallback(
     (s: Step) => {
-      const my = ++token.current;
+      ++token.current;
+      setCaptions([]);
+      setCardHidden(false);
       setPhaseBoth("listening");
-      const audio = s.kind === "question" ? s.audioUrl : null;
-      playQuestion(speechText(s), audio).then(() => {
-        if (token.current !== my) return;
-        setPhaseBoth(s.kind === "question" ? "answering" : "prep");
-      });
+      if (s.kind === "examiner") {
+        void say(s.lines).then((still) => {
+          if (!still) return;
+          const my = token.current;
+          const goOn = () => {
+            if (token.current === my) nextRef.current();
+          };
+          if (s.waitSeconds) {
+            setPhaseBoth("pause");
+            window.setTimeout(goOn, s.waitSeconds * 1000);
+          } else {
+            window.setTimeout(goOn, 400);
+          }
+        });
+      } else if (s.kind === "question") {
+        void say([{ text: s.text, clip: s.audioUrl }]).then((still) => still && setPhaseBoth("answering"));
+      } else if (s.startLines) {
+        // IELTS mock: the card is handed over silently, as in the real test.
+        setPhaseBoth("prep");
+      } else {
+        void say([{ text: cardSpeech(s) }]).then((still) => still && setPhaseBoth("prep"));
+      }
     },
-    [setPhaseBoth],
+    [say, setPhaseBoth],
   );
 
-  // Load every picture of the session now, so each one shows at once when its question comes.
+  // Load every picture and examiner clip of the session now, so each one is ready when its turn comes.
   useEffect(() => {
-    const urls = new Set(plan.steps.flatMap((s) => s.images?.map((i) => i.url) ?? []));
+    const urls = new Set(plan.steps.flatMap((s) => (s.kind === "examiner" ? [] : (s.images?.map((i) => i.url) ?? []))));
     for (const url of urls) new window.Image().src = url;
+    preloadClips(clipsInPlan(plan.steps));
   }, [plan.steps]);
 
   // Present the first step once the screen is shown.
@@ -180,12 +250,9 @@ export function SessionRunner({
           // Timer ran out: move from preparing to speaking, or show "time is up".
           const limit = phaseLimit(phaseRef.current, stepRef.current);
           if (limit && elapsed >= limit) {
-            if (phaseRef.current === "prep") {
-              setPhaseBoth("speak");
-              void speak("Please start speaking now.");
-            } else {
-              setPhaseBoth("timeUp");
-            }
+            if (phaseRef.current === "prep") prepDoneRef.current(true);
+            else if (phaseRef.current === "speak") speakDoneRef.current();
+            else setPhaseBoth("timeUp");
           }
         }
       }
@@ -244,15 +311,68 @@ export function SessionRunner({
   }, [plan, onFinished]);
 
   const next = useCallback(() => {
-    if (isLast) {
+    const i = indexRef.current + 1;
+    if (i >= plan.steps.length) {
       void finish(true);
       return;
     }
-    const i = index + 1;
+    indexRef.current = i;
     stepRef.current = plan.steps[i];
     setIndex(i);
     present(plan.steps[i]);
-  }, [isLast, finish, index, plan.steps, present]);
+  }, [finish, plan.steps, present]);
+
+  /** Card: preparation is over (timer or "Start speaking" tap). */
+  const prepDone = useCallback(
+    (fromTimer: boolean) => {
+      const s = stepRef.current;
+      if (s.kind !== "cue-card" || phaseRef.current !== "prep") return;
+      if (s.startLines?.length) {
+        setCaptions([]);
+        setPhaseBoth("listening");
+        void say(s.startLines).then((still) => still && setPhaseBoth("speak"));
+      } else {
+        setPhaseBoth("speak");
+        if (fromTimer) void speak("Please start speaking now.");
+      }
+    },
+    [say, setPhaseBoth],
+  );
+
+  /** Card: speaking time is over. IELTS mock: "Thank you", then the booklet is taken back. */
+  const speakDone = useCallback(() => {
+    const s = stepRef.current;
+    if (s.kind !== "cue-card" || phaseRef.current !== "speak") return;
+    if (s.endLines?.length) {
+      const handBack = splitSentences(s.endLines[s.endLines.length - 1].text)[0];
+      setCaptions([]);
+      setPhaseBoth("listening");
+      void say(s.endLines, (sentence) => sentence === handBack && setCardHidden(true)).then((still) => {
+        if (!still) return;
+        setCardHidden(true);
+        setPhaseBoth("timeUp");
+      });
+    } else {
+      setPhaseBoth("timeUp");
+    }
+  }, [say, setPhaseBoth]);
+
+  useEffect(() => {
+    nextRef.current = next;
+    prepDoneRef.current = prepDone;
+    speakDoneRef.current = speakDone;
+  }, [next, prepDone, speakDone]);
+
+  function toggleShowText() {
+    setShowText((v) => {
+      try {
+        window.localStorage.setItem(SHOW_TEXT_KEY, v ? "0" : "1");
+      } catch {
+        /* private mode: keep it for this session only */
+      }
+      return !v;
+    });
+  }
 
   // Mock tests move on by themselves when the time is up.
   useEffect(() => {
@@ -265,6 +385,11 @@ export function SessionRunner({
   const hideTopic = partConfig(plan.exam, step.part)?.hideTopic;
   const limit = phaseLimit(phase, step);
   const remaining = Math.max(0, limit - phaseElapsed);
+  // IELTS mock tests (with the recorded examiner) show the examiner's words as captions.
+  const captionsMode = plan.steps.some((s) => s.kind === "examiner");
+  const speaking = phase === "listening";
+  const answerTotal = plan.steps.filter((s) => s.kind !== "examiner").length;
+  const answerNumber = plan.steps.slice(0, index + 1).filter((s) => s.kind !== "examiner").length;
   const progress = plan.unlimited ? 100 : ((index + (phase === "timeUp" ? 1 : 0)) / plan.steps.length) * 100;
 
   return (
@@ -274,11 +399,15 @@ export function SessionRunner({
         <div className="mx-auto flex w-full max-w-3xl items-center gap-2 px-3 py-2 sm:gap-3 sm:px-4">
           <Badge variant="outline" className="shrink-0 whitespace-nowrap">{t("part", { part: partLabel(plan.exam, step.part) })}</Badge>
           <span className="min-w-0 truncate text-sm font-semibold text-muted-foreground tabular-nums">
-            {plan.unlimited ? t("questionN", { n: index + 1 }) : t("question", { n: index + 1, total: plan.steps.length })}
+            {step.kind === "examiner"
+              ? tx("label")
+              : plan.unlimited
+                ? t("questionN", { n: index + 1 })
+                : t("question", { n: answerNumber, total: answerTotal })}
           </span>
           <span className="flex-1" />
           {/* Cards and pictures can push the big timer off a phone screen: keep the time visible up here. */}
-          {(step.kind === "cue-card" || !!step.images?.length) && limit > 0 && (
+          {(step.kind === "cue-card" || (step.kind === "question" && !!step.images?.length)) && limit > 0 && (
             <span className="flex shrink-0 items-center gap-1 text-sm font-semibold text-primary tabular-nums" aria-hidden>
               <Clock className="size-4" />
               {formatClock(remaining)}
@@ -291,6 +420,20 @@ export function SessionRunner({
               <Mic className="size-4 sm:hidden" aria-hidden />
               <span className="sr-only sm:not-sr-only">{t("recording")}</span>
             </span>
+          )}
+          {captionsMode && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={toggleShowText}
+              aria-pressed={showText}
+              aria-label={tx("showText")}
+              title={tx("showText")}
+              className="shrink-0"
+            >
+              {showText ? <Captions aria-hidden /> : <CaptionsOff aria-hidden />}
+            </Button>
           )}
           <Button type="button" variant="ghost" size="icon" onClick={() => {
               // A mock left halfway does not count, so make sure it was not a stray tap.
@@ -317,16 +460,25 @@ export function SessionRunner({
           {t("practiceTime")}
           <span className="text-foreground tabular-nums">{formatClock(activeSeconds)}</span>
         </p>
-        {step.kind === "question" ? (
+        {step.kind === "examiner" ? (
+          <ExaminerCaptions lines={captions} speaking={speaking} showText={showText} hint={step.hint} />
+        ) : step.kind === "question" ? (
           <>
-            {!hideTopic && <p className="text-sm font-semibold text-muted-foreground">{step.topic}</p>}
+            {!hideTopic && step.topic && <p className="text-sm font-semibold text-muted-foreground">{step.topic}</p>}
             {step.images && <ExamPictures pictures={step.images} className="max-w-2xl" />}
-            <h1 lang="en" className="max-w-2xl text-2xl leading-snug sm:text-3xl">
-              {step.text}
-            </h1>
+            {captionsMode ? (
+              <ExaminerCaptions lines={captions} speaking={speaking} showText={showText} />
+            ) : (
+              <h1 lang="en" className="max-w-2xl text-2xl leading-snug sm:text-3xl">
+                {step.text}
+              </h1>
+            )}
           </>
         ) : (
-          <CueCardView card={step} />
+          <>
+            {captionsMode && captions.length > 0 && <ExaminerCaptions lines={captions} speaking={speaking} showText={showText} />}
+            {!cardHidden && <CueCardView card={step} />}
+          </>
         )}
 
         <div className="flex flex-col items-center gap-3" aria-live="polite">
@@ -335,7 +487,7 @@ export function SessionRunner({
               <Volume2 className="size-6 animate-pulse" aria-hidden />
               {t("listening")}
             </p>
-          ) : phase === "timeUp" ? (
+          ) : phase === "pause" ? null : phase === "timeUp" ? (
             <p className="flex items-center gap-2 text-lg font-semibold text-primary">
               <Flag className="size-5" aria-hidden />
               {t("timeUp")}
@@ -384,7 +536,7 @@ export function SessionRunner({
             </Button>
           )}
           {step.kind === "cue-card" && phase === "prep" ? (
-            <Button type="button" size="lg" onClick={() => setPhaseBoth("speak")}>
+            <Button type="button" size="lg" onClick={() => prepDone(false)}>
               {t("startSpeaking")}
             </Button>
           ) : (

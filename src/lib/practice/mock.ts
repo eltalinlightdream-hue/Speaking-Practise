@@ -4,6 +4,7 @@ import { EXAMS, type ExamCode } from "@/config/exams";
 import { chooseNextMock, remainingInCycle, type NextMock } from "./mock-rotation";
 import { topicSteps } from "./general-plan";
 import { readPictures } from "./pictures";
+import { addExaminer } from "./examiner";
 import type { Step } from "./types";
 
 // Server helpers for Mock Tests: find the student's next mock set and turn
@@ -92,5 +93,6 @@ export async function buildMockSteps(exam: ExamCode, mockSetId: string): Promise
     if (steps.length === before) missingParts.push(cfg.part);
   }
 
-  return { steps, missingParts };
+  // IELTS: the recorded examiner speaks around the set (greeting, frames, part intros, closing).
+  return { steps: exam === "ielts" && missingParts.length === 0 ? addExaminer(steps) : steps, missingParts };
 }

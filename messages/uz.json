@@ -471,7 +471,13 @@
       "noPack": "Internetsiz mashq qilish uchun bu sahifani avval internet bor paytda bir marta oching.",
       "mockWaiting": "Siz bu mock testni internetsiz tugatdingiz. Internet qaytganda keyingisi tayyor boʻladi."
     },
-    "wholeTopicsHelp": "Rasmli savollar uchtadan beriladi: har bir juft rasmga uchta savol."
+    "wholeTopicsHelp": "Rasmli savollar uchtadan beriladi: har bir juft rasmga uchta savol.",
+    "examiner": {
+      "label": "Imtihon oluvchi",
+      "showText": "Imtihon oluvchining soʻzlarini koʻrsatish",
+      "textHidden": "Matn yashirilgan. Imtihon oluvchini tinglang.",
+      "idHint": "Haqiqiy imtihonda bu yerda pasport yoki ID kartangizni koʻrsatasiz."
+    }
   },
   "progress": {
     "title": "Mening natijalarim",

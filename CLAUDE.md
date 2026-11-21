@@ -212,6 +212,41 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Admin topic form shows Pictures ("address | description" per line) for parts with `pictures`, and For/Against boxes for Part 3.
 - Weekly PDF report counts sessions per exam and part ("CEFR Part 1.2"). The offline question pack key is `v2`.
 
+## IELTS examiner voice and captions (added 2026-11-21)
+
+- The examiner's fixed lines (opening, Part 1 frames, Part 2 instructions, Part 3 intro, closing) are data in
+  `src/config/examiner-script.json`: 36 lines, each with an `id`, a `kind` and the `flow` order.
+  - `say`: the examiner speaks and moves on.
+  - `ask`: the student answers.
+  - `wait`: a short pause, with an optional hint.
+  - Examiner "Augustus Flores", candidate "Candidate 1".
+- Clips are `public/audio/examiner/<id>.mp3`. If a clip is missing, the browser voice reads the line. The exam
+  questions still use `audio_url` or the browser voice.
+- `addExaminer` (`src/lib/practice/examiner.ts`, unit-tested) wraps the IELTS mock steps inside `buildMockSteps`
+  (`src/lib/practice/mock.ts`), so online and offline mocks both get it:
+  1. Opening.
+  2. Frame 1 (where you live) or Frame 2 (work/study + 3 random questions). A work/study Part 1 topic gets
+     Frame 1 and a home topic gets Frame 2.
+  3. "A different topic", then the set's Part 1.
+  4. Part 2 instructions, then the cue card. The card is not read aloud. The start lines play when prep ends;
+     at time up the end lines play and the card hides.
+  5. The Part 3 intro and questions.
+  6. The closing.
+- `SessionRunner`: `examiner` steps play and move on by themselves and do not count in "Question n of N".
+  When a plan has examiner steps, every spoken line shows as captions (`ExaminerCaptions`), one sentence
+  as it is spoken. The CC button hides the text, and the choice is remembered on the device.
+- `src/lib/speech.ts` plays clips through one shared `<audio>`. `unlockAudio()` must run in the Start tap next
+  to `unlockSpeech()` (iPhone). `stopSpeaking()` also stops clips.
+- Voice: ElevenLabs "Adam - Articulate Engineering Professor", Multilingual v2. The file name gave speed 1.04,
+  stability 40, similarity 34, style 43, speaker boost. Use the same voice and settings for new lines.
+- To change or add lines:
+  1. Edit the JSON.
+  2. Regenerate the Word sheet: `node scripts/examiner/make_lines_docx.cjs src/config/examiner-script.json content/examiner/ielts-examiner-lines.docx`.
+  3. Record all lines in order with 2-second pauses.
+  4. Run `python3 -I scripts/examiner/import_audio.py <recording.mp3>`. It cuts at the pauses, checks there is
+     one piece per line, and evens out loudness.
+- `/design` has a public demo that plays a few clips with captions.
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).

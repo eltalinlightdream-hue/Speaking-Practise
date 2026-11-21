@@ -10,7 +10,7 @@ import { SessionRunner, type SessionOutcome } from "@/components/practice/sessio
 import { FinishScreen } from "@/components/practice/finish-screen";
 import { EXAMS, type ExamCode } from "@/config/exams";
 import { stopStream } from "@/lib/practice/recorder";
-import { unlockSpeech } from "@/lib/speech";
+import { unlockAudio, unlockSpeech } from "@/lib/speech";
 import { saveSessionOutcome, type FinishedSession } from "@/lib/practice/save-outcome";
 import type { RecordingType, SessionPlan } from "@/lib/practice/types";
 import { cn } from "@/lib/utils";
@@ -64,6 +64,7 @@ export function GeneralTraining({ exam }: { exam: ExamCode }) {
 
   function start() {
     unlockSpeech();
+    unlockAudio();
     setError(null);
     if (!navigator.onLine) return startOffline();
     startTransition(async () => {

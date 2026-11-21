@@ -471,7 +471,13 @@
       "noPack": "To practise without internet, open this page once while you are online.",
       "mockWaiting": "You finished this mock test offline. The next one will be ready when the internet is back."
     },
-    "wholeTopicsHelp": "Picture questions come in groups of three: one group for each pair of pictures."
+    "wholeTopicsHelp": "Picture questions come in groups of three: one group for each pair of pictures.",
+    "examiner": {
+      "label": "Examiner",
+      "showText": "Show the examiner's words",
+      "textHidden": "Text is hidden. Listen to the examiner.",
+      "idHint": "In the real test you show your passport or ID card here."
+    }
   },
   "progress": {
     "title": "My progress",

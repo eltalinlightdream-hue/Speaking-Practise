@@ -9,6 +9,7 @@ import { Logo } from "@/components/logo";
 import { CueCardView } from "@/components/practice/cue-card-view";
 import { ExamPictures } from "@/components/practice/exam-pictures";
 import { DemoTimer } from "./demo-timer";
+import { DemoExaminer } from "./demo-examiner";
 
 // Hidden page to check the look of the design system. Not linked anywhere.
 export const metadata: Metadata = { title: "Design system", robots: { index: false } };
@@ -169,6 +170,18 @@ export default function DesignPage() {
                 pointsAgainst: ["lessons and good instruments are expensive", "takes time away from study or work"],
               }}
             />
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl">Examiner captions (IELTS mock tests)</h2>
+        <p className="text-sm text-muted-foreground">
+          Recorded examiner clips from public/audio/examiner. Each sentence appears when the voice reaches it.
+        </p>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-6 py-8">
+            <DemoExaminer />
           </CardContent>
         </Card>
       </section>

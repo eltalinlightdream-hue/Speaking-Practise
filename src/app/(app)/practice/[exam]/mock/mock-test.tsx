@@ -15,7 +15,7 @@ import { EXAMS, partLabel, type ExamCode, type PartConfig } from "@/config/exams
 import type { NextMock } from "@/lib/practice/mock-rotation";
 import { stopStream } from "@/lib/practice/recorder";
 import { saveSessionOutcome, type FinishedSession } from "@/lib/practice/save-outcome";
-import { unlockSpeech } from "@/lib/speech";
+import { unlockAudio, unlockSpeech } from "@/lib/speech";
 import type { RecordingType, SessionPlan, Step } from "@/lib/practice/types";
 import { offlineMockPlan, withTimeout } from "@/lib/practice/offline-start";
 import { onPendingChange, pendingSessions } from "@/lib/practice/offline-queue";
@@ -64,6 +64,7 @@ export function MockTest({ exam, next, steps }: { exam: ExamCode; next: NextMock
 
   function start() {
     unlockSpeech();
+    unlockAudio();
     setError(null);
     if (!navigator.onLine) return startOffline();
     startTransition(async () => {

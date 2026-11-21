@@ -1,0 +1,66 @@
+{
+  "format": "speaking-easy-examiner/v1",
+  "exam": "ielts",
+  "examinerName": "Augustus Flores",
+  "candidateName": "Candidate 1",
+  "audioBase": "/audio/examiner/",
+  "note": "Fixed examiner lines for IELTS mock tests. Each line is one recorded clip: public/audio/examiner/<id>.mp3. If a clip is missing, the browser voice reads the text. kind: say = examiner speaks and moves on; ask = the student answers (answerSeconds, or the Part 1 default when missing); wait = a short silent pause after the line (waitSeconds), with an optional on-screen hint (a key in messages practice.examiner).",
+  "lines": [
+    { "id": "open-01", "kind": "say", "text": "This is the Speaking test for the International English Language Testing System.", "when": "Very start of the test" },
+    { "id": "open-02", "kind": "say", "text": "The candidate is Candidate 1, and the examiner is Augustus Flores.", "when": "Start of the test" },
+    { "id": "open-03a", "kind": "say", "text": "Good morning.", "when": "Greeting before 12:00 (Tashkent time)" },
+    { "id": "open-03b", "kind": "say", "text": "Good afternoon.", "when": "Greeting from 12:00 to 17:59" },
+    { "id": "open-03c", "kind": "say", "text": "Good evening.", "when": "Greeting from 18:00" },
+    { "id": "open-04", "kind": "say", "text": "My name is Augustus Flores.", "when": "After the greeting" },
+    { "id": "open-05", "kind": "ask", "answerSeconds": 10, "text": "Can you tell me your full name, please?", "when": "Student answers (10 s)" },
+    { "id": "open-06", "kind": "ask", "answerSeconds": 6, "text": "Thank you. And what shall I call you?", "when": "Student answers (6 s)" },
+    { "id": "open-07", "kind": "ask", "answerSeconds": 10, "text": "And can you tell me where you're from?", "when": "Student answers (10 s)" },
+    { "id": "open-08", "kind": "wait", "waitSeconds": 3, "hint": "idHint", "text": "Can I see your identification, please?", "when": "ID check (3 s pause)" },
+    { "id": "open-09", "kind": "say", "text": "Thank you, that's fine.", "when": "After the ID check" },
+    { "id": "open-10", "kind": "say", "text": "Now, in this first part, I'd like to ask you some questions about yourself.", "when": "Start of Part 1" },
+
+    { "id": "f1-00", "kind": "say", "text": "Let's talk about where you live now.", "when": "Part 1, Frame 1 (where you live)" },
+    { "id": "f1-01", "kind": "ask", "text": "Which town or city do you live in now?", "when": "Part 1, Frame 1 question" },
+    { "id": "f1-02", "kind": "ask", "text": "Are there any things you don't like about your area? What are they?", "when": "Part 1, Frame 1 question" },
+    { "id": "f1-03", "kind": "ask", "text": "Do you think you will continue to live there for a long time? Why, or why not?", "when": "Part 1, Frame 1 question" },
+
+    { "id": "f2-00", "kind": "say", "text": "Let's talk about what you do.", "when": "Part 1, Frame 2 (work or study)" },
+    { "id": "f2-01", "kind": "ask", "answerSeconds": 10, "text": "Do you work or are you a student?", "when": "Part 1, Frame 2 question (10 s)" },
+    { "id": "f2-w1", "kind": "ask", "text": "What kind of work do you do?", "when": "Part 1, Frame 2 question (work)" },
+    { "id": "f2-w2", "kind": "ask", "text": "What do you find most interesting about your work? Why?", "when": "Part 1, Frame 2 question (work)" },
+    { "id": "f2-w3", "kind": "ask", "text": "Which is more important to you: the people you work with, or the work you do? Why?", "when": "Part 1, Frame 2 question (work)" },
+    { "id": "f2-s1", "kind": "ask", "text": "What do you study?", "when": "Part 1, Frame 2 question (study)" },
+    { "id": "f2-s2", "kind": "ask", "text": "What do you find most interesting about your studies? Why?", "when": "Part 1, Frame 2 question (study)" },
+    { "id": "f2-s3", "kind": "ask", "text": "Which is more important to you: the teachers, or the other students on your course? Why?", "when": "Part 1, Frame 2 question (study)" },
+
+    { "id": "p1-next", "kind": "say", "text": "Now, let's talk about a different topic.", "when": "Part 1, before the mock's own topic" },
+
+    { "id": "p2-01", "kind": "say", "text": "Now, I'm going to give you a topic, and I'd like you to talk about it for one to two minutes.", "when": "Start of Part 2" },
+    { "id": "p2-02", "kind": "say", "text": "Before you talk, you'll have one minute to think about what you're going to say.", "when": "Part 2 instructions" },
+    { "id": "p2-03", "kind": "say", "text": "You can make some notes if you wish.", "when": "Part 2 instructions" },
+    { "id": "p2-04", "kind": "wait", "waitSeconds": 2, "text": "Do you understand?", "when": "Part 2 instructions (2 s pause)" },
+    { "id": "p2-05", "kind": "say", "text": "Here's some paper and a pencil for making notes, and here's your topic.", "when": "Cue card appears after this line" },
+    { "id": "p2-06", "kind": "say", "text": "All right? Remember, you have one to two minutes for this, so don't worry if I stop you.", "when": "End of the 1-minute preparation" },
+    { "id": "p2-07", "kind": "say", "text": "I'll tell you when the time is up. Can you start speaking now, please?", "when": "Student starts the long turn" },
+    { "id": "thanks", "kind": "say", "text": "Thank you.", "when": "When the 2 minutes end" },
+    { "id": "p2-08", "kind": "say", "text": "Can I have the booklet and the paper and pencil back, please?", "when": "End of Part 2 (cue card hides)" },
+
+    { "id": "p3-02", "kind": "say", "text": "Now, I'd like to discuss with you one or two more general questions related to this topic.", "when": "Start of Part 3" },
+
+    { "id": "close-01", "kind": "say", "text": "Thank you. That is the end of the speaking test.", "when": "End of the test" }
+  ],
+  "flow": {
+    "opening": ["open-01", "open-02", "greeting", "open-04", "open-05", "open-06", "open-07", "open-08", "open-09", "open-10"],
+    "greeting": { "morning": "open-03a", "afternoon": "open-03b", "evening": "open-03c" },
+    "frame1": ["f1-00", "f1-01", "f1-02", "f1-03"],
+    "frame2": { "intro": ["f2-00", "f2-01"], "pool": ["f2-w1", "f2-w2", "f2-w3", "f2-s1", "f2-s2", "f2-s3"], "pick": 3 },
+    "useFrame1WhenPart1TopicHas": ["work", "stud", "job"],
+    "useFrame2WhenPart1TopicHas": ["home", "accommodation", "where you live"],
+    "part1Next": ["p1-next"],
+    "part2Intro": ["p2-01", "p2-02", "p2-03", "p2-04", "p2-05"],
+    "part2Start": ["p2-06", "p2-07"],
+    "part2End": ["thanks", "p2-08"],
+    "part3Intro": ["p3-02"],
+    "closing": ["close-01"]
+  }
+}

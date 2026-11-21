@@ -7,6 +7,9 @@ export type RecordingType = "none" | "audio" | "video";
 /** A picture shown with a question or card (CEFR Part 1.2 and Part 2). */
 export type Picture = { url: string; alt: string };
 
+/** One thing the examiner says. `clip` is a recorded file; without it the browser voice reads the text. */
+export type SpokenLine = { text: string; clip?: string | null };
+
 export type QuestionStep = {
   kind: "question";
   part: number;
@@ -34,9 +37,27 @@ export type CueCardStep = {
   /** CEFR Part 3: arguments for and against the statement in the title. */
   pointsFor?: string[];
   pointsAgainst?: string[];
+  /**
+   * IELTS mock tests: what the examiner says when preparation ends ("All right? …")
+   * and when the speaking time ends ("Thank you. …"). When set, the card title
+   * is not read aloud (as in the real test).
+   */
+  startLines?: SpokenLine[];
+  endLines?: SpokenLine[];
 };
 
-export type Step = QuestionStep | CueCardStep;
+/** The examiner talks; the student does not answer (greeting, instructions). IELTS mock tests. */
+export type ExaminerStep = {
+  kind: "examiner";
+  part: number;
+  lines: SpokenLine[];
+  /** Silent pause after the lines, e.g. while the student "shows" their ID. */
+  waitSeconds?: number;
+  /** Message key in practice.examiner shown during the step (e.g. "idHint"). */
+  hint?: string;
+};
+
+export type Step = QuestionStep | CueCardStep | ExaminerStep;
 
 /** A session started without internet: the server creates it later (see offline-queue.ts). */
 export type PendingStart = {
