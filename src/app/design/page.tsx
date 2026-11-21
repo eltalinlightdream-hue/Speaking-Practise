@@ -7,6 +7,7 @@ import { Input, NativeSelect } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { DemoTimer } from "./demo-timer";
+import { DemoExaminer } from "./demo-examiner";
 
 // Hidden page to check the look of the design system. Not linked anywhere.
 export const metadata: Metadata = { title: "Design system", robots: { index: false } };
@@ -132,6 +133,18 @@ export default function DesignPage() {
             <p className="max-w-xl text-2xl font-semibold text-primary sm:text-3xl">Describe a place where you want to go to relax</p>
             <DemoTimer />
             <Button size="lg">Next question</Button>
+          </CardContent>
+        </Card>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl">Examiner captions (mock tests)</h2>
+        <p className="text-sm text-muted-foreground">
+          Recorded examiner clips from public/audio/examiner. Each sentence appears when the voice reaches it.
+        </p>
+        <Card>
+          <CardContent className="flex flex-col items-center gap-6 py-8">
+            <DemoExaminer />
           </CardContent>
         </Card>
       </section>
