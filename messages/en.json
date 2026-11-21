@@ -286,7 +286,8 @@
       "youShouldSay": "You should say:",
       "paused": "Paused while the page is hidden",
       "leaveWarning": "Your session is still running. Leave anyway?",
-      "quit": "End session"
+      "quit": "End session",
+      "doneSpeaking": "I have finished"
     },
     "finish": {
       "title": "Well done!",
@@ -300,6 +301,20 @@
       "again": "Practise again",
       "home": "Home",
       "recordingFailed": "The recording could not be saved on this device."
-    }
+    },
+    "mockLead": "A full speaking test with the examiner: Part 1, Part 2 and Part 3, about 15 minutes. Questions are not repeated, as in the real test.",
+    "mockStart": "Start mock test",
+    "mockHowTitle": "How it works",
+    "mockHow1": "The examiner speaks and the words appear one sentence at a time. You can hide the text with the CC button.",
+    "mockHow2": "Answer each question out loud. If you finish early, tap “Next question”.",
+    "mockHow3": "You get a different mock set each time until you have done them all.",
+    "mockEnded": "Mock test ended early. It will not count as done.",
+    "examiner": {
+      "label": "Examiner",
+      "showText": "Show the examiner's words",
+      "textHidden": "Text is hidden. Listen to the examiner.",
+      "idHint": "In the real test you show your passport or ID card here."
+    },
+    "mockVoiceNote": "The examiner's voice is recorded. The exam questions are read by your device's voice. Turn the sound on."
   }
 }

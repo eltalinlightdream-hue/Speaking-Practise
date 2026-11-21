@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { AlertTriangle, CheckCircle2, Download, House, RotateCcw, WifiOff } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Download, House, Info, RotateCcw, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { extensionFor } from "@/lib/practice/recorder";
@@ -15,12 +15,15 @@ export function FinishScreen({
   recording,
   recordingError,
   onAgain,
+  note,
 }: {
   activeSeconds: number;
   savedSeconds: number | null;
   recording: StoredRecording | null;
   recordingError: boolean;
   onAgain: () => void;
+  /** Extra message under the title, e.g. "Mock test ended early". */
+  note?: string;
 }) {
   const t = useTranslations("practice.finish");
   const [url, setUrl] = useState<string | null>(null);
@@ -44,6 +47,12 @@ export function FinishScreen({
           <CheckCircle2 className="size-8" aria-hidden />
         </span>
         <h1 className="text-3xl">{t("title")}</h1>
+        {note && (
+          <p className="flex items-start gap-2 text-left text-muted-foreground">
+            <Info className="mt-1 size-4 shrink-0" aria-hidden />
+            {note}
+          </p>
+        )}
       </div>
 
       <Card>

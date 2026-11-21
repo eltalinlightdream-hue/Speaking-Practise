@@ -286,7 +286,8 @@
       "youShouldSay": "You should say:",
       "paused": "Sahifa yopiq paytda toʻxtatildi",
       "leaveWarning": "Mashq hali davom etmoqda. Baribir chiqasizmi?",
-      "quit": "Mashqni tugatish"
+      "quit": "Mashqni tugatish",
+      "doneSpeaking": "Gapirib boʻldim"
     },
     "finish": {
       "title": "Barakalla!",
@@ -300,6 +301,20 @@
       "again": "Yana mashq qilish",
       "home": "Bosh sahifa",
       "recordingFailed": "Yozuvni bu qurilmada saqlab boʻlmadi."
-    }
+    },
+    "mockLead": "Imtihon oluvchi bilan toʻliq speaking test: 1-, 2- va 3-qism, taxminan 15 daqiqa. Haqiqiy imtihondagidek savollar takrorlanmaydi.",
+    "mockStart": "Mock testni boshlash",
+    "mockHowTitle": "Qanday ishlaydi",
+    "mockHow1": "Imtihon oluvchi gapiradi va soʻzlari ekranda gapma-gap paydo boʻladi. Matnni CC tugmasi bilan yashirishingiz mumkin.",
+    "mockHow2": "Har bir savolga ovoz chiqarib javob bering. Ertaroq tugatsangiz, “Keyingi savol” tugmasini bosing.",
+    "mockHow3": "Hammasini tugatmaguningizcha har safar boshqa mock toʻplam beriladi.",
+    "mockEnded": "Mock test oxirigacha bajarilmadi. U bajarilgan deb hisoblanmaydi.",
+    "examiner": {
+      "label": "Imtihon oluvchi",
+      "showText": "Imtihon oluvchining soʻzlarini koʻrsatish",
+      "textHidden": "Matn yashirilgan. Imtihon oluvchini tinglang.",
+      "idHint": "Haqiqiy imtihonda bu yerda pasport yoki ID kartangizni koʻrsatasiz."
+    },
+    "mockVoiceNote": "Imtihon oluvchining ovozi yozib olingan. Imtihon savollarini qurilmangiz ovozi oʻqiydi. Ovozni yoqing."
   }
 }
