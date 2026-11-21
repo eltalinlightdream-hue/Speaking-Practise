@@ -37,6 +37,14 @@ FIXES = [
     (39, "How often do you use map?", "How often do you use a map?"),
     (39, "Some people find it easier to accept advice than other people who do. Why do you think there is this difference?",
          "Some people find it easier to accept advice than others. Why do you think there is this difference?"),
+    (42, "and explain why you think hos or her ideas are interesting", "and explain why you think his or her ideas are interesting"),
+    (43, "and explain how you found about it", "and explain how you found out about it"),
+    (44, "What kind of people would go on to a library to read and study?", "What kind of people would go to a library to read and study?"),
+    (45, "Describe a difficult task that you completed at work or study that you felt proud of you",
+         "Describe a difficult task that you completed at work or study that you felt proud of"),
+    (47, "and explain why it made feel tired", "and explain why it made you feel tired"),
+    (48, "In general, how do people judge or, assess the success of others?", "In general, how do people judge or assess the success of others?"),
+    (50, "Have you ever lost you sunglasses?", "Have you ever lost your sunglasses?"),
 ]
 INCOMPLETE = {20, 21, 22, 23, 24, 25}
 P3_TITLE_OVERRIDE = {7: "Being busy"}
@@ -124,7 +132,7 @@ def apply_fixes(s, applied):
 
 
 sets, applied = [], []
-for n in range(1, 41):
+for n in range(1, 51):
     with open(os.path.join(RAW, f"{n}.txt"), encoding="utf-8") as f:
         s = parse(n, f.read())
     apply_fixes(s, applied)
@@ -134,7 +142,7 @@ missing = [f for f in FIXES if not any(a["set"] == f[0] and a["from"] == f[1] fo
 doc = {
     "format": "speaking-easy-content/v1",
     "exam": "ielts",
-    "source_note": "Imported from SPEAKING-1..40 PDFs. Sets 20-25 have no Part 2 cue card and are excluded from mocks.",
+    "source_note": "Imported from SPEAKING-1..50 PDFs. Sets 20-25 have no Part 2 cue card and are excluded from mocks.",
     "mock_sets": sets,
     "fixes_applied": applied,
 }
