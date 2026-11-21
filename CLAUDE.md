@@ -101,6 +101,31 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - `day_tashkent` = Tashkent day the session started (a session crossing midnight counts for its start day).
 - iPhone: `unlockSpeech()` runs inside the Start tap; recorder falls back to MP4.
 
+## Examiner script and mock tests (Step 4)
+
+- The examiner's fixed lines (opening, Part 1 frames, Part 2 instructions, Part 3 intro, closing) are data in
+  `src/config/examiner-script.json`: 36 lines, each with an `id`, `kind` (`say` / `ask` = student answers /
+  `wait` = short pause + optional hint) and the `flow` order. Examiner: "Augustus Flores", candidate "Candidate 1".
+- Recorded clips: `public/audio/examiner/<id>.mp3`. If a clip is missing, the browser voice reads the line.
+  Exam questions still use `audio_url` or the browser voice.
+- Captions: lines play one clip per line, sentence by sentence (`playLines` in `src/lib/speech.ts`). Each sentence
+  appears when the voice reaches it (`ExaminerCaptions`), and a CC button hides the text.
+- Mock order (`buildMockSteps` in `src/lib/practice/examiner.ts`): opening, then Frame 1 (where you live) or
+  Frame 2 (work/study + 3 random questions). A work/study Part 1 topic gets Frame 1 and a home topic gets Frame 2.
+  Then "a different topic", the set's Part 1 questions, Part 2 instructions, the cue card (not read aloud; the
+  start lines play when prep ends, the end lines play at time up and the card hides), the Part 3 intro and
+  questions, and the closing.
+- `startMockTest` (`src/app/(app)/practice/actions.ts`) picks the set this student has completed the fewest
+  times. Quitting early with X does not count as completed.
+- Voice: ElevenLabs, "Adam - Articulate Engineering Professor", Multilingual v2. The settings in the file name
+  were speed 1.04, stability 40, similarity 34, style 43, speaker boost. Use the same voice and settings for new lines.
+- To change or add lines:
+  1. Edit `examiner-script.json`.
+  2. Regenerate the Word sheet: `node scripts/examiner/make_lines_docx.cjs src/config/examiner-script.json content/examiner/ielts-examiner-lines.docx`.
+  3. Record all lines in order with 2-second pauses.
+  4. Run `python3 -I scripts/examiner/import_audio.py <recording.mp3>`. It cuts at the pauses and checks the count.
+- `/design` has a public demo that plays a few clips with captions.
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).
@@ -117,4 +142,6 @@ No scoring or feedback. No payments. No server-side recordings. A privacy page i
   `SessionRunner` (speech, timers, replay, cue card prep, recording, 30 s progress saves + beacon on close),
   device check, recordings in IndexedDB (latest 10 / 300 MB), finish screen with download, real minutes on home.
 - [ ] Step 4: mock tests, streak, my recordings, settings.
+  - [x] Mock tests with the recorded examiner and live captions (`/practice/ielts/mock`).
+  - [ ] Streak, my recordings, settings.
 - [ ] Step 5: admin analytics, privacy, Telegram login, polish, Vercel launch.
