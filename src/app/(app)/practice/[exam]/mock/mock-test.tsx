@@ -1,67 +1,88 @@
 "use client";
 
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { AlertTriangle, Info, Mic, MicOff, Play, Video } from "lucide-react";
+import { AlertTriangle, Clock, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DeviceCheck } from "@/components/practice/device-check";
+import { RecordingChoice } from "@/components/practice/recording-choice";
+import { StartHint, START_HINT_ID } from "@/components/practice/start-hint";
 import { SessionRunner, type SessionOutcome } from "@/components/practice/session-runner";
 import { FinishScreen } from "@/components/practice/finish-screen";
-import { EXAMS, type ExamCode } from "@/config/exams";
+import { EXAMS, partLabel, type ExamCode, type PartConfig } from "@/config/exams";
+import type { NextMock } from "@/lib/practice/mock-rotation";
 import { stopStream } from "@/lib/practice/recorder";
+import { saveSessionOutcome, type FinishedSession } from "@/lib/practice/save-outcome";
 import { unlockAudio, unlockSpeech } from "@/lib/speech";
-import { saveRecording, type StoredRecording } from "@/lib/practice/recordings-db";
-import type { RecordingType, SessionPlan } from "@/lib/practice/types";
-import { cn } from "@/lib/utils";
+import type { RecordingType, SessionPlan, Step } from "@/lib/practice/types";
+import { offlineMockPlan, withTimeout } from "@/lib/practice/offline-start";
+import { onPendingChange, pendingSessions } from "@/lib/practice/offline-queue";
 import { startMockTest } from "../../actions";
 
-type Stage = "setup" | "running" | "finished";
+type Stage = "ready" | "running" | "finished";
 
-function isIOS() {
-  return typeof navigator !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent);
+/** True while a finished mock of this set still waits on this phone to be sent. */
+function useDoneOffline(mockSetId: string) {
+  return useSyncExternalStore(
+    onPendingChange,
+    () => pendingSessions().some((e) => e.completed && e.start?.mockSetId === mockSetId),
+    () => false,
+  );
 }
 
-/** Mock Test: setup (recording + device check) → the full test with the examiner → finish screen. */
-export function MockTest({ exam }: { exam: ExamCode }) {
+export function MockTest({ exam, next, steps }: { exam: ExamCode; next: NextMock; steps: Step[] }) {
   const t = useTranslations("practice");
+  const router = useRouter();
   const cfg = EXAMS[exam];
-  const [stage, setStage] = useState<Stage>("setup");
+  const [stage, setStage] = useState<Stage>("ready");
   const [recordingType, setRecordingType] = useState<RecordingType>("audio");
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [plan, setPlan] = useState<SessionPlan | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<{ outcome: SessionOutcome; saved: StoredRecording | null; recordingError: boolean } | null>(null);
+  const [result, setResult] = useState<FinishedSession | null>(null);
   const [pending, startTransition] = useTransition();
-  const [ios, setIos] = useState(false);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => setIos(isIOS()), []);
+  // Each new step starts at the top of the page (on a phone the last tap was near the bottom).
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [stage]);
 
   // Release the microphone/camera when leaving the page.
   useEffect(() => () => stopStream(stream), [stream]);
 
-  const needsStream = recordingType !== "none";
-  const canStart = !needsStream || !!stream;
+  const doneOffline = useDoneOffline(next.set.id);
+  const canStart = (recordingType === "none" || !!stream) && !doneOffline;
 
-  function chooseRecording(type: RecordingType) {
-    setRecordingType(type);
-    // A video stream is needed for video; an audio-only stream is not enough.
-    if (stream && (type === "none" || (type === "video") !== stream.getVideoTracks().length > 0)) {
-      stopStream(stream);
-      setStream(null);
-    }
+  /** No internet: run the set with the questions this page brought along. */
+  function startOffline() {
+    if (steps.length === 0) return setError(t("mock.broken"));
+    setPlan(offlineMockPlan({ exam, mockSetId: next.set.id, name: next.set.name, steps, recordingType }));
+    setStage("running");
   }
 
   function start() {
-    // iPhone: sound may only start from a tap, so unlock both voices before any await.
     unlockSpeech();
     unlockAudio();
     setError(null);
+    if (!navigator.onLine) return startOffline();
     startTransition(async () => {
-      const res = await startMockTest({ exam, recordingType });
+      let res: Awaited<ReturnType<typeof startMockTest>> | "timeout";
+      try {
+        res = await withTimeout(startMockTest({ exam, mockSetId: next.set.id, recordingType }));
+      } catch {
+        res = "timeout";
+      }
+      if (res === "timeout") return startOffline();
       if (res.error || !res.plan) {
-        setError(res.error === "empty" ? t("empty") : res.error ?? "error");
+        if (res.error === "taken") {
+          // Finished on another device meanwhile: load the next set.
+          setError(t("mock.taken"));
+          router.refresh();
+        } else {
+          setError(res.error === "empty" ? t("mock.broken") : (res.error ?? "error"));
+        }
         return;
       }
       setPlan(res.plan);
@@ -71,131 +92,106 @@ export function MockTest({ exam }: { exam: ExamCode }) {
 
   const onFinished = useCallback(
     async (outcome: SessionOutcome) => {
-      let saved: StoredRecording | null = null;
-      let recordingError = false;
-      if (outcome.recording && plan && plan.recordingType !== "none") {
-        try {
-          saved = await saveRecording({
-            exam: plan.exam,
-            mode: plan.mode,
-            label: plan.label,
-            type: plan.recordingType,
-            mimeType: outcome.mimeType || outcome.recording.type,
-            durationSeconds: outcome.activeSeconds,
-            blob: outcome.recording,
-          });
-        } catch {
-          recordingError = true;
-        }
-      } else if (plan && plan.recordingType !== "none") {
-        recordingError = true;
-      }
+      const finished = plan ? await saveSessionOutcome(plan, outcome) : { outcome, saved: null, recordingError: false };
       stopStream(stream);
       setStream(null);
-      setResult({ outcome, saved, recordingError });
+      setResult(finished);
       setStage("finished");
+      // The server page picks the next set (a finished one will not come back).
+      router.refresh();
     },
-    [plan, stream],
+    [plan, stream, router],
   );
 
   if (stage === "running" && plan) return <SessionRunner plan={plan} stream={stream} onFinished={onFinished} />;
 
   if (stage === "finished" && result) {
+    const completed = result.outcome.completed;
     return (
       <FinishScreen
         activeSeconds={result.outcome.activeSeconds}
         savedSeconds={result.outcome.savedSeconds}
+        queued={result.outcome.queued}
         recording={result.saved}
         recordingError={result.recordingError}
-        note={result.outcome.completed ? undefined : t("mockEnded")}
+        stoppedEarly={!completed}
+        note={completed ? t("mock.doneNote", { name: plan?.label ?? "" }) : t("mock.stoppedNote")}
+        againLabel={t("mock.another")}
         onAgain={() => {
           setResult(null);
           setPlan(null);
-          setStage("setup");
+          setStage("ready");
+          // Ask again in case the refresh after finishing has not arrived yet (slow internet).
+          router.refresh();
         }}
       />
     );
   }
 
+  /** One line per part, from the exam config (IELTS: 3 parts, CEFR: 4 parts with pictures and a debate). */
+  function describe(p: PartConfig) {
+    const prep = Math.round((p.prepSeconds ?? 60) / 60);
+    const speak = Math.round((p.speakSeconds ?? 120) / 60);
+    const s = p.secondsPerQuestion ?? 45;
+    if (p.kind === "cue-card") {
+      if (p.cardStyle === "debate") return t("mock.debate", { prep, speak });
+      if (p.cardStyle === "questions") return t("mock.cardPicture", { prep, speak });
+      return t("mock.p2", { prep, speak });
+    }
+    if (p.pictures) return t("mock.pictures", { first: p.firstQuestionSeconds ?? s, s });
+    if (p.linkedToPart) return t("mock.p3", { s });
+    return t("mock.p1", { s });
+  }
+
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-2xl">{t("mockTitle", { exam: cfg.label })}</h1>
-        <p className="text-muted-foreground">{t("mockLead")}</p>
-      </div>
+      <h1 className="text-2xl">{t("mockTitle", { exam: cfg.label })}</h1>
 
       <Card>
         <CardHeader>
-          <CardTitle>{t("mockHowTitle")}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ol className="flex list-decimal flex-col gap-2 pl-5">
-            <li>{t("mockHow1")}</li>
-            <li>{t("mockHow2")}</li>
-            <li>{t("mockHow3")}</li>
-          </ol>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>{t("recordingTitle")}</CardTitle>
-          <p className="text-sm text-muted-foreground">{t("recordingLead")}</p>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-6">
-          <div role="radiogroup" aria-label={t("recordingTitle")} className="grid gap-3 sm:grid-cols-3">
-            {(["audio", "video", "none"] as const).map((type) => {
-              const Icon = type === "audio" ? Mic : type === "video" ? Video : MicOff;
-              const selected = type === recordingType;
-              return (
-                <button
-                  key={type}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  onClick={() => chooseRecording(type)}
-                  className={cn(
-                    "flex min-h-20 flex-col items-start gap-1 rounded-card border-2 p-4 text-left transition-colors",
-                    selected ? "border-primary bg-surface" : "border-border bg-card hover:bg-muted",
-                  )}
-                >
-                  <span className="flex items-center gap-2 font-semibold text-primary">
-                    <Icon className="size-5" aria-hidden />
-                    {t(`recording.${type}`)}
-                  </span>
-                  <span className="text-sm text-muted-foreground">{t(`recordingHelp.${type}`)}</span>
-                </button>
-              );
-            })}
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge>{t("mock.number", { n: next.number, total: next.total })}</Badge>
+            {next.cycle > 1 && <Badge variant="outline">{t("mock.round", { n: next.cycle })}</Badge>}
           </div>
-
-          {recordingType !== "none" && <DeviceCheck key={recordingType} type={recordingType} stream={stream} onReady={setStream} />}
+          <CardTitle className="pt-2 text-xl">{next.set.name}</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-2">
+            {cfg.parts.map((p) => (
+              <li key={p.part} className="flex items-start gap-3">
+                <span className="w-20 shrink-0 font-semibold text-primary">{t("session.part", { part: partLabel(exam, p.part) })}</span>
+                <span>{describe(p)}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="flex items-start gap-2 rounded-button bg-muted px-3 py-2 text-sm">
+            <Clock className="mt-0.5 size-4 shrink-0 text-secondary" aria-hidden />
+            {t("mock.rules")}
+          </p>
         </CardContent>
       </Card>
 
-      <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-        <p className="flex items-start gap-2">
-          <Info className="mt-0.5 size-4 shrink-0" aria-hidden />
-          {t("mockVoiceNote")}
-        </p>
-        {ios && (
-          <p className="flex items-start gap-2">
-            <Info className="mt-0.5 size-4 shrink-0" aria-hidden />
-            {t("safariNote")}
-          </p>
-        )}
-      </div>
+      <RecordingChoice recordingType={recordingType} onRecordingTypeChange={setRecordingType} stream={stream} onStreamChange={setStream} />
 
       {error && (
         <p role="alert" className="flex items-center gap-2 rounded-button border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          <AlertTriangle className="size-4" aria-hidden />
+          <AlertTriangle className="size-4 shrink-0" aria-hidden />
           {error}
         </p>
       )}
 
-      <Button type="button" size="lg" onClick={start} disabled={!canStart || pending} className="self-start">
+      {doneOffline && (
+        <p role="status" className="flex items-start gap-2 rounded-button bg-muted px-3 py-2 text-sm">
+          <Clock className="mt-0.5 size-4 shrink-0 text-secondary" aria-hidden />
+          {t("offline.mockWaiting")}
+        </p>
+      )}
+
+      <StartHint recordingType={recordingType} show={!canStart && !doneOffline} />
+
+      <Button type="button" size="lg" onClick={start} disabled={!canStart || pending} className="self-start" aria-describedby={canStart || doneOffline ? undefined : START_HINT_ID}>
         <Play aria-hidden />
-        {pending ? t("starting") : t("mockStart")}
+        {pending ? t("starting") : t("mock.start")}
       </Button>
     </div>
   );

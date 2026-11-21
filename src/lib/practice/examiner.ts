@@ -2,8 +2,8 @@
 // the opening, the Part 1 frame, the Part 2 instructions, the Part 3 intro and the closing.
 // Pure functions (no browser or database code), so they are easy to test.
 
-import script from "@/config/examiner-script.json";
-import { shuffle } from "./random";
+import script from "../../config/examiner-script.json" with { type: "json" };
+import { shuffle } from "./random.ts";
 import type { CueCardStep, ExaminerStep, QuestionStep, SpokenLine, Step } from "./types";
 
 type ScriptLine = {
@@ -49,14 +49,6 @@ export function pickFrame(part1Title: string, rand: () => number = Math.random):
   return rand() < 0.5 ? 1 : 2;
 }
 
-type Timers = { part1Seconds: number; part3Seconds: number; prepSeconds: number; speakSeconds: number };
-
-type MockContent = {
-  part1: { title: string; questions: { text: string; audioUrl: string | null }[] };
-  cueCard: { title: string; bullets: string[]; explain: string | null };
-  part3: { title: string; questions: { text: string; audioUrl: string | null }[] };
-};
-
 /** Turn a run of script ids into steps: "say" lines are grouped, "ask" lines become questions. */
 function scriptSteps(ids: string[], part: number, defaultSeconds: number): Step[] {
   const steps: Step[] = [];
@@ -82,48 +74,43 @@ function scriptSteps(ids: string[], part: number, defaultSeconds: number): Step[
 }
 
 /**
- * The whole mock test in order: opening → Part 1 frame → the set's Part 1 topic →
- * Part 2 (instructions, cue card) → Part 3 → closing.
+ * Add the examiner to an IELTS mock test built from a mock set (Part 1 questions,
+ * the Part 2 cue card, Part 3 questions, in that order):
+ * opening → Part 1 frame → "a different topic" + the set's Part 1 →
+ * Part 2 instructions + cue card (start/end lines) → Part 3 intro + questions → closing.
  */
-export function buildMockSteps(content: MockContent, timers: Timers, opts: { now?: Date; rand?: () => number } = {}): Step[] {
+export function addExaminer(steps: Step[], opts: { now?: Date; rand?: () => number } = {}): Step[] {
   const rand = opts.rand ?? Math.random;
   const f = script.flow;
-  const steps: Step[] = [];
+  const part = (n: number) => steps.filter((s) => s.part === n);
+  const part1 = part(1);
+  const part2 = part(2);
+  const part3 = part(3);
+  const firstQ = part1.find((s): s is QuestionStep => s.kind === "question");
+  const part1Seconds = firstQ?.seconds ?? 45;
+  const part3Seconds = part3.find((s): s is QuestionStep => s.kind === "question")?.seconds ?? 60;
+  const out: Step[] = [];
 
   // Opening (the greeting depends on the time of day).
   const opening = f.opening.map((id) => (id === "greeting" ? f.greeting[timeOfDay(opts.now)] : id));
-  steps.push(...scriptSteps(opening, 1, timers.part1Seconds));
+  out.push(...scriptSteps(opening, 1, part1Seconds));
 
   // Part 1: one frame, then the set's own topic.
-  const frameIds = pickFrame(content.part1.title, rand) === 1 ? f.frame1 : [...f.frame2.intro, ...shuffle(f.frame2.pool, rand).slice(0, f.frame2.pick)];
-  steps.push(...scriptSteps(frameIds, 1, timers.part1Seconds));
-  steps.push(...scriptSteps(f.part1Next, 1, timers.part1Seconds));
-  for (const q of content.part1.questions) {
-    steps.push({ kind: "question", part: 1, topic: content.part1.title, text: q.text, audioUrl: q.audioUrl, seconds: timers.part1Seconds });
-  }
+  const frameIds = pickFrame(firstQ?.topic ?? "", rand) === 1 ? f.frame1 : [...f.frame2.intro, ...shuffle(f.frame2.pool, rand).slice(0, f.frame2.pick)];
+  out.push(...scriptSteps(frameIds, 1, part1Seconds));
+  if (part1.length) out.push(...scriptSteps(f.part1Next, 1, part1Seconds), ...part1);
 
-  // Part 2: instructions, then the cue card (not read aloud).
-  steps.push(...scriptSteps(f.part2Intro, 2, timers.part1Seconds));
-  const card: CueCardStep = {
-    kind: "cue-card",
-    part: 2,
-    title: content.cueCard.title,
-    bullets: content.cueCard.bullets,
-    explain: content.cueCard.explain,
-    prepSeconds: timers.prepSeconds,
-    speakSeconds: timers.speakSeconds,
-    startLines: f.part2Start.map(spoken),
-    endLines: f.part2End.map(spoken),
-  };
-  steps.push(card);
+  // Part 2: instructions, then the cue card (handed over silently, not read aloud).
+  if (part2.length) {
+    out.push(...scriptSteps(f.part2Intro, 2, part1Seconds));
+    for (const s of part2) {
+      out.push(s.kind === "cue-card" ? ({ ...s, startLines: f.part2Start.map(spoken), endLines: f.part2End.map(spoken) } satisfies CueCardStep) : s);
+    }
+  }
 
   // Part 3: intro, then the discussion questions.
-  steps.push(...scriptSteps(f.part3Intro, 3, timers.part3Seconds));
-  for (const q of content.part3.questions) {
-    const step: QuestionStep = { kind: "question", part: 3, topic: content.part3.title, text: q.text, audioUrl: q.audioUrl, seconds: timers.part3Seconds };
-    steps.push(step);
-  }
+  if (part3.length) out.push(...scriptSteps(f.part3Intro, 3, part3Seconds), ...part3);
 
-  steps.push(...scriptSteps(f.closing, 3, timers.part3Seconds));
-  return steps;
+  out.push(...scriptSteps(f.closing, part3.length ? 3 : 2, part3Seconds));
+  return out;
 }

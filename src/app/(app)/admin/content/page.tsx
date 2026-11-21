@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input, NativeSelect } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { EXAMS, EXAM_CODES, isExamCode } from "@/config/exams";
+import { EXAMS, EXAM_CODES, isExamCode, partConfig, partLabel } from "@/config/exams";
 import { listTopics } from "@/lib/content/queries";
 
 export default async function ContentPage({ searchParams }: PageProps<"/admin/content">) {
@@ -47,7 +47,7 @@ export default async function ContentPage({ searchParams }: PageProps<"/admin/co
             <option value="">{t("content.allParts")}</option>
             {EXAMS[exam].parts.map((p) => (
               <option key={p.part} value={p.part}>
-                {t("stats.part", { part: p.part })}
+                {t("stats.part", { part: partLabel(exam, p.part) })}
               </option>
             ))}
           </NativeSelect>
@@ -73,7 +73,7 @@ export default async function ContentPage({ searchParams }: PageProps<"/admin/co
       ) : (
         <ul className="flex flex-col divide-y divide-border overflow-hidden rounded-card border border-border bg-card">
           {topics.map((topic) => {
-            const isCue = topic.part === 2 && topic.exam === "ielts";
+            const isCue = partConfig(topic.exam, topic.part)?.kind === "cue-card";
             return (
               <li key={topic.id}>
                 <Link
@@ -81,7 +81,7 @@ export default async function ContentPage({ searchParams }: PageProps<"/admin/co
                   className="flex min-h-16 items-center gap-3 px-4 py-3 transition-colors hover:bg-muted"
                 >
                   <Badge variant="outline" className="shrink-0">
-                    {t("stats.part", { part: topic.part })}
+                    {t("stats.part", { part: partLabel(topic.exam, topic.part) })}
                   </Badge>
                   <div className="flex min-w-0 flex-1 flex-col">
                     <span className={topic.active ? "font-semibold text-primary" : "font-semibold text-muted-foreground line-through"}>

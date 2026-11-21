@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { ArrowRight, FileJson, Layers, ListPlus, ListTree } from "lucide-react";
+import { ArrowRight, CalendarDays, FileJson, Layers, ListPlus, ListTree, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { EXAMS, EXAM_CODES } from "@/config/exams";
+import { EXAMS, EXAM_CODES, partLabel } from "@/config/exams";
 import { contentStats } from "@/lib/content/queries";
 
 export default async function AdminOverviewPage() {
@@ -11,6 +11,8 @@ export default async function AdminOverviewPage() {
   const stats = await contentStats();
 
   const links = [
+    { href: "/admin/reports", label: t("nav.reports"), icon: CalendarDays },
+    { href: "/admin/students", label: t("nav.students"), icon: Users },
     { href: "/admin/content", label: t("nav.content"), icon: ListTree },
     { href: "/admin/add", label: t("nav.add"), icon: ListPlus },
     { href: "/admin/mock-sets", label: t("nav.mockSets"), icon: Layers },
@@ -60,7 +62,7 @@ export default async function AdminOverviewPage() {
                       <li key={part}>
                         <Link href={`/admin/content?exam=${exam}&part=${part}`}>
                           <Badge variant="surface" className="hover:bg-surface/80">
-                            {t("stats.part", { part })}: {n}
+                            {t("stats.part", { part: partLabel(exam, part) })}: {n}
                           </Badge>
                         </Link>
                       </li>
@@ -87,7 +89,6 @@ export default async function AdminOverviewPage() {
         ))}
       </div>
 
-      <p className="text-sm text-muted-foreground">{t("comingNext")}</p>
     </div>
   );
 }

@@ -28,8 +28,11 @@ Useful pages: `/` landing, `/login`, `/design` (hidden page showing the colours 
 
 ```bash
 npm run lint
+npm test
 npm run build
 ```
+
+`npm test` runs the unit tests (`src/**/*.test.ts`) with Node's built-in test runner: no extra packages.
 
 ## Database
 
@@ -59,3 +62,45 @@ npm run build
 - **Playwright**: open the site in a real browser and take screenshots
 
 After opening Claude Code in this folder, approve the project tools, then type `/mcp` and log in to Supabase and Vercel.
+
+## Going live on Vercel (free)
+
+1. On [vercel.com](https://vercel.com), **Add New → Project**, import this GitHub repository. Framework: Next.js (found by itself).
+2. Under **Environment Variables**, add `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+   (same values as `.env.local`). Optional: `NEXT_PUBLIC_CONTACT_EMAIL` (shown on the privacy page).
+3. Deploy. The site gets a free address like `https://speaking-easy.vercel.app`.
+4. In Supabase → **Authentication → URL Configuration**: set **Site URL** to that address and add
+   `https://<your-address>/auth/callback` to **Redirect URLs**. Google sign-in needs this.
+5. Every push to `main` deploys again by itself.
+
+## Telegram login (one-time setup)
+
+Students sign in through the bot: on `/login` they tap **Continue with Telegram**, the bot opens, they press
+**Start** and then **Confirm**, and the login page signs them in by itself. Telegram login stays hidden until
+these steps are done.
+
+1. In Telegram, open **@BotFather**, send `/newbot`, and follow the questions (name: *Speaking Easy*).
+   BotFather gives you a **token**. Keep it secret: never paste it into chat or into the code.
+2. In Vercel → Project → **Settings → Environment Variables**, add:
+   - `NEXT_PUBLIC_TELEGRAM_BOT_USERNAME`: the bot's username, without `@`
+   - `TELEGRAM_BOT_TOKEN`: the token from step 1
+   - `SUPABASE_SERVICE_ROLE_KEY`: Supabase → **Project Settings → API Keys** → the secret (service_role) key
+3. Redeploy (Vercel → Deployments → ⋯ → Redeploy). The Telegram button appears on `/login`.
+4. Sign in as the owner, open **`/owner`** and press **Connect bot** in the "Telegram bot" card. This tells
+   Telegram to send the bot's messages to `https://<your-address>/auth/telegram/webhook`. Press it again
+   if the site address or the bot token ever changes.
+5. **Owner on Telegram (optional).** So the owner's Telegram goes to the same account as the owner email,
+   find your numeric Telegram id (send any message to @userinfobot) and run once in the Supabase SQL editor:
+   `insert into private.app_config (key, value) values ('owner_telegram_id', '123456789') on conflict (key) do update set value = excluded.value;`
+
+### Owner email sign-in
+
+The owner can also sign in at **`/login/owner`** (not linked anywhere): it emails a one-time link, but only to
+the `owner_email` in `private.app_config`. New sign-ups are switched off in Supabase (Authentication → Sign In /
+Providers → "Allow new users to sign up" = off), so nobody can make an account by email or Google.
+Telegram accounts are still created by the server.
+
+### Google sign-in (hidden)
+
+The Google button is hidden but the code is kept. To show it again set `NEXT_PUBLIC_GOOGLE_LOGIN=on` in Vercel
+and switch "Allow new users to sign up" back on.

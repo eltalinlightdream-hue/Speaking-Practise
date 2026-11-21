@@ -58,6 +58,7 @@ export function BottomNav({ role }: { role: Role }) {
   return (
     <nav
       aria-label="Main"
+      style={{ viewTransitionName: "app-tabbar" }}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card pb-[env(safe-area-inset-bottom)] md:hidden"
     >
       <ul className="grid" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
@@ -69,7 +70,7 @@ export function BottomNav({ role }: { role: Role }) {
                 href={href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex min-h-16 flex-col items-center justify-center gap-1 px-1 text-[11px] font-semibold leading-tight",
+                  "flex min-h-16 flex-col items-center justify-center gap-1 px-1 text-[11px] font-semibold leading-tight transition-colors active:bg-muted",
                   active ? "text-primary" : "text-muted-foreground",
                 )}
               >
