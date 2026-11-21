@@ -425,7 +425,8 @@
       "for": "For",
       "against": "Against",
       "debateHelp": "Ikkala tomon haqida gapiring, soʻng oʻz fikringizni bildiring.",
-      "practiceTime": "Mashq vaqti"
+      "practiceTime": "Mashq vaqti",
+      "doneSpeaking": "Gapirib boʻldim"
     },
     "finish": {
       "title": "Barakalla!",

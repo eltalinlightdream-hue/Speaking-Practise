@@ -425,7 +425,8 @@
       "for": "For",
       "against": "Against",
       "debateHelp": "Talk about both sides, then give your own opinion.",
-      "practiceTime": "Practice time"
+      "practiceTime": "Practice time",
+      "doneSpeaking": "I have finished"
     },
     "finish": {
       "title": "Well done!",

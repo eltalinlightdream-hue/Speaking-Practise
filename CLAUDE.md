@@ -66,6 +66,8 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - **General Training (IELTS)**: the student picks Part 1 only, Part 2 only, Part 3 only, or Part 1 + Part 3.
   Questions come from the pools built from all sets. Replay allowed.
 - **Mock Test**: never repeat a set until all active sets are done, then a new cycle starts. No replay.
+  Students can skip ahead: "Next question" while answering, "I have finished" during the Part 2 long turn
+  (added 2026-11-21 because the time limits felt too long). Skipping to the end still counts as completed.
   Default timers (one config file): Part 1 ~45 s per question; Part 2 60 s prep then up to 120 s; Part 3 ~60 s per question.
 - CEFR (Multi-Level): four parts, added 2026-11-20 from the owner's booklet (see "CEFR format" below).
   Parts, topics, questions and timers are data, not code.
@@ -239,6 +241,8 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   to `unlockSpeech()` (iPhone). `stopSpeaking()` also stops clips.
 - Voice: ElevenLabs "Adam - Articulate Engineering Professor", Multilingual v2. The file name gave speed 1.04,
   stability 40, similarity 34, style 43, speaker boost. Use the same voice and settings for new lines.
+- A line with `"tempo": 0.8` is slowed down by 20% when imported (pitch kept). The three greetings use it because
+  they came out rushed.
 - To change or add lines:
   1. Edit the JSON.
   2. Regenerate the Word sheet: `node scripts/examiner/make_lines_docx.cjs src/config/examiner-script.json content/examiner/ielts-examiner-lines.docx`.
