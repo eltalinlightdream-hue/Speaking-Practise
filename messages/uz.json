@@ -97,7 +97,8 @@
       "mockSets": "Mock testlar",
       "importExport": "Import / eksport",
       "reports": "Haftalik hisobot",
-      "students": "Oʻquvchilar"
+      "students": "Oʻquvchilar",
+      "messages": "Xabarlar"
     },
     "stats": {
       "topics": "Mavzular",
@@ -310,6 +311,39 @@
       "changeNameHelp": "Yangi toʻliq ism-familiyani yozing.",
       "changeGroup": "Guruhni oʻzgartirish",
       "needNameFirst": "Bu hisobda hali ism yoʻq. Avval “Ismni oʻzgartirish” orqali ism kiriting."
+    },
+    "messages": {
+      "title": "Telegram xabarlari",
+      "lead": "Speaking Easy boti orqali oʻquvchilarga xabar yuboring. Faqat Telegram orqali kirgan oʻquvchilar oladi.",
+      "step1": "1. Kimga",
+      "step2": "2. Xabar",
+      "allStudents": "Barcha oʻquvchilar",
+      "audience": "{audience}: {count, plural, =0 {Telegramli oʻquvchi yoʻq} other {# ta oʻquvchi oladi}}.",
+      "messageLabel": "Xabar",
+      "placeholder": "Masalan: Bugun 15 daqiqa mashq qilishni unutmang!",
+      "help": "Oxiriga ismingiz ({name}) qoʻshiladi",
+      "sendTo": "{count, plural, =0 {Yuboriladigan oʻquvchi yoʻq} other {# ta oʻquvchiga yuborish}}",
+      "sendTest": "Oʻzimga sinab koʻrish",
+      "sending": "Yuborilmoqda…",
+      "testPrefix": "Sinov — buni faqat siz koʻrasiz",
+      "confirmTitle": "Xabarni yuborasizmi?",
+      "confirmText": "U {count} ta oʻquvchiga ({audience}) boradi. Uni qaytarib boʻlmaydi.",
+      "confirmYes": "Ha, yuborish",
+      "cancel": "Bekor qilish",
+      "testSent": "Sinov xabari yuborildi. Telegramni tekshiring.",
+      "testFailed": "Sinov xabari yetib bormadi. Telegramda botni ochib, Start tugmasini bosing va qayta urinib koʻring.",
+      "sent": "Yuborildi: {delivered} ta yetib bordi{failed, plural, =0 {} other {, # tasiga yetmadi (botni bloklagan yoki Telegramdan chiqqan)}}.",
+      "history": "Yuborilgan xabarlar",
+      "noHistory": "Hali xabar yuborilmagan.",
+      "historyCounts": "{recipients} tadan {delivered} tasiga yetdi{failed, plural, =0 {} other { · # tasiga yetmadi}}",
+      "errors": {
+        "empty": "Avval xabar yozing.",
+        "long": "Xabar juda uzun.",
+        "noRecipients": "Bu tanlovda Telegramli oʻquvchi yoʻq.",
+        "noTelegram": "Hisobingizga Telegram ulanmagan, shuning uchun sinov yuborib boʻlmaydi.",
+        "notConfigured": "Serverda Telegram boti sozlanmagan (TELEGRAM_BOT_TOKEN).",
+        "failed": "Xatolik yuz berdi. Qayta urinib koʻring."
+      }
     }
   },
   "owner": {
@@ -663,5 +697,18 @@
     "invalid": "Iltimos, toʻgʻri email manzilini kiriting.",
     "error": "Havolani yuborib boʻlmadi. Keyinroq qaytadan urinib koʻring.",
     "back": "Telegram orqali kirishga qaytish"
+  },
+  "leaderboard": {
+    "title": "Reyting",
+    "intro": "Kim eng koʻp mashq qildi. Toshkent vaqti.",
+    "back": "Natijalarim",
+    "today": "Bugun",
+    "week": "Shu hafta",
+    "place": "Oʻrin",
+    "you": "Siz",
+    "noName": "Oʻquvchi",
+    "minutes": "{minutes} daq",
+    "empty": "Hali hech kim mashq qilmadi. Birinchi boʻling!",
+    "notRanked": "Faqat oʻquvchilar reytingda. Sizning mashqingiz bu yerda koʻrsatilmaydi."
   }
 }

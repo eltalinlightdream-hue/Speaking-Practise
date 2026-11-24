@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { CueCardView } from "@/components/practice/cue-card-view";
 import { ExamPictures } from "@/components/practice/exam-pictures";
+import { LeaderboardList } from "@/components/leaderboard-list";
+import { MessageForm } from "../(app)/admin/messages/message-form";
 import { DemoTimer } from "./demo-timer";
 import { DemoExaminer } from "./demo-examiner";
 
@@ -184,6 +186,25 @@ export default function DesignPage() {
             <DemoExaminer />
           </CardContent>
         </Card>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl">Leaderboard</h2>
+        <LeaderboardList
+          rows={[
+            { place: 1, display_name: "Aziza K.", seconds: 3720, is_me: false },
+            { place: 2, display_name: "Jasur T.", seconds: 2940, is_me: false },
+            { place: 2, display_name: "Madina R.", seconds: 2940, is_me: false },
+            { place: 4, display_name: "Bobur", seconds: 1500, is_me: false },
+            { place: 5, display_name: null, seconds: 960, is_me: false },
+            { place: 12, display_name: "Dilnoza Abdullayeva-Karimova S.", seconds: 300, is_me: true },
+          ]}
+        />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl">Telegram message form</h2>
+        <MessageForm recipients={67} audience="All students" hidden={{}} senderName="Abduraimov Erkinjon" />
       </section>
     </div>
   );
