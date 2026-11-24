@@ -101,6 +101,12 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - `day_tashkent` = Tashkent day the session started (a session crossing midnight counts for its start day).
 - iPhone: `unlockSpeech()` runs inside the Start tap; recorder falls back to MP4.
 
+## Leaderboard
+
+- `/progress` shows Today / This week (Mon–Sun, Tashkent). Data comes only from `public.leaderboard(period, limit)`
+  (security definer): short names ("Aziza K."), minutes and place. Only `student` role, at least 1 minute.
+  Top 20 plus the viewer's own row. List component: `src/components/leaderboard-list.tsx` (also on `/design`).
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).

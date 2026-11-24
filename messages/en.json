@@ -301,5 +301,17 @@
       "home": "Home",
       "recordingFailed": "The recording could not be saved on this device."
     }
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "intro": "Who practised the most. Tashkent time.",
+    "today": "Today",
+    "week": "This week",
+    "place": "Place",
+    "you": "You",
+    "noName": "Student",
+    "minutes": "{minutes} min",
+    "empty": "Nobody has practised yet. Be the first!",
+    "notRanked": "Only students are ranked. Your own practice is not shown here."
   }
 }

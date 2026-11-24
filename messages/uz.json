@@ -301,5 +301,17 @@
       "home": "Bosh sahifa",
       "recordingFailed": "Yozuvni bu qurilmada saqlab boʻlmadi."
     }
+  },
+  "leaderboard": {
+    "title": "Reyting",
+    "intro": "Kim eng koʻp mashq qildi. Toshkent vaqti.",
+    "today": "Bugun",
+    "week": "Shu hafta",
+    "place": "Oʻrin",
+    "you": "Siz",
+    "noName": "Oʻquvchi",
+    "minutes": "{minutes} daq",
+    "empty": "Hali hech kim mashq qilmadi. Birinchi boʻling!",
+    "notRanked": "Faqat oʻquvchilar reytingda. Sizning mashqingiz bu yerda koʻrsatilmaydi."
   }
 }

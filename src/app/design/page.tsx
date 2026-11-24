@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input, NativeSelect } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
+import { LeaderboardList } from "@/components/leaderboard-list";
 import { DemoTimer } from "./demo-timer";
 
 // Hidden page to check the look of the design system. Not linked anywhere.
@@ -134,6 +135,20 @@ export default function DesignPage() {
             <Button size="lg">Next question</Button>
           </CardContent>
         </Card>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl">Leaderboard</h2>
+        <LeaderboardList
+          rows={[
+            { place: 1, display_name: "Aziza K.", seconds: 3720, is_me: false },
+            { place: 2, display_name: "Jasur T.", seconds: 2940, is_me: false },
+            { place: 2, display_name: "Madina R.", seconds: 2940, is_me: false },
+            { place: 4, display_name: "Bobur", seconds: 1500, is_me: false },
+            { place: 5, display_name: null, seconds: 960, is_me: false },
+            { place: 12, display_name: "Dilnoza Abdullayeva-Karimova S.", seconds: 300, is_me: true },
+          ]}
+        />
       </section>
     </div>
   );
