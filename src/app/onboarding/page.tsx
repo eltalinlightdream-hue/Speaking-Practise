@@ -5,6 +5,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { Logo } from "@/components/logo";
 import { getCurrentProfile, isSetupComplete } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { GROUP_COLUMNS, type LessonGroup } from "@/lib/groups";
 import { OnboardingForm } from "./onboarding-form";
 
 export default async function OnboardingPage() {
@@ -14,7 +15,7 @@ export default async function OnboardingPage() {
 
   const supabase = await createClient();
   const [{ data: groups }, { data: auth }] = await Promise.all([
-    supabase.from("lesson_groups").select("id, name").eq("active", true).order("name"),
+    supabase.from("lesson_groups").select(GROUP_COLUMNS).eq("active", true).order("sort_order").order("name"),
     supabase.auth.getUser(),
   ]);
   // Prefill the name Google gives us; the student can change it.
@@ -36,7 +37,7 @@ export default async function OnboardingPage() {
             <CardDescription className="text-base">{t("lead")}</CardDescription>
           </CardHeader>
           <CardContent>
-            <OnboardingForm groups={groups ?? []} defaultName={defaultName} />
+            <OnboardingForm groups={(groups ?? []) as LessonGroup[]} defaultName={defaultName} />
           </CardContent>
         </Card>
       </main>

@@ -1,0 +1,427 @@
+{
+  "format": "speaking-easy-cefr/v1",
+  "about": "CEFR (Multi-Level) speaking tests typed from the booklet 'Multi-Level Recent Speaking Questions' (@MultiLevelRecord), questions reported by candidates from the real exam on 15-16 September 2026. Each test is one mock set: Part 1.1 (3 questions), Part 1.2 (2 pictures + 3 questions), Part 2 (1 picture + 3 questions), Part 3 (statement with arguments for and against). Pictures are in public/content/cefr/2026-09/. Database: run scripts/content/build_cefr_seed_sql.py to make supabase/seed_cefr_content.sql.",
+  "image_dir": "/content/cefr/2026-09",
+  "sets": [
+    {
+      "name": "CEFR-1",
+      "exam_date": "2026-09-16",
+      "part1_1": {
+        "title": "First teacher, typical day, pets",
+        "questions": ["Tell me about your first teacher.", "What does your typical day look like?", "Do you have a pet at home?"]
+      },
+      "part1_2": {
+        "title": "Eating out and eating at home",
+        "images": [
+          { "file": "t01-part12-a.webp", "alt": "Friends having dinner together in a restaurant" },
+          { "file": "t01-part12-b.webp", "alt": "A family eating a meal together at home" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "What are the advantages of eating out in a restaurant?",
+          "Some people prefer eating at home. Why do you think that is?"
+        ]
+      },
+      "part2": {
+        "title": "A truly happy moment",
+        "image": { "file": "t01-part2.webp", "alt": "A person standing on a mountain top with arms raised at sunrise" },
+        "questions": [
+          "Tell me about a time when you felt truly happy.",
+          "What made that moment so special for you?",
+          "How do moments like this influence a person's life afterwards?"
+        ]
+      },
+      "part3": {
+        "statement": "Students should be encouraged to take part in extracurricular activities.",
+        "for": [
+          "develops teamwork, leadership and communication skills",
+          "helps students discover talents that lessons never show",
+          "builds confidence and keeps young people motivated at school"
+        ],
+        "against": [
+          "takes valuable time away from academic study",
+          "extra cost for families and for the school budget",
+          "can increase pressure and tiredness among students"
+        ]
+      }
+    },
+    {
+      "name": "CEFR-2",
+      "exam_date": "2026-09-16",
+      "part1_1": {
+        "title": "Breakfast, sports, your room",
+        "questions": ["What do you usually eat for breakfast?", "Do you like doing any sports?", "Describe the room where you spend most of your time."]
+      },
+      "part1_2": {
+        "title": "Exercising outdoors and in a gym",
+        "images": [
+          { "file": "t02-part12-a.webp", "alt": "A man training with battle ropes on a sports field outdoors" },
+          { "file": "t02-part12-b.webp", "alt": "People exercising on bikes in a gym" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "What are the benefits of exercising outdoors?",
+          "Why do some people prefer training in a gym?"
+        ]
+      },
+      "part2": {
+        "title": "A happy achievement",
+        "image": { "file": "t02-part2.webp", "alt": "A smiling woman at her desk raising her arms in celebration" },
+        "questions": [
+          "Describe a time when you felt happy about something you achieved.",
+          "Who did you share that moment with?",
+          "Why is it important for people to celebrate their small successes?"
+        ]
+      },
+      "part3": {
+        "statement": "The number of people working remotely should continue to increase.",
+        "for": [
+          "saves hours of commuting and daily transport costs",
+          "allows a much better balance between work and family life",
+          "companies can employ talented people from any region"
+        ],
+        "against": [
+          "communication between team members becomes weaker",
+          "many employees feel isolated when working from home",
+          "harder for managers to control quality and productivity"
+        ]
+      }
+    },
+    {
+      "name": "CEFR-3",
+      "exam_date": "2026-09-16",
+      "part1_1": {
+        "title": "Your home, favourite drink, bedtime",
+        "questions": ["Describe the home you live in.", "What is your favourite drink?", "Do you usually go to bed early or late?"]
+      },
+      "part1_2": {
+        "title": "Travelling by plane and by train",
+        "images": [
+          { "file": "t03-part12-a.webp", "alt": "A woman working and talking on the phone in a plane seat" },
+          { "file": "t03-part12-b.webp", "alt": "A woman looking out of a train window in green mountains" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "What are the advantages of travelling by plane?",
+          "Why do some people still prefer travelling by train?"
+        ]
+      },
+      "part2": {
+        "title": "Trying hard but failing",
+        "image": { "file": "t03-part2.webp", "alt": "A tired student holding his head at a desk in a library" },
+        "questions": [
+          "Tell me about a time when you tried very hard but still failed.",
+          "How did you feel immediately after it happened?",
+          "What did that experience teach you about yourself?"
+        ]
+      },
+      "part3": {
+        "statement": "Extracurricular activities should be a compulsory part of the school programme.",
+        "for": [
+          "gives every student equal access to sport, art and clubs",
+          "builds social skills that ordinary lessons cannot teach",
+          "keeps young people away from harmful free-time habits"
+        ],
+        "against": [
+          "reduces the hours available for core academic subjects",
+          "not every student enjoys the same kind of activity",
+          "schools need extra staff, equipment and funding"
+        ]
+      }
+    },
+    {
+      "name": "CEFR-4",
+      "exam_date": "2026-09-16",
+      "part1_1": {
+        "title": "Favourite food, weekends, hometown",
+        "questions": ["What is your favourite food?", "What do you usually do at the weekend?", "Tell me about your hometown."]
+      },
+      "part1_2": {
+        "title": "Online and classroom learning",
+        "images": [
+          { "file": "t04-part12-a.webp", "alt": "A student following an online lesson on a laptop" },
+          { "file": "t04-part12-b.webp", "alt": "Children raising their hands in a classroom" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "What are the benefits of studying online?",
+          "Why do many students still prefer studying in a classroom?"
+        ]
+      },
+      "part2": {
+        "title": "A failure and its effect",
+        "image": { "file": "t04-part2.webp", "alt": "A sad man resting his chin on his hands and looking at his phone" },
+        "questions": [
+          "Describe a moment when you tried to do something but failed.",
+          "How did it affect you and the people around you?",
+          "Do you think accepting failure helps people to grow?"
+        ]
+      },
+      "part3": {
+        "statement": "The rising cost of fuel has a positive effect on the environment.",
+        "for": [
+          "people drive less and use public transport more often",
+          "encourages investment in electric and renewable energy",
+          "factories look for cleaner and cheaper technology"
+        ],
+        "against": [
+          "transport and food prices rise for ordinary families",
+          "some people switch to cheaper but dirtier types of fuel",
+          "in rural areas there is no alternative to private cars"
+        ]
+      }
+    },
+    {
+      "name": "CEFR-5",
+      "exam_date": "2026-09-16",
+      "part1_1": {
+        "title": "Your house, hobbies, music",
+        "questions": ["Describe your house.", "What is your hobby?", "When do you usually listen to music?"]
+      },
+      "part1_2": {
+        "title": "Working in an office and at home",
+        "images": [
+          { "file": "t05-part12-a.webp", "alt": "A group of colleagues working together around a table" },
+          { "file": "t05-part12-b.webp", "alt": "A woman working at home with a laptop and a notebook" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "What are the benefits of working together in an office?",
+          "Why do some people prefer working from home?"
+        ]
+      },
+      "part2": {
+        "title": "A time of change",
+        "image": { "file": "t05-part2.webp", "alt": "A woman standing where a road splits in two, deciding which way to go" },
+        "questions": [
+          "Tell me about a time when something in your life changed.",
+          "How did you deal with that change?",
+          "Do you think changes are usually good for people?"
+        ]
+      },
+      "part3": {
+        "statement": "Governments should ban all forms of gambling.",
+        "for": [
+          "protects families from serious financial loss",
+          "reduces addiction and the health problems linked to it",
+          "lowers the crime connected with gambling debts"
+        ],
+        "against": [
+          "gambling brings tax income and creates thousands of jobs",
+          "adults should be free to spend their own money",
+          "a ban pushes gambling into illegal, unregulated places"
+        ]
+      }
+    },
+    {
+      "name": "CEFR-6",
+      "exam_date": "2026-09-16",
+      "part1_1": {
+        "title": "Studies or work, internet, favourite drink",
+        "questions": ["Tell me about your studies or your work.", "How often do you use the internet?", "What is your favourite drink?"]
+      },
+      "part1_2": {
+        "title": "Traditional and online education",
+        "images": [
+          { "file": "t06-part12-a.webp", "alt": "Children in a classroom while the teacher writes on the board" },
+          { "file": "t06-part12-b.webp", "alt": "A student watching a teacher on a laptop screen" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "What are the advantages of traditional education?",
+          "Why has online education become so popular in recent years?"
+        ]
+      },
+      "part2": {
+        "title": "A happy day",
+        "image": { "file": "t06-part2.webp", "alt": "A woman with open arms in a field at sunset" },
+        "questions": [
+          "Describe a day when you felt really happy.",
+          "Where were you and who were you with?",
+          "Why do you still remember that particular day?"
+        ]
+      },
+      "part3": {
+        "statement": "Everyone should learn to play a musical instrument.",
+        "for": [
+          "improves memory, patience and concentration",
+          "a healthy way to relax and express emotions",
+          "helps people connect through culture and performance"
+        ],
+        "against": [
+          "lessons and good instruments are expensive",
+          "takes time away from study or work",
+          "not everyone has the interest or the talent for music"
+        ]
+      }
+    },
+    {
+      "name": "CEFR-7",
+      "exam_date": "2026-09-15",
+      "part1_1": {
+        "title": "Weather and umbrellas",
+        "questions": ["What is your favourite kind of weather?", "Do you often carry an umbrella with you?", "What do you usually do when the weather is bad?"]
+      },
+      "part1_2": {
+        "title": "Working alone and working in a team",
+        "images": [
+          { "file": "t07-part12-a.webp", "alt": "A young man working alone at a desk with a computer" },
+          { "file": "t07-part12-b.webp", "alt": "A group of colleagues working together around a table" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "What are the differences between working alone and working in a team?",
+          "What are the benefits of working from home compared with working in an office?"
+        ]
+      },
+      "part2": {
+        "title": "Waiting a long time",
+        "image": { "file": "t07-part2.webp", "alt": "A man in a suit talking on the phone in front of a departures board" },
+        "questions": [
+          "Describe a situation when you had to wait a long time for someone or something.",
+          "How did you feel while you were waiting?",
+          "How do you usually react when your plans are delayed?"
+        ]
+      },
+      "part3": {
+        "statement": "Surveillance cameras should be installed in all public places.",
+        "for": [
+          "helps the police to prevent and to solve crime",
+          "makes people feel safer on streets and public transport",
+          "provides useful evidence in accidents and disputes"
+        ],
+        "against": [
+          "a serious loss of personal privacy for ordinary citizens",
+          "recordings can be misused, leaked or sold",
+          "very expensive to install and maintain everywhere"
+        ]
+      }
+    },
+    {
+      "name": "CEFR-8",
+      "exam_date": "2026-09-15",
+      "part1_1": {
+        "title": "Hometown, weekends, seasons",
+        "questions": ["Tell me about an interesting place in your hometown.", "What do you often do at the weekend?", "What is your favourite season?"]
+      },
+      "part1_2": {
+        "title": "Growing food and buying food",
+        "images": [
+          { "file": "t08-part12-a.webp", "alt": "A man picking vegetables in a garden" },
+          { "file": "t08-part12-b.webp", "alt": "A woman choosing fruit in a supermarket" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "Which do you prefer — growing vegetables yourself or buying them from a shop?",
+          "Why do most people prefer to buy food from markets instead of growing it themselves?"
+        ]
+      },
+      "part2": {
+        "title": "A skill learned at home",
+        "image": { "file": "t08-part2.webp", "alt": "A parent and a child cooking together in a kitchen" },
+        "questions": [
+          "Describe a skill that you learned from a member of your family.",
+          "How long did it take you to learn it?",
+          "How useful is that skill for you today?"
+        ]
+      },
+      "part3": {
+        "statement": "People should grow more of their own food at home.",
+        "for": [
+          "home-grown food is fresher and free from chemicals",
+          "reduces the monthly food costs of a family",
+          "teaches children where their food actually comes from"
+        ],
+        "against": [
+          "most city flats have no land and not enough sunlight",
+          "growing food takes daily time, effort and knowledge",
+          "shops offer far more variety throughout the whole year"
+        ]
+      }
+    },
+    {
+      "name": "CEFR-9",
+      "exam_date": "2026-09-15",
+      "part1_1": {
+        "title": "School, sports, weekends",
+        "questions": ["Tell me about your school.", "Do you like doing any sports?", "What do you do at the weekends?"]
+      },
+      "part1_2": {
+        "title": "Outdoor and indoor activities",
+        "images": [
+          { "file": "t09-part12-a.webp", "alt": "Young people playing volleyball on a beach" },
+          { "file": "t09-part12-b.webp", "alt": "A family playing a board game at home" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "What are the advantages of outdoor activities?",
+          "Why do some people prefer indoor activities?"
+        ]
+      },
+      "part2": {
+        "title": "A time you did not succeed",
+        "image": { "file": "t09-part2.webp", "alt": "A tired man rubbing his eyes at a desk in front of a blackboard" },
+        "questions": [
+          "Tell me about a situation when you worked very hard but did not succeed.",
+          "What would you do differently if you had the same chance again?",
+          "How do you usually motivate yourself after a failure?"
+        ]
+      },
+      "part3": {
+        "statement": "Children should take part in extracurricular activities outside their school lessons.",
+        "for": [
+          "keeps children active, healthy and away from screens",
+          "helps them make friends outside their own classroom",
+          "develops talents that the school programme ignores"
+        ],
+        "against": [
+          "children already have a very heavy homework load",
+          "extra activities cost money and require transport",
+          "leaves less time for family, rest and sleep"
+        ]
+      }
+    },
+    {
+      "name": "CEFR-10",
+      "exam_date": "2026-09-15",
+      "part1_1": {
+        "title": "Pets, typical day, first teacher",
+        "questions": ["Do you have any pets?", "What is your typical day like?", "Describe your first teacher."]
+      },
+      "part1_2": {
+        "title": "Eating in a restaurant and at home",
+        "images": [
+          { "file": "t10-part12-a.webp", "alt": "Friends laughing and eating burgers outdoors" },
+          { "file": "t10-part12-b.webp", "alt": "A woman eating a salad in her kitchen at home" }
+        ],
+        "questions": [
+          "What do you see in these pictures?",
+          "Why do many people prefer eating at home?",
+          "What are the advantages of eating in a restaurant?"
+        ]
+      },
+      "part2": {
+        "title": "A happy moment",
+        "image": { "file": "t10-part2.webp", "alt": "A happy family together at an amusement park" },
+        "questions": [
+          "Describe a time when you felt happy about something.",
+          "Who was with you at that moment?",
+          "How do happy moments and good relationships help people to achieve things in the future?"
+        ]
+      },
+      "part3": {
+        "statement": "Everyone should own and learn to play a musical instrument.",
+        "for": [
+          "music develops discipline, creativity and self-expression",
+          "a useful skill for family celebrations and social life",
+          "supports national culture and musical traditions"
+        ],
+        "against": [
+          "good quality instruments are costly for most families",
+          "requires years of regular and patient practice",
+          "people can enjoy music fully without playing it"
+        ]
+      }
+    }
+  ]
+}

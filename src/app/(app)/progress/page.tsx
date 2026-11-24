@@ -1,53 +1,32 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { LeaderboardList, type LeaderboardRow } from "@/components/leaderboard-list";
+import { ChevronRight, Trophy } from "lucide-react";
+import { ProgressView } from "@/components/progress/progress-view";
+import { WeeklyReportDownload } from "@/components/report/weekly-report-download";
 import { requireProfile } from "@/lib/auth";
-import { createClient } from "@/lib/supabase/server";
-import { cn } from "@/lib/utils";
+import { loadProgress } from "@/lib/practice/progress-data";
 
-type Period = "day" | "week";
-
-export default async function ProgressPage({ searchParams }: { searchParams: Promise<{ period?: string }> }) {
+export default async function ProgressPage({ searchParams }: PageProps<"/progress">) {
   const profile = await requireProfile();
-  const t = await getTranslations("leaderboard");
-  const { period: periodParam } = await searchParams;
-  const period: Period = periodParam === "week" ? "week" : "day";
-
-  const supabase = await createClient();
-  const { data } = await supabase.rpc("leaderboard", { p_period: period, p_limit: 20 });
-  const rows = (data ?? []) as LeaderboardRow[];
-
-  const tabs: { id: Period; label: string }[] = [
-    { id: "day", label: t("today") },
-    { id: "week", label: t("week") },
-  ];
+  const t = await getTranslations("progress");
+  const tl = await getTranslations("leaderboard");
+  const data = await loadProgress(profile.id, (await searchParams).month);
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-2xl sm:text-3xl">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("intro")}</p>
-      </header>
-
-      <nav aria-label={t("title")} className="grid grid-cols-2 gap-1 rounded-button border border-border bg-card p-1">
-        {tabs.map((tab) => (
-          <Link
-            key={tab.id}
-            href={tab.id === "day" ? "/progress" : "/progress?period=week"}
-            aria-current={period === tab.id ? "page" : undefined}
-            className={cn(
-              "flex min-h-11 items-center justify-center rounded-[8px] font-semibold transition-colors",
-              period === tab.id ? "bg-primary text-primary-foreground" : "text-primary hover:bg-surface",
-            )}
-          >
-            {tab.label}
-          </Link>
-        ))}
-      </nav>
-
-      {profile.role !== "student" && <p className="text-sm text-muted-foreground">{t("notRanked")}</p>}
-
-      <LeaderboardList rows={rows} />
+      <h1 className="text-2xl">{t("title")}</h1>
+      <Link
+        href="/progress/leaderboard"
+        className="flex min-h-14 items-center gap-3 rounded-card border border-border bg-card px-4 font-semibold text-primary transition-colors hover:bg-surface"
+      >
+        <span className="flex size-9 items-center justify-center rounded-full bg-accent text-accent-foreground">
+          <Trophy className="size-5" aria-hidden />
+        </span>
+        <span className="flex-1">{tl("title")}</span>
+        <ChevronRight className="size-5" aria-hidden />
+      </Link>
+      <ProgressView data={data} basePath="/progress" />
+      <WeeklyReportDownload />
     </div>
   );
 }

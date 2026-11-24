@@ -6,23 +6,39 @@ import { requireAdmin } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { isExamCode, partConfig } from "@/config/exams";
 import { findDuplicate, normalize, splitLines } from "@/lib/content/similarity";
+import { parsePictureLines } from "@/lib/practice/pictures";
 
-export type ActionResult = { ok?: boolean; error?: string };
+export type ActionResult = { ok?: boolean; error?: string; detail?: string };
 
 function revalidateContent(topicId?: string) {
   revalidatePath("/admin", "layout");
   if (topicId) revalidatePath(`/admin/content/${topicId}`);
 }
 
+/** One item per line; list marks ("-", "*", "•", "1.") at the start are dropped. */
+function lines(value: FormDataEntryValue | null) {
+  return String(value ?? "")
+    .split(/\r?\n/)
+    .map((l) => l.replace(/^\s*(?:[-*•]\s*|\d+[.)]\s+)/, "").trim())
+    .filter(Boolean);
+}
+
 function readTopicFields(formData: FormData) {
   const title = String(formData.get("title") ?? "").replace(/\s+/g, " ").trim();
-  const bullets = String(formData.get("cue_bullets") ?? "")
-    .split(/\r?\n/)
-    .map((l) => l.replace(/^\s*[-*•]\s*/, "").trim())
-    .filter(Boolean);
+  const bullets = lines(formData.get("cue_bullets"));
   const explain = String(formData.get("cue_explain") ?? "").trim() || null;
   const related = String(formData.get("related_topic_id") ?? "") || null;
-  return { title, bullets, explain, related };
+  // CEFR fields: only saved when the form shows them (parts without them keep what they have).
+  const extra: { images?: { url: string; alt: string }[]; points_for?: string[]; points_against?: string[] } = {};
+  let badPicture: string | null = null;
+  if (formData.has("images")) {
+    const { pictures, bad } = parsePictureLines(String(formData.get("images")));
+    extra.images = pictures;
+    badPicture = bad[0] ?? null;
+  }
+  if (formData.has("points_for")) extra.points_for = lines(formData.get("points_for"));
+  if (formData.has("points_against")) extra.points_against = lines(formData.get("points_against"));
+  return { title, bullets, explain, related, extra, badPicture };
 }
 
 export async function createTopic(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
@@ -30,26 +46,30 @@ export async function createTopic(_prev: ActionResult, formData: FormData): Prom
   const exam = String(formData.get("exam"));
   const part = Number(formData.get("part"));
   if (!isExamCode(exam) || !partConfig(exam, part)) return { error: "invalid exam or part" };
-  const { title, bullets, explain, related } = readTopicFields(formData);
+  const { title, bullets, explain, related, extra, badPicture } = readTopicFields(formData);
   if (!title) return { error: "required" };
+  if (badPicture) return { error: "badPicture", detail: badPicture };
 
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("topics")
-    .insert({ exam, part, title, cue_bullets: bullets, cue_explain: explain, related_topic_id: related })
+    .insert({ exam, part, title, cue_bullets: bullets, cue_explain: explain, related_topic_id: related, ...extra })
     .select("id")
     .single();
   if (error) return { error: error.code === "23505" ? "duplicateTitle" : error.message };
 
   revalidateContent();
+  // Made from the "Add questions" page: go back there with the new topic open.
+  if (formData.get("after") === "add") redirect(`/admin/add?${new URLSearchParams({ exam, part: String(part), topic: data.id, created: "1" })}`);
   redirect(`/admin/content/${data.id}`);
 }
 
 export async function updateTopic(_prev: ActionResult, formData: FormData): Promise<ActionResult> {
   await requireAdmin();
   const id = String(formData.get("id"));
-  const { title, bullets, explain, related } = readTopicFields(formData);
+  const { title, bullets, explain, related, extra, badPicture } = readTopicFields(formData);
   if (!title) return { error: "required" };
+  if (badPicture) return { error: "badPicture", detail: badPicture };
 
   const supabase = await createClient();
   const { error } = await supabase
@@ -61,6 +81,7 @@ export async function updateTopic(_prev: ActionResult, formData: FormData): Prom
       cue_bullets: bullets,
       cue_explain: explain,
       related_topic_id: related,
+      ...extra,
     })
     .eq("id", id);
   if (error) return { error: error.code === "23505" ? "duplicateTitle" : error.message };

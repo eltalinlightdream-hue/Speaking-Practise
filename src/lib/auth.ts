@@ -19,13 +19,15 @@ export type Profile = {
 // cache() makes repeated calls within one request share the same result.
 export const getCurrentProfile = cache(async (): Promise<Profile | null> => {
   const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getUser();
-  if (!auth.user) return null;
+  // Verified locally (signed token), no extra trip to Supabase Auth.
+  const { data: auth } = await supabase.auth.getClaims();
+  const userId = auth?.claims?.sub;
+  if (!userId) return null;
 
   const { data } = await supabase
     .from("profiles")
     .select("id, email, full_name, lesson_group_id, role, language, kept")
-    .eq("id", auth.user.id)
+    .eq("id", userId)
     .single();
 
   return (data as Profile | null) ?? null;

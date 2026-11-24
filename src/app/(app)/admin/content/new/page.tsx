@@ -34,6 +34,9 @@ export default async function NewTopicPage({ searchParams }: PageProps<"/admin/c
               cue_bullets: [],
               cue_explain: null,
               related_topic_id: null,
+              images: [],
+              points_for: [],
+              points_against: [],
             }}
           />
         </CardContent>

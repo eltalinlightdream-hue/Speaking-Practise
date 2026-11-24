@@ -24,10 +24,17 @@
   },
   "login": {
     "title": "Kirish",
-    "lead": "Davom etish uchun Google hisobingizdan foydalaning.",
     "google": "Google orqali davom etish",
-    "telegram": "Telegram orqali kirish tez orada qoʻshiladi.",
-    "error": "Kirish amalga oshmadi. Iltimos, qaytadan urinib koʻring."
+    "telegram": "Telegram orqali kirish sozlanmoqda. Iltimos, birozdan soʻng qayting.",
+    "error": "Kirish amalga oshmadi. Iltimos, qaytadan urinib koʻring.",
+    "or": "yoki",
+    "telegramError": "Telegram orqali kirib boʻlmadi. Iltimos, qaytadan urinib koʻring.",
+    "telegramStart": "Telegram orqali davom etish",
+    "telegramOpen": "Telegramni ochish",
+    "telegramWaiting": "Botda Start, soʻng Tasdiqlash tugmasini bosing. Bu sahifa sizni oʻzi kiritadi.",
+    "telegramExpired": "Kirish havolasi eskirdi. Qaytadan urinib koʻring.",
+    "telegramRetry": "Telegram orqali qayta urinish",
+    "leadTelegram": "Telegram hisobingiz orqali kiring."
   },
   "onboarding": {
     "title": "Xush kelibsiz!",
@@ -58,11 +65,27 @@
     "cefr": "CEFR",
     "cefrText": "Multilevel speaking",
     "generalTraining": "Umumiy mashq",
-    "mockTest": "Mock test"
+    "mockTest": "Mock test",
+    "streak": "{count, plural, =0 {Hali seriya yoʻq} other {# kunlik seriya}}",
+    "seeProgress": "Mening natijalarim"
   },
   "settings": {
     "title": "Sozlamalar",
-    "languageHelp": "Sayt tilini tanlang."
+    "languageHelp": "Sayt tilini tanlang.",
+    "profileTitle": "Maʼlumotlaringiz",
+    "profileSaved": "Saqlandi.",
+    "accountTitle": "Hisob",
+    "deleteTitle": "Hisobni oʻchirish",
+    "deleteLead": "Bu hisobingiz, seriyangiz va mashqlar tarixini butunlay oʻchiradi. Shu qurilmadagi yozuvlar joyida qoladi.",
+    "deleteButton": "Hisobimni oʻchirish",
+    "deleteConfirmTitle": "Ishonchingiz komilmi?",
+    "deleteConfirmText": "Hisobingiz, seriyangiz va mashqlar tarixi oʻchiriladi. Buni qaytarib boʻlmaydi.",
+    "deleteConfirmCheck": "Buni qaytarib boʻlmasligini tushunaman",
+    "deleteConfirmButton": "Ha, hisobimni oʻchirish",
+    "deleteCancel": "Bekor qilish",
+    "deleteError": "Hisobni oʻchirib boʻlmadi. Iltimos, qaytadan urinib koʻring.",
+    "ownerNote": "Egasining hisobini ilovadan oʻchirib boʻlmaydi.",
+    "viaTelegram": "Telegram orqali kirilgan"
   },
   "admin": {
     "title": "Admin",
@@ -72,7 +95,9 @@
       "content": "Mavzular",
       "add": "Savol qoʻshish",
       "mockSets": "Mock testlar",
-      "importExport": "Import / eksport"
+      "importExport": "Import / eksport",
+      "reports": "Haftalik hisobot",
+      "students": "Oʻquvchilar"
     },
     "stats": {
       "topics": "Mavzular",
@@ -81,7 +106,6 @@
       "activeOf": "{total} tadan {active} tasi faol",
       "part": "{part}-qism"
     },
-    "comingNext": "Oʻquvchilar roʻyxati va haftalik hisobotlar 5-bosqichda qoʻshiladi.",
     "content": {
       "title": "Mavzular va savollar",
       "exam": "Imtihon",
@@ -119,7 +143,15 @@
       "noQuestions": "Hali savol yoʻq.",
       "details": "Mavzu maʼlumotlari",
       "cuePreview": "Cue card koʻrinishi",
-      "youShouldSay": "You should say:"
+      "youShouldSay": "You should say:",
+      "statement": "Fikr (statement)",
+      "cardQuestions": "Kartadagi savollar (har biri yangi qatorda)",
+      "pictures": "Rasmlar (har biri yangi qatorda: manzil | rasmda nima borligi)",
+      "picturesHelp": "Bu qismga {count} ta rasm kerak. Fayllarni public/content/ papkasiga qoʻying (har bir yangi rasmga yangi nom) yoki https havola bering.",
+      "pointsFor": "Foydasiga dalillar (har biri yangi qatorda)",
+      "pointsAgainst": "Ziddiga dalillar (har biri yangi qatorda)",
+      "cardPreview": "Karta koʻrinishi",
+      "picturesTitle": "Rasmlar"
     },
     "question": {
       "edit": "Tahrirlash",
@@ -139,7 +171,6 @@
       "lead": "Mavzuni tanlang, soʻng bitta savol qoʻshing yoki koʻpini joylang (har biri yangi qatorda).",
       "chooseTopic": "Mavzu",
       "pickTopic": "Mavzuni tanlang",
-      "open": "Ochish",
       "single": "Bitta savol",
       "singlePlaceholder": "Savolni yozing…",
       "addOne": "Savol qoʻshish",
@@ -154,7 +185,12 @@
       "saveN": "{count} ta savolni saqlash",
       "skipNote": "Bu mavzuda bor savollar oʻtkazib yuboriladi. Oʻxshashlari faqat ogohlantirish.",
       "added": "{count, plural, =0 {Yangi savol qoʻshilmadi.} other {# ta savol qoʻshildi.}}",
-      "notCueCard": "2-qism cue cardlarida savol oʻrniga bandlar boʻladi. Ularni mavzu sahifasida tahrirlang."
+      "notCueCard": "2-qism cue cardlarida savol oʻrniga bandlar boʻladi. Ularni mavzu sahifasida tahrirlang.",
+      "newTopicOption": "+ Yangi mavzu yaratish",
+      "newTopicTitle": "Yangi mavzu",
+      "newTopicLead": "Mavzu nomini yozing. Yaratilgach, savollarni shu sahifaning oʻzida qoʻshasiz.",
+      "createAndContinue": "Yaratish va savol qoʻshish",
+      "created": "Mavzu yaratildi. Endi savollarni qoʻshing."
     },
     "mocks": {
       "title": "Mock testlar",
@@ -202,12 +238,98 @@
     "errors": {
       "generic": "Xatolik yuz berdi: {message}",
       "duplicateTitle": "Bu qismda shu nomli mavzu allaqachon bor.",
-      "required": "Iltimos, nomini kiriting."
+      "required": "Iltimos, nomini kiriting.",
+      "badPicture": "Bu rasm qatorida toʻgʻri manzil yoʻq: {line}"
+    },
+    "reports": {
+      "title": "Haftalik hisobot",
+      "lead": "Har bir oʻquvchi bu hafta qancha mashq qilgani (dushanbadan yakshanbagacha, Toshkent vaqti bilan).",
+      "prevWeek": "Oldingi hafta",
+      "nextWeek": "Keyingi hafta",
+      "thisWeek": "Shu hafta",
+      "allGroups": "Barcha guruhlar",
+      "noGroup": "Guruhsiz",
+      "active": "Mashq qilganlar",
+      "activeValue": "{total} tadan {active} ta",
+      "minutes": "Daqiqalar",
+      "countedDays": "15+ daqiqali kunlar",
+      "mocks": "Tugatilgan mock testlar",
+      "byGroup": "Guruhlar boʻyicha",
+      "group": "Guruh",
+      "students": "Oʻquvchilar",
+      "name": "Ism",
+      "streak": "Joriy seriya",
+      "lastActive": "Oxirgi mashq",
+      "never": "Hech qachon",
+      "download": "CSV yuklab olish",
+      "downloadHelp": "Excel yoki Google Sheetsʼda ochiladi.",
+      "empty": "Bu guruhda hali oʻquvchilar yoʻq.",
+      "daysValue": "{n}/7",
+      "minutesValue": "{m} daq.",
+      "streakValue": "{n} kun",
+      "pdf": "Haftalik PDF hisobot",
+      "teacher": "Oʻqituvchi"
+    },
+    "students": {
+      "title": "Oʻquvchilar",
+      "lead": "Oʻquvchining mashqlari, seriyasi va kalendarini koʻrish uchun uni toping.",
+      "search": "Ism yoki email boʻyicha qidirish",
+      "searchButton": "Qidirish",
+      "count": "{count} kishi",
+      "limited": "Birinchi {count} tasi koʻrsatilmoqda. Boshqalarini qidiruv orqali toping.",
+      "empty": "Hech kim topilmadi.",
+      "back": "Barcha oʻquvchilar",
+      "email": "Email",
+      "group": "Guruh",
+      "role": "Rol",
+      "joined": "Qoʻshilgan",
+      "thisWeek": "Shu hafta",
+      "keptTitle": "Saqlangan",
+      "keptHelp": "Oʻqituvchi tekshirgan va saqlab qolmoqchi boʻlgan hisoblarni belgilang.",
+      "keptYes": "Saqlangan deb belgilangan",
+      "keptNo": "Belgilanmagan",
+      "keptSet": "Saqlangan deb belgilash",
+      "keptUnset": "Belgini olib tashlash",
+      "roleHelp": "Adminlar savollar va mock testlarni boshqaradi hamda barcha oʻquvchilarni koʻradi.",
+      "makeAdmin": "Admin qilish",
+      "makeStudent": "Oʻquvchi qilish",
+      "deleteTitle": "Bu hisobni oʻchirish",
+      "deleteLead": "Bu hisob, uning seriyasi va mashqlar tarixi butunlay oʻchiriladi.",
+      "deleteButton": "Hisobni oʻchirish",
+      "deleteConfirmTitle": "Ishonchingiz komilmi?",
+      "deleteConfirmText": "{name}ning hisobi, seriyasi va mashqlar tarixi oʻchiriladi. Buni qaytarib boʻlmaydi.",
+      "deleteConfirmButton": "Ha, bu hisobni oʻchirish",
+      "cannotDeleteOwner": "Egasining hisobini oʻchirib boʻlmaydi.",
+      "cannotDeleteAdmin": "Adminni faqat ega oʻchira oladi.",
+      "error": "Bajarilmadi: {message}",
+      "editTitle": "Ism va guruhni oʻzgartirish",
+      "saved": "Saqlandi.",
+      "menu": "{name}: amallar",
+      "menuShort": "Amallar",
+      "changeName": "Ismni oʻzgartirish",
+      "changeNameHelp": "Yangi toʻliq ism-familiyani yozing.",
+      "changeGroup": "Guruhni oʻzgartirish",
+      "needNameFirst": "Bu hisobda hali ism yoʻq. Avval “Ismni oʻzgartirish” orqali ism kiriting."
     }
   },
   "owner": {
     "title": "Egasi",
-    "lead": "Bu yerda admin huquqini berish yoki olib tashlash mumkin."
+    "lead": "Bu yerda admin huquqini berish yoki olib tashlash mumkin.",
+    "admins": "Adminlar",
+    "noAdmins": "Hali adminlar yoʻq.",
+    "howTo": "Kimnidir admin qilish uchun uni Admin → Oʻquvchilar boʻlimida toping, sahifasini oching va “Admin qilish” tugmasini bosing.",
+    "openStudents": "Oʻquvchilarni ochish",
+    "you": "siz",
+    "telegram": {
+      "title": "Telegram bot",
+      "off": "Telegram orqali kirish oʻchiq: bot sozlamalari hali Vercelda yoʻq.",
+      "connected": "Bot shu saytga ulangan. Talabalar Telegram orqali kira oladi.",
+      "notConnected": "Bot hali shu saytga ulanmagan. Tugmani bir marta bosing.",
+      "connect": "Botni ulash",
+      "reconnect": "Qayta ulash",
+      "lastError": "Telegramning oxirgi xatosi: {message}",
+      "error": "Ulab boʻlmadi: {message}"
+    }
   },
   "roles": {
     "student": "Oʻquvchi",
@@ -222,19 +344,28 @@
     "back": "Orqaga",
     "generalTitle": "{exam} umumiy mashq",
     "mockTitle": "{exam} mock test",
-    "mockSoon": "Mock testlar keyingi yangilanishda qoʻshiladi. Hozircha umumiy mashqni sinab koʻring.",
     "chooseParts": "Nimani mashq qilmoqchisiz?",
     "options": {
       "p1": "Faqat 1-qism",
       "p2": "Faqat 2-qism",
       "p3": "Faqat 3-qism",
-      "p1p3": "1-qism + 3-qism"
+      "p1p3": "1-qism + 3-qism",
+      "cefr11": "Faqat 1.1-qism",
+      "cefr12": "Faqat 1.2-qism (rasmlar)",
+      "cefr1": "1.1-qism + 1.2-qism",
+      "cefr2": "Faqat 2-qism",
+      "cefr3": "Faqat 3-qism (foydasiga va ziddiga)"
     },
     "optionHelp": {
       "p1": "Oʻzingiz va tanish mavzular haqida qisqa savollar",
       "p2": "Bitta cue card: 1 daqiqa tayyorlanish, 2 daqiqagacha gapirish",
       "p3": "Bitta mavzu boʻyicha muhokama savollari",
-      "p1p3": "Avval 1-qism, keyin 3-qism, haqiqiy imtihondagidek"
+      "p1p3": "Avval 1-qism, keyin 3-qism, haqiqiy imtihondagidek",
+      "cefr11": "Oʻzingiz haqingizda qisqa savollar, har biriga 30 soniya",
+      "cefr12": "Ikki rasm va uchta savol: 45 soniya, keyin har biriga 30 soniya",
+      "cefr1": "Avval 1.1-qism, keyin 1.2-qism, haqiqiy imtihondagidek",
+      "cefr2": "Rasm va uchta savol: 1 daqiqa tayyorlanish, 2 daqiqagacha gapirish",
+      "cefr3": "Fikr va uning foydasiga hamda ziddiga dalillar: 1 daqiqa tayyorlanish, 2 daqiqagacha gapirish"
     },
     "howMany": "Har bir qismda savollar soni",
     "next": "Keyingisi",
@@ -261,7 +392,9 @@
       "notFound": "Bu qurilmada mikrofon yoki kamera topilmadi.",
       "unsupported": "Bu brauzer yozib ololmaydi. Chrome yoki Safarining soʻnggi versiyasini sinab koʻring yoki “Yozmaslik”ni tanlang.",
       "error": "Mikrofonni ishga tushirib boʻlmadi: {message}",
-      "level": "Mikrofon darajasi"
+      "level": "Mikrofon darajasi",
+      "needed": "Boshlash uchun avval mikrofonni tekshiring.",
+      "neededVideo": "Boshlash uchun avval kamera va mikrofonni tekshiring."
     },
     "start": "Mashqni boshlash",
     "starting": "Boshlanmoqda…",
@@ -286,7 +419,14 @@
       "youShouldSay": "You should say:",
       "paused": "Sahifa yopiq paytda toʻxtatildi",
       "leaveWarning": "Mashq hali davom etmoqda. Baribir chiqasizmi?",
-      "quit": "Mashqni tugatish"
+      "quit": "Mashqni tugatish",
+      "quitMockConfirm": "Mock testni hozir tugatasizmi? U bajarilgan deb hisoblanmaydi.",
+      "questionN": "{n}-savol",
+      "for": "For",
+      "against": "Against",
+      "debateHelp": "Ikkala tomon haqida gapiring, soʻng oʻz fikringizni bildiring.",
+      "practiceTime": "Mashq vaqti",
+      "doneSpeaking": "Gapirib boʻldim"
     },
     "finish": {
       "title": "Barakalla!",
@@ -299,12 +439,235 @@
       "noRecording": "Bu safar yozib olinmadi.",
       "again": "Yana mashq qilish",
       "home": "Bosh sahifa",
-      "recordingFailed": "Yozuvni bu qurilmada saqlab boʻlmadi."
+      "recordingFailed": "Yozuvni bu qurilmada saqlab boʻlmadi.",
+      "stoppedTitle": "Mashq toʻxtatildi",
+      "savedLater": "Internet yoʻq: vaqtingiz telefonda saqlandi va internet qaytganda avtomatik yuboriladi."
+    },
+    "modes": {
+      "general": "Umumiy mashq",
+      "mock": "Mock test"
+    },
+    "mock": {
+      "none": "Bu imtihon uchun hali mock testlar yoʻq. Ular tez orada qoʻshiladi.",
+      "tryGeneral": "Umumiy mashqni sinab koʻring",
+      "number": "{total} tadan {n}-mock",
+      "round": "{n}-aylanma",
+      "p1": "Oʻzingiz haqingizda savollar, har biriga taxminan {s} soniya",
+      "p2": "Cue card: {prep} daqiqa tayyorlanish, {speak} daqiqagacha gapirish",
+      "p3": "Muhokama savollari, har biriga taxminan {s} soniya",
+      "rules": "Haqiqiy imtihondagidek: vaqt tugashi bilan savollar oʻzi almashadi va ularni qayta eshitib boʻlmaydi. Mock test barcha qismlarni oxirigacha tugatgandagina bajarilgan hisoblanadi.",
+      "start": "Mock testni boshlash",
+      "taken": "Bu mock test allaqachon bajarilgan. Keyingisi yuklandi.",
+      "broken": "Bu mock test hali tayyor emas. Iltimos, oʻqituvchingizga xabar bering.",
+      "doneNote": "{name} bajarildi. Keyingi safar boshqa mock test beriladi.",
+      "stoppedNote": "Siz oxirigacha yetmasdan toʻxtadingiz, shuning uchun bu mock test bajarilgan hisoblanmaydi. U keyinroq yana chiqishi mumkin.",
+      "another": "Keyingi mock test",
+      "pictures": "Ikki rasm va uchta savol: taxminan {first} soniya, keyin har biriga {s} soniya",
+      "cardPicture": "Rasm va uchta savol: {prep} daqiqa tayyorlanish, {speak} daqiqagacha gapirish",
+      "debate": "Fikr va uning foydasiga hamda ziddiga dalillar: {prep} daqiqa tayyorlanish, {speak} daqiqagacha gapirish"
+    },
+    "unlimited": "Cheksiz",
+    "unlimitedHelp": "Savollar tugamaguncha yoki siz “Tugatish”ni bosguningizcha davom etadi.",
+    "offline": {
+      "noPack": "Internetsiz mashq qilish uchun bu sahifani avval internet bor paytda bir marta oching.",
+      "mockWaiting": "Siz bu mock testni internetsiz tugatdingiz. Internet qaytganda keyingisi tayyor boʻladi."
+    },
+    "wholeTopicsHelp": "Rasmli savollar uchtadan beriladi: har bir juft rasmga uchta savol.",
+    "examiner": {
+      "label": "Imtihon oluvchi",
+      "showText": "Imtihon oluvchining soʻzlarini koʻrsatish",
+      "textHidden": "Matn yashirilgan. Imtihon oluvchini tinglang.",
+      "idHint": "Haqiqiy imtihonda bu yerda pasport yoki ID kartangizni koʻrsatasiz."
     }
+  },
+  "progress": {
+    "title": "Mening natijalarim",
+    "currentStreak": "Joriy seriya",
+    "longestStreak": "Eng uzun seriya",
+    "days": "{count} kun",
+    "today": "Bugun",
+    "todayMinutes": "{minutes} / 15 daqiqa",
+    "goalDone": "Bugungi kun seriyaga qoʻshildi.",
+    "goalLeft": "Bugun hisoblanishi uchun yana {minutes} daqiqa.",
+    "rule": "Jami 15 daqiqa mashq qilingan kun hisoblanadi (Toshkent vaqti bilan). Bir kun oʻtkazib yuborilsa, seriya 0 dan boshlanadi.",
+    "calendar": "Mashq kunlari",
+    "prevMonth": "Oldingi oy",
+    "nextMonth": "Keyingi oy",
+    "legendCounted": "15 daqiqa va undan koʻp",
+    "legendSome": "Biroz mashq",
+    "legendToday": "Bugun",
+    "dayCounted": "{date}: {minutes} daqiqa, hisoblandi",
+    "daySome": "{date}: {minutes} daqiqa, hisoblanmadi",
+    "dayNone": "{date}: mashq yoʻq",
+    "sessions": "Oʻtgan mashqlar",
+    "noSessions": "Hali mashqlar yoʻq. Umumiy mashq yoki mock testdan boshlang.",
+    "noSessionsPlain": "Hali mashqlar yoʻq.",
+    "start": "Mashqni boshlash",
+    "notFinished": "Tugatilmagan",
+    "completed": "Bajarildi",
+    "lastN": "Oxirgi {count} ta mashq",
+    "minutesShort": "{m, plural, =0 {<1 daq.} other {# daq.}}"
+  },
+  "recordings": {
+    "title": "Mening yozuvlarim",
+    "warning": "Yozuvlar faqat shu qurilmada, shu brauzerda saqlanadi. Ular hech qachon yuklanmaydi. Saqlab qolmoqchi boʻlganlaringizni yuklab oling: brauzer tozalansa yoki telefon almashtirilsa, ular yoʻqoladi. Faqat eng yangi 10 tasi saqlanadi.",
+    "loading": "Yozuvlar yuklanmoqda…",
+    "empty": "Bu qurilmada hali yozuvlar yoʻq.",
+    "emptyHelp": "Oʻzingizni yozib olish uchun mashqdan oldin Audio yoki Videoni tanlang.",
+    "unavailable": "Bu brauzer yozuvlarni saqlay olmaydi. Chrome yoki Safarining soʻnggi versiyasini sinab koʻring.",
+    "usage": "{max} tadan {count} ta yozuv · {size}",
+    "download": "Yuklab olish",
+    "delete": "Oʻchirish",
+    "deleteConfirm": "Bu yozuv oʻchirilsinmi? Buni qaytarib boʻlmaydi.",
+    "length": "{m} daqiqa {s} soniya"
+  },
+  "privacy": {
+    "title": "Maxfiylik",
+    "updated": "Oxirgi yangilanish: 2026-yil 13-noyabr",
+    "intro": "Speaking Easy with Practise — IELTS va CEFR speaking boʻyicha har kungi mashq uchun bepul sayt. Bu sahifada siz haqingizda nimalarni saqlashimiz va nima uchun saqlashimiz oddiy soʻzlar bilan tushuntirilgan.",
+    "sections": [
+      {
+        "title": "Nimalarni saqlaymiz",
+        "items": [
+          "Ismingiz va email manzilingiz — Google orqali kirsangiz, Googledan olinadi. Telegram orqali kirsangiz: Telegramdagi ismingiz, username va Telegram ID raqamingiz (telefon raqamingiz emas).",
+          "Dars guruhingiz, tanlagan sayt tilingiz va rolingiz (oʻquvchi, admin yoki ega).",
+          "Mashqlaringiz: qachon va qancha vaqt mashq qilganingiz, qaysi imtihon va qismlar, qaysi mock test va uni tugatganingiz. Seriyangiz va daqiqalaringiz shu orqali hisoblanadi."
+        ]
+      },
+      {
+        "title": "Nimalarni hech qachon saqlamaymiz",
+        "items": [
+          "Yozuvlaringizni. Ular faqat oʻz qurilmangizdagi brauzerda saqlanadi va hech qachon yuklanmaydi. Ularni hech kim eshita olmaydi.",
+          "Mashq paytida aytgan gaplaringiz, joylashuvingiz, kontaktlaringiz yoki toʻlov maʼlumotlari. Sayt bepul."
+        ]
+      },
+      {
+        "title": "Mikrofon va kamera",
+        "items": [
+          "Sayt mikrofoningizdan (video tanlasangiz, kamerangizdan ham) faqat mashq paytida va faqat brauzerda ruxsat berganingizdan keyin foydalanadi. Istalgan vaqtda “Yozmaslik”ni tanlashingiz mumkin."
+        ]
+      },
+      {
+        "title": "Cookie fayllar",
+        "items": [
+          "Faqat sayt ishlashi uchun kerakli cookie fayllardan foydalanamiz: biri sizni tizimda saqlab turadi, ikkinchisi tilingizni eslab qoladi. Reklama yoki kuzatuv cookie fayllari yoʻq."
+        ]
+      },
+      {
+        "title": "Maʼlumotlaringizni kim koʻra oladi",
+        "items": [
+          "Oʻz mashqlaringizni “Mening natijalarim” sahifasida koʻrasiz.",
+          "Oʻqituvchilaringiz (sayt adminlari) natijalaringizni kuzatib borishi uchun ismingiz, emailingiz, guruhingiz va mashq vaqtlaringizni koʻra oladi. Boshqa hech kim koʻra olmaydi.",
+          "Maʼlumotlaringizni hech kimga sotmaymiz va bermaymiz."
+        ]
+      },
+      {
+        "title": "Maʼlumotlar qayerda saqlanadi",
+        "items": [
+          "Hisobingiz va mashq maʼlumotlaringiz Supabase xizmatida, Yevropa Ittifoqidagi (Frankfurt) maʼlumotlar markazida saqlanadi. Sayt Vercel xizmatida ishlaydi.",
+          "Google va Telegram faqat tizimga kirish uchun ishlatiladi."
+        ]
+      },
+      {
+        "title": "Qancha vaqt saqlaymiz va qanday oʻchirasiz",
+        "items": [
+          "Hisobingiz bor ekan, maʼlumotlaringizni saqlaymiz.",
+          "Ismingiz va guruhingizni istalgan vaqtda Sozlamalarda oʻzgartirishingiz mumkin.",
+          "Hisobingizni Sozlamalarda oʻchirishingiz mumkin. Hisobingiz, seriyangiz va mashqlar tarixi darhol oʻchiriladi va ularni qaytarib boʻlmaydi. Admin ham hisobni oʻchirishi mumkin, masalan, endi ishlatilmayotgan hisobni.",
+          "Yozuvlaringizni oʻchirish uchun “Mening yozuvlarim” sahifasidan foydalaning yoki brauzerda shu sayt maʼlumotlarini tozalang."
+        ]
+      },
+      {
+        "title": "Bolalar",
+        "items": [
+          "Agar 16 yoshga toʻlmagan boʻlsangiz, saytdan ota-onangiz yoki oʻqituvchingiz ruxsati bilan foydalaning."
+        ]
+      },
+      {
+        "title": "Oʻzgarishlar va savollar",
+        "items": [
+          "Bu sahifa oʻzgarsa, yuqoridagi sana ham oʻzgaradi.",
+          "Maʼlumotlaringiz haqida savolingiz boʻlsa, oʻqituvchingizdan soʻrang."
+        ]
+      }
+    ],
+    "contact": "Shuningdek, bu manzilga yozishingiz mumkin:",
+    "back": "Orqaga"
+  },
+  "errors": {
+    "notFoundTitle": "Sahifa topilmadi",
+    "notFoundText": "Bunday sahifa yoʻq yoki u boshqa joyga koʻchirilgan.",
+    "errorTitle": "Nimadir xato ketdi",
+    "errorText": "Sahifani yuklab boʻlmadi. Internet aloqasini tekshirib, qaytadan urinib koʻring.",
+    "tryAgain": "Qayta urinish",
+    "home": "Bosh sahifaga"
+  },
+  "report": {
+    "brand": "Speaking Easy with Practise",
+    "title": "Haftalik hisobot",
+    "student": "Oʻquvchi",
+    "group": "Guruh",
+    "week": "Hafta",
+    "generated": "Tayyorlangan sana",
+    "totalTime": "Jami mashq",
+    "goalDays": "15+ daqiqali kunlar",
+    "sessions": "Mashgʻulotlar",
+    "mockTests": "Mock testlar",
+    "daily": "Kunma-kun",
+    "day": "Kun",
+    "time": "Vaqt",
+    "sessionsCol": "Mashgʻulot",
+    "goal": "15 daqiqa maqsad",
+    "goalYes": "Bajarildi",
+    "goalNo": "Bajarilmadi",
+    "breakdown": "Nima mashq qilindi",
+    "general": "Umumiy mashq mashgʻulotlari",
+    "mock": "Mock test mashgʻulotlari",
+    "mockCompleted": "Tugatilgan mock testlar",
+    "part": "{exam} {n}-qism (mashgʻulotlar)",
+    "partsNone": "Bu hafta mashq qilinmagan",
+    "note": "15 daqiqa yoki undan koʻp mashq qilingan kun hisobga olinadi (Toshkent vaqti). Mashq vaqti — faol mashgʻulot ichidagi vaqt.",
+    "unitH": "soat",
+    "unitMin": "daq"
+  },
+  "footer": {
+    "why": "Speaking Easy oʻquvchilar IELTS va CEFR speakingni har kuni, bepul va oʻz telefonida mashq qilishlari uchun yaratilgan. Gapirish faqat muntazam mashq bilan oʻsadi: kuniga 15 daqiqa ham katta natija beradi.",
+    "started": "Loyiha boshlangan sana: {date}",
+    "engineer": "Muhandis",
+    "contributors": "Hissa qoʻshganlar",
+    "free": "Barcha oʻquvchilar uchun bepul.",
+    "privacy": "Maxfiylik"
+  },
+  "weeklyPdf": {
+    "title": "Haftalik hisobot (PDF)",
+    "lead": "Haftani tanlang va bir sahifalik PDF hisobotni yuklab oling. Uni ustozingizga yuborishingiz mumkin.",
+    "week": "Hafta",
+    "thisWeek": "shu hafta",
+    "download": "PDF yuklab olish"
+  },
+  "groups": {
+    "even": "Juft kunlar",
+    "odd": "Toq kunlar",
+    "other": "Boshqa"
+  },
+  "offline": {
+    "banner": "Internet yoʻq. Mashq qilishda davom etishingiz mumkin: vaqtingiz telefonda saqlanadi va internet qaytganda yuboriladi.",
+    "waiting": "Internetsiz qilingan {n} ta mashq saqlanmoqda…"
+  },
+  "ownerLogin": {
+    "title": "Egasi uchun kirish",
+    "lead": "Egasining email manzilini kiriting. Bir martalik kirish havolasini yuboramiz.",
+    "email": "Email",
+    "submit": "Kirish havolasini yuborish",
+    "sent": "Agar bu egasining email manzili boʻlsa, kirish havolasi yuborildi. Uni shu qurilmada oching.",
+    "invalid": "Iltimos, toʻgʻri email manzilini kiriting.",
+    "error": "Havolani yuborib boʻlmadi. Keyinroq qaytadan urinib koʻring.",
+    "back": "Telegram orqali kirishga qaytish"
   },
   "leaderboard": {
     "title": "Reyting",
     "intro": "Kim eng koʻp mashq qildi. Toshkent vaqti.",
+    "back": "Natijalarim",
     "today": "Bugun",
     "week": "Shu hafta",
     "place": "Oʻrin",
