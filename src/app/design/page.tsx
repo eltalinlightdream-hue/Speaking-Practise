@@ -9,6 +9,7 @@ import { Logo } from "@/components/logo";
 import { CueCardView } from "@/components/practice/cue-card-view";
 import { ExamPictures } from "@/components/practice/exam-pictures";
 import { LeaderboardList } from "@/components/leaderboard-list";
+import { MessageForm } from "../(app)/admin/messages/message-form";
 import { DemoTimer } from "./demo-timer";
 import { DemoExaminer } from "./demo-examiner";
 
@@ -199,6 +200,11 @@ export default function DesignPage() {
             { place: 12, display_name: "Dilnoza Abdullayeva-Karimova S.", seconds: 300, is_me: true },
           ]}
         />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl">Telegram message form</h2>
+        <MessageForm recipients={67} audience="All students" hidden={{}} senderName="Abduraimov Erkinjon" />
       </section>
     </div>
   );

@@ -258,6 +258,15 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   Only `student` role, at least 1 minute. Top 20 plus the viewer's own row.
   List component: `src/components/leaderboard-list.tsx` (also on `/design`).
 
+## Telegram messages to students
+
+- `/admin/messages` (owner + admins/teachers): choose All / a teacher's groups / one group (same `GroupFilter`),
+  write, "Send a test to me", then "Send to N students" (second tap to confirm). Sender's name is added at the end.
+- Only students who signed in with Telegram get it (they already pressed Start in the bot). Telegram id comes from
+  `auth.users.raw_user_meta_data.telegram_id` / the `telegram-<id>@users.invalid` email; owner: `owner_telegram_id`.
+- Database: `admin_message_recipients(group_ids)`, `admin_my_telegram_id()`, `admin_log_message(...)` (admins only),
+  history in `telegram_messages` (admins read). Sending: `src/lib/telegram-send.ts` (plain text, ~20/s, retries on 429).
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).
