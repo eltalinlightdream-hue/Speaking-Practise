@@ -85,7 +85,18 @@
     "deleteCancel": "Cancel",
     "deleteError": "Could not delete the account. Please try again.",
     "ownerNote": "The owner account cannot be deleted from the app.",
-    "viaTelegram": "Signed in with Telegram"
+    "viaTelegram": "Signed in with Telegram",
+    "reminders": {
+      "title": "Telegram reminders",
+      "lead": "The bot reminds you to practise every day (if today's 15 minutes aren't done yet) and warns you when your streak is in danger.",
+      "enabled": "Reminders on",
+      "time": "Reminder time",
+      "auto": "Automatic",
+      "help": "Automatic: 30 minutes before you usually practise, 18:00 for now. Tashkent time.",
+      "save": "Save",
+      "saved": "Saved",
+      "error": "Could not save. Please try again."
+    }
   },
   "admin": {
     "title": "Admin",

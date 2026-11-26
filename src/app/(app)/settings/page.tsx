@@ -9,6 +9,7 @@ import { createClient } from "@/lib/supabase/server";
 import { GROUP_COLUMNS, type LessonGroup } from "@/lib/groups";
 import { ProfileForm } from "./profile-form";
 import { DeleteAccount } from "./delete-account";
+import { ReminderForm } from "./reminder-form";
 
 export default async function SettingsPage() {
   const profile = await requireProfile();
@@ -21,6 +22,7 @@ export default async function SettingsPage() {
   // Students can only see active groups. If their own group was disabled,
   // show "Choose your group" instead of quietly picking another one.
   const options = ((groups ?? []) as LessonGroup[]).filter((g) => g.active || g.id === profile.lesson_group_id);
+  const { data: reminder } = await supabase.from("profiles").select("reminders_enabled, reminder_time").eq("id", profile.id).single();
   const groupId = options.some((g) => g.id === profile.lesson_group_id) ? (profile.lesson_group_id ?? "") : "";
 
   return (
@@ -39,6 +41,16 @@ export default async function SettingsPage() {
         </CardHeader>
         <CardContent>
           <ProfileForm groups={options} fullName={profile.full_name ?? ""} groupId={groupId} />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t("reminders.title")}</CardTitle>
+          <CardDescription>{t("reminders.lead")}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ReminderForm enabled={reminder?.reminders_enabled ?? true} time={reminder?.reminder_time ?? null} />
         </CardContent>
       </Card>
 

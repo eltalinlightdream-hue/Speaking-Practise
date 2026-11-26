@@ -85,7 +85,18 @@
     "deleteCancel": "Bekor qilish",
     "deleteError": "Hisobni oʻchirib boʻlmadi. Iltimos, qaytadan urinib koʻring.",
     "ownerNote": "Egasining hisobini ilovadan oʻchirib boʻlmaydi.",
-    "viaTelegram": "Telegram orqali kirilgan"
+    "viaTelegram": "Telegram orqali kirilgan",
+    "reminders": {
+      "title": "Telegram eslatmalari",
+      "lead": "Bot har kuni mashq qilishni eslatadi (agar bugungi 15 daqiqa hali qilinmagan boʻlsa) va streak xavf ostida qolsa ogohlantiradi.",
+      "enabled": "Eslatmalar yoqilgan",
+      "time": "Eslatma vaqti",
+      "auto": "Avtomatik",
+      "help": "Avtomatik: odatda mashq qiladigan vaqtingizdan 30 daqiqa oldin, hozircha 18:00. Toshkent vaqti.",
+      "save": "Saqlash",
+      "saved": "Saqlandi",
+      "error": "Saqlab boʻlmadi. Qayta urinib koʻring."
+    }
   },
   "admin": {
     "title": "Admin",

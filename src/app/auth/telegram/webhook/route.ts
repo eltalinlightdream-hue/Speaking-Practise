@@ -10,6 +10,7 @@ import {
   webhookSecret,
 } from "@/lib/telegram-auth";
 import { telegramApi } from "@/lib/telegram-bot";
+import { OFF_CALLBACK, OFF_DONE } from "@/lib/reminders/messages";
 
 // Telegram calls this for every message to the bot (set up once on /owner).
 // The secret header proves the call really comes from Telegram.
@@ -86,7 +87,15 @@ export async function POST(request: Request) {
     }
 
     const cb = update.callback_query;
-    if (cb) {
+    if (cb && cb.data === OFF_CALLBACK) {
+      // "Turn off reminders" button under a practice reminder.
+      const { data: off } = admin ? await admin.rpc("reminders_off_by_telegram", { p_telegram_id: cb.from.id }) : { data: false };
+      await telegramApi("answerCallbackQuery", { callback_query_id: cb.id, text: off ? "🔕" : "⚠️" });
+      if (cb.message) {
+        await telegramApi("editMessageReplyMarkup", { chat_id: cb.message.chat.id, message_id: cb.message.message_id, reply_markup: { inline_keyboard: [] } });
+        await telegramApi("sendMessage", { chat_id: cb.message.chat.id, text: `${OFF_DONE.uz}\n\n${OFF_DONE.en}` });
+      }
+    } else if (cb) {
       const code = parseConfirmData(cb.data);
       let confirmed = false;
       if (code && admin && !cb.from.is_bot && cb.message?.chat.type === "private") {
