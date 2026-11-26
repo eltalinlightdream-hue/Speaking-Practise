@@ -2,9 +2,9 @@
 --
 -- pg_cron runs a job every 15 minutes; pg_net sends an HTTP POST to the site,
 -- which decides who gets a reminder (src/app/api/cron/reminders/route.ts).
--- The shared secret is NOT in git: it is in Supabase Vault (name 'cron_secret')
--- and in Vercel (CRON_SECRET). Set both once, the same value:
---   select vault.create_secret('<random>', 'cron_secret');
+-- The secret is NOT in git: it is only in Supabase Vault (name 'cron_secret').
+-- The job sends it, and the site asks the database (cron_token_ok) if it is right.
+-- Set it once:  select vault.create_secret('<random, 32+ characters>', 'cron_secret');
 -- To pause reminders for everyone:   select cron.unschedule('practice-reminders');
 
 create extension if not exists pg_cron with schema pg_catalog;

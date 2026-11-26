@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { safeEqual } from "@/lib/telegram-auth";
 import { telegramApi } from "@/lib/telegram-bot";
 import { addDays, summarise, tashkentDay } from "@/lib/practice/streak";
 import { decide, type ReminderDecision, type ReminderKind, type ReminderSession } from "@/lib/reminders/plan";
 import { buildReminder } from "@/lib/reminders/messages";
 
 // Called every 15 minutes by the database (pg_cron + pg_net, migration
-// 20261126000200). Header: "Authorization: Bearer <CRON_SECRET>".
+// 20261126000200). Header: "Authorization: Bearer <secret>"; the secret is
+// only in Supabase Vault (name 'cron_secret') and checked by cron_token_ok().
 //
 //   POST /api/cron/reminders              send the reminders that are due now
 //   POST /api/cron/reminders?dry=1        only list who would get what (sends nothing)
@@ -34,15 +34,15 @@ type LogRow = { user_id: string; day_tashkent: string; kind: ReminderKind };
 type SendAnswer = { ok: boolean; error_code?: number; description?: string; parameters?: { retry_after?: number } };
 
 export async function POST(request: Request) {
-  const secret = process.env.CRON_SECRET;
-  const given = (request.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
-  if (!secret || !given || !safeEqual(given, secret)) {
-    return NextResponse.json({ ok: false }, { status: 401 });
-  }
   const admin = createAdminClient();
   if (!admin || !process.env.TELEGRAM_BOT_TOKEN) {
     return NextResponse.json({ ok: false, error: "not configured" }, { status: 500 });
   }
+  // The secret lives only in Supabase Vault ('cron_secret'); the database checks it.
+  const given = (request.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "").trim();
+  if (given.length < 32) return NextResponse.json({ ok: false }, { status: 401 });
+  const { data: tokenOk } = await admin.rpc("cron_token_ok", { p_token: given });
+  if (tokenOk !== true) return NextResponse.json({ ok: false }, { status: 401 });
 
   const url = new URL(request.url);
   const site = url.origin;

@@ -97,3 +97,19 @@ revoke all on function public.reminder_targets(uuid) from public, anon, authenti
 revoke all on function public.reminders_off_by_telegram(bigint) from public, anon, authenticated;
 grant execute on function public.reminder_targets(uuid) to service_role;
 grant execute on function public.reminders_off_by_telegram(bigint) to service_role;
+
+-- Is this the cron secret? (Supabase Vault, name 'cron_secret'.) Server only.
+create or replace function public.cron_token_ok(p_token text)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select coalesce(length(p_token) >= 32 and exists (
+    select 1 from vault.decrypted_secrets s where s.name = 'cron_secret' and s.decrypted_secret = p_token
+  ), false);
+$$;
+
+revoke all on function public.cron_token_ok(text) from public, anon, authenticated;
+grant execute on function public.cron_token_ok(text) to service_role;

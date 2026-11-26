@@ -4,7 +4,7 @@ import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from "./env";
 
 // Paths anyone can open without signing in.
 const PUBLIC_PATHS = ["/", "/login", "/privacy", "/design", "/manifest.webmanifest"];
-// /api/cron/ checks its own secret (CRON_SECRET) instead of a login.
+// /api/cron/ checks its own secret (Supabase Vault 'cron_secret') instead of a login.
 const PUBLIC_PREFIXES = ["/auth/", "/login/", "/api/cron/"];
 
 function isPublic(pathname: string) {

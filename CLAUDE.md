@@ -279,7 +279,7 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Data: `profiles.reminders_enabled` (default true), `profiles.reminder_time` (null = automatic), `reminder_log`
   (unique user+day+kind, written before sending so overlapping runs never double-send). `reminder_targets()` service role only.
 - Clock: pg_cron job `practice-reminders` every 15 min -> pg_net POST `/api/cron/reminders` with
-  `Authorization: Bearer <CRON_SECRET>` (Vercel env + Vault `cron_secret`). `?dry=1` lists who would get what;
+  `Authorization: Bearer <secret>`; the secret is only in Vault (`cron_secret`), checked by `cron_token_ok()`. `?dry=1` lists who would get what;
   `?user=<id>&kind=daily|streak|stop` sends a test to one account. `/api/cron/` is public in the proxy (own secret).
   Blocked bot (403) or the goodbye message turns `reminders_enabled` off. Settings card: `settings/reminder-form.tsx`.
 
