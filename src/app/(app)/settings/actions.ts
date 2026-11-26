@@ -31,6 +31,27 @@ export async function updateProfile(_prev: ProfileState, formData: FormData): Pr
   return { ok: true };
 }
 
+export type ReminderState = { ok?: boolean; error?: boolean };
+
+/** Reminders on/off and the time ("auto" = 30 min before the usual practice time, 18:00 until known). */
+export async function updateReminders(_prev: ReminderState, formData: FormData): Promise<ReminderState> {
+  const enabled = formData.get("enabled") === "on";
+  const time = String(formData.get("time") ?? "auto");
+  if (time !== "auto" && !/^(0[89]|1\d|20):(00|30)$|^21:00$/.test(time)) return { error: true };
+
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) redirect("/login");
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ reminders_enabled: enabled, reminder_time: time === "auto" ? null : time })
+    .eq("id", auth.user.id);
+  if (error) return { error: true };
+  revalidatePath("/settings");
+  return { ok: true };
+}
+
 /**
  * Delete the signed-in user's account. The database function
  * delete_my_account() does the work (and refuses for the owner).

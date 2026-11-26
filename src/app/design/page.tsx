@@ -10,6 +10,7 @@ import { CueCardView } from "@/components/practice/cue-card-view";
 import { ExamPictures } from "@/components/practice/exam-pictures";
 import { LeaderboardList } from "@/components/leaderboard-list";
 import { MessageForm } from "../(app)/admin/messages/message-form";
+import { ReminderForm } from "../(app)/settings/reminder-form";
 import { DemoTimer } from "./demo-timer";
 import { DemoExaminer } from "./demo-examiner";
 
@@ -205,6 +206,15 @@ export default function DesignPage() {
       <section className="flex flex-col gap-4">
         <h2 className="text-xl">Telegram message form</h2>
         <MessageForm recipients={67} audience="All students" hidden={{}} senderName="Abduraimov Erkinjon" />
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <h2 className="text-xl">Reminder settings</h2>
+        <Card>
+          <CardContent>
+            <ReminderForm enabled time={null} />
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

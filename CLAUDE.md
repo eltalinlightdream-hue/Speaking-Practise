@@ -269,6 +269,22 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Database: `admin_message_recipients(group_ids)`, `admin_my_telegram_id()`, `admin_log_message(...)` (admins only),
   history in `telegram_messages` (admins read). Sending: `src/lib/telegram-send.ts` (plain text, ~20/s, retries on 429).
 
+## Practice reminders (Telegram, like Duolingo; added 2026-11-26)
+
+- Owner's choices: playful tone, ON for everyone (off button in every message + Settings), default 18:00.
+- Rules (pure, tested): `src/lib/reminders/plan.ts` + `plan.test.ts`. Tashkent time, never before 08:00 or from 22:00,
+  nothing once today counts (15 min) or while a session is open. `daily` at the student's time (own choice, or 30 min
+  before their usual start: median of the last 21 days, needs 3 days; else 18:00), variants almost/keep/start/comeback;
+  `streak` at 21:00 for a 2+ day streak; `stop` = goodbye after 10+ ignored reminders in 14 days, then reminders off.
+- Texts (uz/en, several per kind, random): `src/lib/reminders/messages.ts`. Buttons: practise (/home), turn off
+  (`rem:off`, handled in the bot webhook via `reminders_off_by_telegram`).
+- Data: `profiles.reminders_enabled` (default true), `profiles.reminder_time` (null = automatic), `reminder_log`
+  (unique user+day+kind, written before sending so overlapping runs never double-send). `reminder_targets()` service role only.
+- Clock: pg_cron job `practice-reminders` every 15 min -> pg_net POST `/api/cron/reminders` with
+  `Authorization: Bearer <secret>`; the secret is only in Vault (`cron_secret`), checked by `cron_token_ok()`. `?dry=1` lists who would get what;
+  `?user=<id>&kind=daily|streak|stop` sends a test to one account. `/api/cron/` is public in the proxy (own secret).
+  Blocked bot (403) or the goodbye message turns `reminders_enabled` off. Settings card: `settings/reminder-form.tsx`.
+
 ## Not in version 1
 
 No scoring or feedback. No payments. No server-side recordings. A privacy page is required (Step 5).
