@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildGeneralSteps, topicSteps, type PoolTopic } from "./general-plan.ts";
+import { buildGeneralSteps, topicSteps, type PoolTopic, type SeenMap } from "./general-plan.ts";
+import { freshFirst } from "./random.ts";
 import { partConfig, partLabel } from "../../config/exams.ts";
 import type { CueCardStep, QuestionStep } from "./types";
 
@@ -112,4 +113,56 @@ test("topics saved on the phone before pictures existed still work", () => {
   const old = { id: "x", title: "Old", related_topic_id: null, cue_bullets: [], cue_explain: null, questions: qs("A?", "B?") };
   const steps = topicSteps(partConfig("cefr", 2)!, old) as QuestionStep[];
   assert.deepEqual(steps.map((s) => [s.text, s.seconds, s.images]), [["A?", 45, undefined], ["B?", 30, undefined]]);
+});
+
+// ---- Memory: unseen first (students said questions repeated) ----
+
+const ieltsPools: Record<number, PoolTopic[]> = {
+  1: Array.from({ length: 6 }, (_, i) => topic(1, { questions: qs(`P1 t${i} a?`, `P1 t${i} b?`, `P1 t${i} c?`, `P1 t${i} d?`, `P1 t${i} e?`) })),
+  2: Array.from({ length: 5 }, (_, i) => topic(2, { title: `Card ${i}`, cue_bullets: ["who", "when"] })),
+  3: [
+    topic(3, { questions: qs("Shared?", "P3 a?") }),
+    topic(3, { questions: qs("Shared?", "P3 b?", "P3 c?", "P3 d?") }),
+  ],
+};
+const ielts = (optionId: string, count: number, seen?: SeenMap) =>
+  buildGeneralSteps({ exam: "ielts", optionId, count }, (p) => ieltsPools[p] ?? [], seen)!;
+
+/** Pretend the student saw everything in these plans, in this order (one day apart). */
+function history(...plans: ReturnType<typeof ielts>[]) {
+  const seen = new Map<string, number>();
+  plans.forEach((p, day) => p.keysByStep.flat().forEach((k) => seen.set(k, (day + 1) * 86_400_000)));
+  return seen;
+}
+
+test("freshFirst: unseen first, then oldest; plain shuffle without history", () => {
+  const order = freshFirst(["new", "old", "older", "new2"], (x) => ({ old: 5 * 86_400_000, older: 86_400_000 })[x as "old"]);
+  assert.deepEqual(new Set(order.slice(0, 2)), new Set(["new", "new2"]));
+  assert.deepEqual(order.slice(2), ["older", "old"]);
+  assert.equal(freshFirst([1, 2, 3], () => undefined).length, 3);
+});
+
+test("cue cards do not repeat until every card has been shown", () => {
+  const plans: ReturnType<typeof ielts>[] = [];
+  for (let i = 0; i < 5; i++) plans.push(ielts("p2", 5, history(...plans)));
+  const titles = plans.map((p) => (p.steps[0] as CueCardStep).title);
+  assert.equal(new Set(titles).size, 5, titles.join(", "));
+  // Round two starts with the card seen longest ago.
+  assert.equal((ielts("p2", 5, history(...plans)).steps[0] as CueCardStep).title, titles[0]);
+});
+
+test("Part 1 asks unseen questions until the pool runs out (30 questions, 10 a session)", () => {
+  const plans: ReturnType<typeof ielts>[] = [];
+  for (let i = 0; i < 3; i++) plans.push(ielts("p1", 10, history(...plans)));
+  const texts = plans.flatMap((p) => (p.steps as QuestionStep[]).map((s) => s.text));
+  assert.equal(texts.length, 30);
+  assert.equal(new Set(texts).size, 30, "no question twice in three sessions");
+  assert.deepEqual(plans[0].keysByStep[0].map((k) => k[0]), ["t", "q"]);
+});
+
+test("Part 3 top-up never repeats a question shared by two topics", () => {
+  for (let i = 0; i < 20; i++) {
+    const texts = (ielts("p3", 5).steps as QuestionStep[]).map((s) => s.text);
+    assert.equal(new Set(texts).size, texts.length, texts.join(" | "));
+  }
 });

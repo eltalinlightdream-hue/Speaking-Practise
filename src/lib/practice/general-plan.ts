@@ -5,7 +5,7 @@
 
 // Relative imports with ".ts" so the unit tests (node --test) can load this file.
 import { EXAMS, partConfig, partLabel, type ExamCode, type PartConfig } from "../../config/exams.ts";
-import { pickAcrossTopics, shuffle } from "./random.ts";
+import { freshFirst, pickAcrossTopics, seenLevel } from "./random.ts";
 import type { Picture, QuestionStep, Step } from "./types";
 
 export type PoolTopic = {
@@ -32,6 +32,15 @@ export const GENERAL_COUNTS = [3, 5, 8, 10, 0];
 const UNLIMITED_FIRST_PART = 12;
 
 export type GeneralChoice = { exam: ExamCode; optionId: string; count: number };
+
+/**
+ * What the student has seen before: key -> time (ms) it was last shown.
+ * Keys come from topicSeenKey / questionSeenKey. Saved in public.practice_seen.
+ */
+export type SeenMap = ReadonlyMap<string, number>;
+export const topicSeenKey = (topicId: string) => `t:${topicId}`;
+/** By text, so the same question in two topics counts as one. */
+export const questionSeenKey = (part: number, text: string) => `q${part}:${text.trim().toLowerCase()}`;
 
 /** The option and the cleaned-up count, or null for an unknown option. */
 export function readChoice({ exam, optionId, count }: GeneralChoice) {
@@ -84,23 +93,36 @@ export function topicSteps(cfg: PartConfig, topic: StepTopic): Step[] {
   return topic.questions.map((q, i) => questionStep(cfg, topic, q, i === 0));
 }
 
-/** Questions from several topics, a few per topic; the same question text is never asked twice. */
-function mixedQuestionSteps(cfg: PartConfig, topics: PoolTopic[], count: number, perTopic: number): Step[] {
-  const seen = new Set<string>();
-  const groups = shuffle(topics).map((t) => ({
-    topic: t,
-    items: t.questions.filter((q) => {
-      const key = q.text.trim().toLowerCase();
-      if (seen.has(key)) return false;
-      seen.add(key);
+/**
+ * Questions from several topics (in the order given), a few per topic, unseen
+ * questions first. A question text already in `used` is never asked again.
+ * Returns the steps and, for each step, the keys to mark as seen.
+ */
+function mixedQuestionSteps(
+  cfg: PartConfig,
+  topics: PoolTopic[],
+  count: number,
+  perTopic: number,
+  seen: SeenMap,
+  used: Set<string>,
+): { steps: Step[]; keys: string[][] } {
+  const groups = topics.map((t) => {
+    const fresh = t.questions.filter((q) => {
+      const key = questionSeenKey(cfg.part, q.text);
+      if (used.has(key)) return false;
+      used.add(key);
       return true;
-    }),
-  }));
-  return pickAcrossTopics(
-    groups.map((g) => ({ topic: g.topic.title, items: g.items.map((item) => ({ item, t: g.topic })) })),
-    count,
-    perTopic,
-  ).map(({ item }) => questionStep(cfg, item.t, item.item, false));
+    });
+    return {
+      topic: t.title,
+      items: freshFirst(fresh, (q) => seen.get(questionSeenKey(cfg.part, q.text))).map((item) => ({ item, t })),
+    };
+  });
+  const picked = pickAcrossTopics(groups, count, perTopic, ({ item }) => seenLevel(seen.get(questionSeenKey(cfg.part, item.text))));
+  return {
+    steps: picked.map(({ item }) => questionStep(cfg, item.t, item.item, false)),
+    keys: picked.map(({ item }) => [topicSeenKey(item.t.id), questionSeenKey(cfg.part, item.item.text)]),
+  };
 }
 
 /**
@@ -109,13 +131,24 @@ function mixedQuestionSteps(cfg: PartConfig, topics: PoolTopic[], count: number,
  * there is one), topped up from other topics if it is short. Whole-topic
  * parts (CEFR Part 1.2): random topics, each with all its questions, until
  * the count is reached.
+ *
+ * "Random" prefers what the student has not seen yet (`seen`), then what they
+ * saw longest ago, so questions do not repeat until the pool runs out.
+ * `keysByStep[i]` lists what step i shows, for saving as seen.
+ * Without `seen` (offline) it is plain random.
  */
-export function buildGeneralSteps(choice: GeneralChoice, poolFor: (part: number) => PoolTopic[]) {
+export function buildGeneralSteps(choice: GeneralChoice, poolFor: (part: number) => PoolTopic[], seen: SeenMap = new Map()) {
   const read = readChoice(choice);
   if (!read) return null;
   const { option, unlimited, count } = read;
   const exam = choice.exam;
   const steps: Step[] = [];
+  const keysByStep: string[][] = [];
+  const add = (more: { steps: Step[]; keys: string[][] }) => {
+    steps.push(...more.steps);
+    keysByStep.push(...more.keys);
+  };
+  const freshTopics = (list: PoolTopic[]) => freshFirst(list, (t) => seen.get(topicSeenKey(t.id)));
   let linkedCueId: string | null = null;
   const questionParts = option.parts.filter((p) => partConfig(exam, p)?.kind === "questions");
 
@@ -127,31 +160,34 @@ export function buildGeneralSteps(choice: GeneralChoice, poolFor: (part: number)
     const partCount = unlimited && questionParts.length > 1 && part !== questionParts.at(-1) ? UNLIMITED_FIRST_PART : count;
 
     if (cfg.kind === "cue-card") {
-      const card = shuffle(topics.filter(hasCard))[0];
+      const card = freshTopics(topics.filter(hasCard))[0];
       if (!card) continue;
       linkedCueId = card.id;
-      steps.push(...topicSteps(cfg, card));
+      add({ steps: topicSteps(cfg, card), keys: [[topicSeenKey(card.id)]] });
     } else if (cfg.wholeTopics) {
-      const picked: Step[] = [];
-      for (const t of shuffle(topics.filter((x) => x.questions.length > 0))) {
-        if (picked.length >= partCount) break;
-        picked.push(...topicSteps(cfg, t));
+      let picked = 0;
+      for (const t of freshTopics(topics.filter((x) => x.questions.length > 0))) {
+        if (picked >= partCount) break;
+        const more = topicSteps(cfg, t);
+        add({ steps: more, keys: t.questions.map((q) => [topicSeenKey(t.id), questionSeenKey(cfg.part, q.text)]) });
+        picked += more.length;
       }
-      steps.push(...picked);
     } else if (cfg.linkedToPart) {
       const linked = linkedCueId ? topics.filter((t) => t.related_topic_id === linkedCueId) : [];
-      const main = shuffle(linked.length ? linked : topics)[0];
-      const ordered = main ? [main, ...shuffle(topics.filter((t) => t.id !== main.id))] : [];
-      const picked: Step[] = [];
+      const main = freshTopics(linked.length ? linked : topics)[0];
+      const ordered = main ? [main, ...freshTopics(topics.filter((t) => t.id !== main.id))] : [];
+      const used = new Set<string>();
+      let picked = 0;
       for (const t of ordered) {
-        for (const s of mixedQuestionSteps(cfg, [t], partCount - picked.length, partCount)) picked.push(s);
-        if (picked.length >= partCount) break;
+        const more = mixedQuestionSteps(cfg, [t], partCount - picked, partCount, seen, used);
+        add(more);
+        picked += more.steps.length;
+        if (picked >= partCount) break;
       }
-      steps.push(...picked);
     } else {
-      steps.push(...mixedQuestionSteps(cfg, topics, partCount, 4));
+      add(mixedQuestionSteps(cfg, freshTopics(topics), partCount, 4, seen, new Set()));
     }
   }
 
-  return { option, unlimited, steps, label: option.parts.map((p) => `Part ${partLabel(exam, p)}`).join(" + ") };
+  return { option, unlimited, steps, keysByStep, label: option.parts.map((p) => `Part ${partLabel(exam, p)}`).join(" + ") };
 }

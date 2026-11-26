@@ -65,6 +65,9 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   Their Part 1 and Part 3 questions **are still used in General Training**.
 - Extra Part 1 topics (General Training only, never in mocks): `content/ielts/part1-topics.json`, typed from the
   owner's screenshots (Nov 2026). They merge into existing topics by title; `season` is for reference only.
+- Extra Part 3 topics (General Training only, not linked to a cue card): `content/ielts/part3-topics.json`, typed from
+  the owner's screenshots (26 Nov 2026). Same merge rules; `not_typed` lists questions the screenshots cut off.
+  Both extra files are loaded by `scripts/content/build_seed_sql.py`.
 - **General Training (IELTS)**: the student picks Part 1 only, Part 2 only, Part 3 only, or Part 1 + Part 3.
   Questions come from the pools built from all sets. Replay allowed.
 - **Mock Test**: never repeat a set until all active sets are done, then a new cycle starts. No replay.
@@ -108,6 +111,12 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Active time counts only while the page is visible. Progress is POSTed to `/api/practice/progress`.
 - `day_tashkent` = Tashkent day the session started (a session crossing midnight counts for its start day).
 - iPhone: `unlockSpeech()` runs inside the Start tap; recorder falls back to MP4.
+- No repeats (added 2026-11-26, students said questions repeated): `public.practice_seen` (migration
+  `20261126000100_practice_seen.sql`, applied) keeps, per student and exam, the last time each topic (`t:<id>`) and
+  question (`q<part>:<text>`, by text so the same question in two topics is one) was shown. `buildGeneralSteps(choice,
+  pools, seen)` picks unseen first, then the oldest seen (`freshFirst`, `pickAcrossTopics` levels in `random.ts`), so
+  nothing repeats until the pool runs out. `startGeneralTraining` saves `keysByStep` after the start (with ∞ only the
+  first 10 steps). Offline sessions have no memory (plain random).
 
 ## Mock tests, streak, progress (Step 4)
 

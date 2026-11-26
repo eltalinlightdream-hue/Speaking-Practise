@@ -1,0 +1,382 @@
+{
+  "format": "speaking-easy-content/part3-v1",
+  "exam": "ielts",
+  "part": 3,
+  "source_note": "Extra IELTS Part 3 topics typed from the owner's screenshots of a Part 3 question list (sent 26 November 2026, topics 2-33, all marked 'Predicted & Reported: September 2026 - April 2027'). General Training only; not linked to a cue card. Topics merge with existing Part 3 topics of the same title ('app_title' shows the name in the list when it differs), and questions already in a topic are skipped.",
+  "season": "September 2026 - April 2027",
+  "not_typed": [
+    "Cities: 2 of 10 questions were below the screenshot.",
+    "Gifts: 3 of 11 questions were below the screenshot.",
+    "Money, Travelling, Teaching/learning, Happiness: 1 question each was below the screenshot.",
+    "Popularity: 2 of 10 questions were below the screenshot.",
+    "Parties: the first question was cut off at the top (it ends '... had so far?').",
+    "Natural places: the first question was cut off at the top (it ends '... 18 Nov)')."
+  ],
+  "fixes_applied": [
+    "Removed '(added on ...)' and '(frequently asked)' notes and the '(Predicted & Reported ...)' part of titles.",
+    "Merged into existing topics: 'Making noise' -> Noise; 'Memory, history' and 'Learning history' -> History; 'Service, shopping' -> Shopping; 'Time management, daily routine' -> Daily routine; 'Movies' -> Films; 'Sports' -> Athletes, sports; 'Photos' -> Photography.",
+    "'Being organised' (1 question, 'How can parents help children to be organized?') is the same as 'How can parents teach children to be organized?' in Losing things, so it is not a separate topic.",
+    "Matched existing wording: 'How can we avoid or reduce the possibility of losing things?' -> 'How can we avoid losing things?'; 'In your view, should children be taught to help others?' -> '... to help others and to be kind to them?'.",
+    "Buildings listed 'Is it hard to protect historical buildings?' twice; kept once. Reading and Happiness/Photos screenshots overlapped; each question kept once.",
+    "'Do you prefer book or movies?' -> 'books or movies'; 'teach children save money' -> 'teach children to save money'."
+  ],
+  "topics": [
+    {
+      "title": "Cities",
+      "questions": [
+        "What is the difference between living in the countryside and the city?",
+        "Do you prefer to live in the city or in the countryside?",
+        "Do you think modern cities are suitable for young people or old people?",
+        "Is it good for elderly people to live in large cities?",
+        "Is it possible that all of the population move to cities?",
+        "Will people live in the countryside in the future?",
+        "Do you think people in the countryside are friendlier than in cities?",
+        "What should the government do to improve citizens' safety?"
+      ]
+    },
+    {
+      "title": "Gifts",
+      "questions": [
+        "Which do people give on traditional festivals, money or other kinds of gifts?",
+        "Why is it sometimes difficult to buy or choose a gift for someone?",
+        "Is the price of a gift important?",
+        "Will people feel happy when receiving an expensive gift?",
+        "Do you like giving gifts?",
+        "Why do people give gifts?",
+        "When do people normally send gifts to others?",
+        "What gifts are popular in your country?"
+      ]
+    },
+    {
+      "title": "Making friends, meeting people",
+      "questions": [
+        "What do you think of making friends online?",
+        "Do we benefit from having friends with different personalities?",
+        "Would you only make friends with people who are similar to you?",
+        "Is it important to have the same interests and hobbies when making friends?",
+        "How and where do people in your country make friends these days?",
+        "In what situations would people be willing to get to know new people?",
+        "Is it easy to find real friends on a social networking website?"
+      ]
+    },
+    {
+      "title": "History",
+      "app_title": "Memory, history + Learning history",
+      "questions": [
+        "Do you agree that learning history may help people understand the present?",
+        "Is it true that modern society has much to learn from the past?",
+        "Why do you think some people have better memory than others?",
+        "What are the differences between learning history from books and from videos?",
+        "How can people learn about history?",
+        "How can technology make learning history more interesting?"
+      ]
+    },
+    {
+      "title": "Noise",
+      "app_title": "Making noise",
+      "questions": [
+        "Is it good for children to make noise?",
+        "Should children not be allowed to make noise under any circumstances?",
+        "What type of noise do you come across in your daily life?",
+        "Where is there louder noise, in cities or in the countryside?"
+      ]
+    },
+    {
+      "title": "Shopping",
+      "app_title": "Service, shopping",
+      "questions": [
+        "What are the advantages and disadvantages of shopping at a big shopping centre?",
+        "What makes large shopping malls so popular?",
+        "What are the benefits and drawbacks of consumerism for a country's economy?",
+        "Can consumption drive economic growth?",
+        "Are small shops important?",
+        "What are the differences between shopping online and in-store?",
+        "What do you think are the pros and cons of shopping online?"
+      ]
+    },
+    {
+      "title": "Money",
+      "questions": [
+        "Is it good and necessary to teach children to save money?",
+        "Do you think it is important to save money?",
+        "Should children learn how to use money at school or from their parents?",
+        "Why is it hard for some people to save money?",
+        "What is the best way to save money?",
+        "Do people in your country like to save money?",
+        "What can parents do to teach children to save money?",
+        "What are the consequences of not saving money?"
+      ]
+    },
+    {
+      "title": "Skills",
+      "questions": [
+        "What's the difference between children learning and adults learning what they have to learn?",
+        "Is it better to study in a group or individually?"
+      ]
+    },
+    {
+      "title": "Crowded places",
+      "questions": [
+        "Do you agree that in the future cities will become so crowded that they will have no green spots?",
+        "What places are often crowded in your country?",
+        "Do people change their behaviour when they get to a crowded place?",
+        "What are the negative aspects of crowded places?"
+      ]
+    },
+    {
+      "title": "Daily routine",
+      "app_title": "Time management, daily routine",
+      "questions": [
+        "Do you think nowadays people have a better work-life balance than in the past?",
+        "How do people balance life and work?",
+        "Do you agree that having a routine gives people more time to think?",
+        "How important is it to have a daily routine?",
+        "Why do some people refuse to abide by rules?",
+        "Do you agree that social media increases pressures of modern life?",
+        "What kinds of things make people feel pressured?",
+        "Do you think a small amount of stress can be beneficial for a person?"
+      ]
+    },
+    {
+      "title": "Films",
+      "app_title": "Movies",
+      "questions": [
+        "What kinds of movies are popular in your country?",
+        "What are the differences between watching movies at home and in a cinema?",
+        "Why do people of different ages like different types of movies?"
+      ]
+    },
+    {
+      "title": "Travelling",
+      "questions": [
+        "Why do some people prefer to travel in their own country rather than going abroad?",
+        "What problems arise when lots of people travel to work at the same time?",
+        "Why do people like travelling?",
+        "Do people in your country like travelling abroad?",
+        "Why do people choose to travel or live abroad?",
+        "What are the benefits of travelling abroad?",
+        "Who likes to travel more, older people or younger people?",
+        "Some people don't like to travel abroad. Why?"
+      ]
+    },
+    {
+      "title": "Teaching, learning",
+      "questions": [
+        "Is it important for people to learn new skills all life long?",
+        "What age will make it difficult for people to master new skills?",
+        "Is it hard for old people to learn new skills?",
+        "How can we know what to do when we want to learn something new?",
+        "What practical skills can young people teach old people?",
+        "What skills can younger people learn from older people?",
+        "Do you think playing computer games can help people develop skills?",
+        "Where can we learn practical skills?"
+      ]
+    },
+    {
+      "title": "Old people",
+      "questions": [
+        "What kinds of things can young people learn from old people?",
+        "What practical skills can young people teach old people?",
+        "Do you think old people enjoy their life more these days compared with the past?",
+        "Do you think old people and young people can share interests?",
+        "What kinds of activities do old people like to do these days?"
+      ]
+    },
+    {
+      "title": "AI, talents",
+      "questions": [
+        "Have you ever had any experience with things related to AI?",
+        "Have you ever used AI-based technology?",
+        "Are art classes important in schools?",
+        "Should all children learn to draw?"
+      ]
+    },
+    {
+      "title": "Meals",
+      "questions": [
+        "What leisure activities do old and young people prefer?",
+        "How do people spend their leisure time in your country?",
+        "What is the difference between staying with friends or family?",
+        "Do young people prefer spending time with family or with friends?",
+        "Do you think friendship is important?",
+        "Why do people need friends?"
+      ]
+    },
+    {
+      "title": "Athletes, sports",
+      "app_title": "Sports",
+      "questions": [
+        "Should students have physical education and do sports at school?",
+        "What characteristics do you think an athlete should have?",
+        "Is talent important in sports?",
+        "Is it easy to identify children's talents?",
+        "Why are there so few top athletes?",
+        "What kind of sports are popular in your country?"
+      ]
+    },
+    {
+      "title": "Popularity",
+      "questions": [
+        "Why are some students popular in school?",
+        "Is it important for a teacher to be popular?",
+        "Do you think good teachers are always popular among students?",
+        "What are the qualities of being a good teacher?",
+        "Is it easier to become popular nowadays?",
+        "Why do people want to be popular?",
+        "Why do some people become famous but not successful?",
+        "What kinds of people are popular at work?"
+      ]
+    },
+    {
+      "title": "Losing things",
+      "questions": [
+        "What things do people often lose?",
+        "Is it easy to lose something?",
+        "What kinds of people lose things easily?",
+        "How can we avoid losing things?",
+        "How can parents teach children to be organized?"
+      ]
+    },
+    {
+      "title": "Time management",
+      "questions": [
+        "Is it important to manage your time efficiently?",
+        "How do people manage their time?",
+        "What can people do to spend their time efficiently?",
+        "What do people do to save time?",
+        "How does technology help with time management?",
+        "Do you agree that today success mainly depends on being able to manage time effectively?",
+        "Are people born with time management skills or can they develop them?"
+      ]
+    },
+    {
+      "title": "Communication",
+      "questions": [
+        "What topics do young people talk about?",
+        "How do you know if others aren't interested in your conversation?"
+      ]
+    },
+    {
+      "title": "Reading",
+      "questions": [
+        "What's the difference between films and books?",
+        "Do you prefer books or movies?",
+        "Is it important to read a book before watching a movie version of it?",
+        "Do people read more nowadays?",
+        "How can reading help children?",
+        "Do you think parents should help their children develop the reading habit from an early age?",
+        "Do you think old people spend more time reading than young people?",
+        "What are the types of books that young people like to read?",
+        "Do you think reading books can make people happier?",
+        "What books do children like to read?",
+        "Is reading books more popular with boys or with girls?",
+        "Some people say that it's easier for children who start reading at a young age to succeed. Do you agree?"
+      ]
+    },
+    {
+      "title": "Helping others",
+      "questions": [
+        "Should children help their parents with household chores?",
+        "What can children help parents with?",
+        "In your view, should children be taught to help others and to be kind to them?",
+        "Should parents reward their children when they help others?",
+        "Who should teach children to help others, parents or teachers?",
+        "Do you think parents should give advice to their children?"
+      ]
+    },
+    {
+      "title": "Happiness",
+      "questions": [
+        "Why does buying new things make people happy?",
+        "Why do some people hide their happy feelings?",
+        "How do people express happiness in your culture?",
+        "Do you think happiness has any effect on people?",
+        "Is it good to be unhappy?",
+        "What kinds of things make people in your country happy?",
+        "Do you think money can make people happy?",
+        "Do you think failures help people feel happiness?",
+        "Is it important to have goals in life in order to feel happy?",
+        "Do you think people will be happy if they don't have goals to achieve?",
+        "How would you define happiness?",
+        "Why do some people say happiness never lasts long?",
+        "What do you do when you feel unhappy?",
+        "Are people in your country happier now than they were 30 years ago?",
+        "Why are some people more positive than others?"
+      ]
+    },
+    {
+      "title": "Health, stress",
+      "questions": [
+        "What things make people stressed in everyday life?",
+        "Is it hard for modern people to live a healthy lifestyle?",
+        "What can parents do to help improve their children's health awareness?",
+        "Do schools have the responsibility to provide health education?",
+        "Where can people find information about keeping healthy?",
+        "Do you think it's a good way for governments to use the power of idols to help people build health awareness?",
+        "How can media improve or influence people's knowledge about health?"
+      ]
+    },
+    {
+      "title": "Parties",
+      "questions": [
+        "Why do some people dislike parties?",
+        "What do adults do at parties?",
+        "How do people celebrate their personal events?",
+        "What do children do at a birthday party?",
+        "Why do people organise family parties in your country?",
+        "Do people in your country like to hold parties?",
+        "Do you think people can make more friends if they often attend parties?"
+      ]
+    },
+    {
+      "title": "Buildings",
+      "questions": [
+        "Is it hard to protect historical buildings?",
+        "Should old buildings be preserved?",
+        "Why do many people move to the countryside?",
+        "What's the difference between living in an apartment and in a house?",
+        "Who should pay for the preservation of historic buildings?",
+        "Who should be responsible for preserving historic buildings?"
+      ]
+    },
+    {
+      "title": "Photography",
+      "app_title": "Photos",
+      "questions": [
+        "Why do some people like to keep photos?",
+        "Do people in your country like to take photos?",
+        "Why do people like to record important things with photos?",
+        "On what occasions do most people take photos?",
+        "What are the advantages and disadvantages of travelling with a camera?",
+        "Where do people like to take photos?",
+        "Who would like to take photos more often, young people or older people?",
+        "Do people take more pictures now compared to the past?",
+        "Is taking photos the best way to remember something?",
+        "Is it easier to take pictures now than in the past?"
+      ]
+    },
+    {
+      "title": "Natural places",
+      "questions": [
+        "What kind of people like to visit natural places?",
+        "What can people gain from going to natural places?",
+        "Should all scenic spots charge an entry fee?",
+        "Is visiting scenic spots the best choice for us while travelling?",
+        "Do people relax when they see nature?",
+        "What are the differences between a natural place and a city?",
+        "Do you think that going to the park is the only way to get closer to nature?"
+      ]
+    },
+    {
+      "title": "Interviews",
+      "questions": [
+        "What kinds of things do famous people often say in an interview?",
+        "What kinds of people are frequently interviewed?",
+        "What can we do to get a job interview?",
+        "What should people do to prepare for a job interview?",
+        "Why do we need to attend interviews when applying for jobs?",
+        "What should people wear to a job interview?"
+      ]
+    }
+  ]
+}
