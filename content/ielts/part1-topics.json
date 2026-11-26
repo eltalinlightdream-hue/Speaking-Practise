@@ -1,0 +1,401 @@
+{
+  "format": "speaking-easy-content/part1-v1",
+  "exam": "ielts",
+  "part": 1,
+  "source_note": "Extra IELTS Part 1 topics typed from the owner's screenshots of a Part 1 question list (sent November 2026, topics 2-37; 1 and 24 were not included). 'season' is the exam period the list gave and is kept for reference only; it is not loaded into the database. Topics merge with existing Part 1 topics of the same title, and questions already in a topic are skipped.",
+  "fixes_applied": [
+    "Titles: removed '(always in use)' and the date ranges; they are kept in 'season'.",
+    "'Work and studies, schools and workplaces' merged into 'Work and studies'; 'Hometown, area you live in' merged into 'Hometown'.",
+    "'Home and accommodation' merged into 'Home, decoration' (same questions; its 2 cut-off questions are the two colour questions already in that topic).",
+    "Removed '(added on 25/26 June)' notes and the duplicate questions they created (Music).",
+    "'Do you ever (often) get bored?' -> 'Do you ever get bored?'; 'Did (Do) you have a favourite teacher?' -> 'Did you have a favourite teacher?' (matches existing wording).",
+    "Matched existing wording: 'Do you like your home town?' -> 'hometown'; 'What work do you do? What subjects...' -> 'What work do you do? / What subjects...'; 'What kinds of movies do you like best?' -> 'What kind of movies...'; 'Do you feel more bored than when you were young?' -> '...more bored now than...'; 'Do you think you could be a teacher?' -> '...a good teacher?'; 'How does this teacher help you?' -> 'How did this teacher help you?'.",
+    "Dropped 'Are you an ambitious person?' (same as 'Do you think you are an ambitious person?').",
+    "'Do you like traveling?' -> 'travelling'; 'travel in the outer space' -> 'travel in outer space'; 'Sports programs' -> 'Sports programmes' (British spelling, like the rest)."
+  ],
+  "topics": [
+    {
+      "title": "Work and studies",
+      "season": "always in use",
+      "questions": [
+        "Do you work or are you a student?",
+        "What work do you do? / What subjects are you studying?",
+        "Why did you choose that job?",
+        "Why did you choose to study that subject?",
+        "Do you like your job?",
+        "Is there anything you dislike about your job?",
+        "What do you like about your studies?",
+        "What do you dislike about your studies?"
+      ]
+    },
+    {
+      "title": "Hometown",
+      "season": "always in use",
+      "questions": [
+        "Please describe your hometown a little.",
+        "What is your town well-known for?",
+        "Do you like your hometown?",
+        "Is that a big city or a small place?",
+        "How long have you been living there?",
+        "Do you think you will continue living there for a long time?",
+        "Would you like to live in the countryside in the future?",
+        "Have you ever lived in the countryside?",
+        "Do you ever spend time in the countryside?",
+        "What is the difference between living in the countryside and the city?",
+        "What do people living in the countryside like to do?",
+        "What do you like to do in the countryside?",
+        "How has your town changed over the last 20 years?"
+      ]
+    },
+    {
+      "title": "Home, decoration",
+      "season": "always in use",
+      "questions": [
+        "Can you describe the place where you live?",
+        "What kind of housing accommodation do you live in?",
+        "What do you like about your flat?",
+        "Which room does your family spend most of the time in?",
+        "What can you see from the windows where you live?",
+        "Do you prefer living in a house or a flat?",
+        "What would you like to change in your flat?",
+        "What do you dislike about your flat?"
+      ]
+    },
+    {
+      "title": "Street markets",
+      "season": "September 2026 - April 2027",
+      "questions": [
+        "What do street markets sell?",
+        "What do people usually buy at street markets?",
+        "Are there many street markets in your country?",
+        "What is the difference between street markets and supermarkets?",
+        "Do you prefer shopping in a shopping mall or at a street market?",
+        "Do many people go to street markets in your country?",
+        "Do you like going to street markets?"
+      ]
+    },
+    {
+      "title": "Travelling",
+      "season": "September 2026 - April 2027",
+      "questions": [
+        "Do you like travelling?",
+        "Do you like travelling long distances?",
+        "Would you like to travel long distances more often in the future?",
+        "Do you often travel by plane?"
+      ]
+    },
+    {
+      "title": "Collecting things",
+      "season": "September 2026 - April 2027",
+      "questions": [
+        "Do you collect things?",
+        "What items are considered collectibles in your country?",
+        "Is collecting a popular pastime in your country?",
+        "Do a lot of people in your country collect things?",
+        "Why do people like collecting?",
+        "What are the benefits of collecting?"
+      ]
+    },
+    {
+      "title": "Computers and tablets",
+      "season": "September 2026 - April 2027",
+      "questions": [
+        "Is it difficult for you to use a computer?",
+        "Who taught you how to use a computer?",
+        "When was the first time you used a computer?",
+        "How often do you use a computer?",
+        "What do you usually use your computer for?",
+        "What kinds of computers are popular in your country?"
+      ]
+    },
+    {
+      "title": "Shoes",
+      "season": "September 2026 - April 2027",
+      "questions": [
+        "How often do you buy shoes?",
+        "How much money do you usually spend on shoes?",
+        "Have you ever bought shoes online?",
+        "Do you like to wear shoes that are comfortable or good-looking?",
+        "Do people like to wear shoes that are comfortable or good-looking?",
+        "What is your favourite type of shoes?",
+        "Why do some people have too many shoes?"
+      ]
+    },
+    {
+      "title": "Recycling and rubbish",
+      "season": "September 2026 - April 2027",
+      "questions": [
+        "Can you name products or materials that are commonly recycled?",
+        "Do you always try to recycle things like paper and plastic?",
+        "How do you feel when you see rubbish in the streets?",
+        "Why have people's attitudes towards recycling changed over the last several years?",
+        "Do you think recycling is important?"
+      ]
+    },
+    {
+      "title": "Politeness",
+      "season": "September 2026 - April 2027",
+      "questions": [
+        "Who taught you to be polite?",
+        "How do people in your country show politeness?",
+        "What rules of politeness have changed in your country since 10 or 20 years ago?"
+      ]
+    },
+    {
+      "title": "Names",
+      "season": "September 2026 - April 2027",
+      "questions": [
+        "Is it difficult for you to remember people's names?",
+        "How do you remember people's names?",
+        "How do you feel when people can't remember your name?",
+        "Do you often forget people's names?"
+      ]
+    },
+    {
+      "title": "Being bored",
+      "season": "September 2026 - April 2027",
+      "questions": [
+        "Do you ever get bored?",
+        "When would you feel bored?",
+        "Do you think school is boring?",
+        "What things are boring to you?",
+        "What do you do when you feel bored?",
+        "Do you feel more bored now than when you were young?"
+      ]
+    },
+    {
+      "title": "Teachers",
+      "season": "May - December 2026",
+      "questions": [
+        "Would you like to be a teacher?",
+        "Do you think you could be a good teacher?",
+        "Did you have a favourite teacher?",
+        "How did this teacher help you?",
+        "How has your favourite teacher helped you?"
+      ]
+    },
+    {
+      "title": "Social media",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you think you spend too much time on social media?",
+        "What do people often do on social media?"
+      ]
+    },
+    {
+      "title": "Dreams and ambitions",
+      "season": "May - December 2026",
+      "questions": [
+        "What is your dream job?",
+        "What was your dream when you were a child?",
+        "Are you the kind of person who sticks to dreams?",
+        "Do you think you are an ambitious person?"
+      ]
+    },
+    {
+      "title": "Mirrors",
+      "season": "May - December 2026",
+      "questions": [
+        "Would you use mirrors to decorate your room?",
+        "Do you usually take a mirror with you?",
+        "How often do you use a mirror?",
+        "Do you like looking at yourself in a mirror?",
+        "Have you ever bought a mirror?",
+        "Do you use a mirror before buying clothing?",
+        "What functions does a mirror have?",
+        "Do you think a mirror is a good decoration?"
+      ]
+    },
+    {
+      "title": "Music",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you prefer sad or happy music?",
+        "Does happy music make you feel more excited?"
+      ]
+    },
+    {
+      "title": "Tidiness",
+      "season": "May - December 2026",
+      "questions": [
+        "Would you say you are a tidy person?",
+        "Do you like to keep things tidy?",
+        "Did you use to keep your room tidy as a child?",
+        "How do you keep things tidy?",
+        "Do you think it is possible for people to be tidy all the time?"
+      ]
+    },
+    {
+      "title": "Websites",
+      "season": "May - December 2026",
+      "questions": [
+        "What kinds of websites do you often visit?",
+        "What kinds of websites are popular in your country?",
+        "What is your favourite website?",
+        "Are there any changes to the websites you often visit?"
+      ]
+    },
+    {
+      "title": "Watches",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you like to wear watches?",
+        "Do you think a watch is important for you?",
+        "Have you ever received a watch as a gift?",
+        "Why do people like expensive watches?"
+      ]
+    },
+    {
+      "title": "Shopping",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you like shopping?",
+        "How often do you go shopping?",
+        "Do you compare prices when you shop?",
+        "Is it difficult for you to make choices when you shop?"
+      ]
+    },
+    {
+      "title": "Cars",
+      "season": "May - December 2026",
+      "questions": [
+        "What type of car do you like?",
+        "What colour car would you choose to buy?",
+        "Do you think car colours are important?",
+        "What do you usually do when there's a traffic jam?",
+        "Do you prefer to be a driver or a passenger?"
+      ]
+    },
+    {
+      "title": "Science",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you like science?",
+        "Did you like science classes when you were young?"
+      ]
+    },
+    {
+      "title": "Outer space and stars",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you want to travel in outer space?",
+        "What would you do if you had an opportunity?",
+        "Do you think it's necessary to see other planets?",
+        "Are you interested in films about outer space and stars?",
+        "Do you like science fiction movies?",
+        "Have you ever taken a course about stars?",
+        "Is it important to study stars?",
+        "Do you want to know more about outer space?"
+      ]
+    },
+    {
+      "title": "Headphones",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you use headphones?",
+        "In what situations would you use headphones?",
+        "What type of headphones do you use?",
+        "In what situations would you NOT use headphones?"
+      ]
+    },
+    {
+      "title": "Singing",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you think singing can bring happiness to people?"
+      ]
+    },
+    {
+      "title": "Art",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you like modern art or traditional art?",
+        "Do you like art?",
+        "Have you ever visited an art gallery?",
+        "Do you think it would be interesting for you to be an artist?"
+      ]
+    },
+    {
+      "title": "Clothes",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you usually wear T-shirts?",
+        "Do you like wearing T-shirts?",
+        "Do you like T-shirts with pictures and prints?",
+        "What colour clothes do you like to wear?",
+        "What are the differences between men and women's preference in colour?",
+        "What kind of clothes do you like to wear?",
+        "What kind of clothes do you never wear?",
+        "Do you wear the same style of clothes on weekdays and weekends?"
+      ]
+    },
+    {
+      "title": "Jokes",
+      "season": "May - December 2026",
+      "questions": [
+        "Are you good at telling jokes?",
+        "Do your friends like to tell jokes?",
+        "Do you like to watch comedies?"
+      ]
+    },
+    {
+      "title": "Morning routines",
+      "season": "May - December 2026",
+      "questions": [
+        "What is your morning routine?",
+        "Do you spend your mornings doing the same things on both weekends and weekdays?",
+        "Is breakfast important?",
+        "Do you like to get up early?"
+      ]
+    },
+    {
+      "title": "Evening time",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you like the morning or the evening?",
+        "What do you usually do in the evening?"
+      ]
+    },
+    {
+      "title": "History",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you think history is important?",
+        "Do you like to learn about history?",
+        "Do you think the internet is a good place to learn about history?"
+      ]
+    },
+    {
+      "title": "Old buildings",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you prefer living in an old building or a modern house?",
+        "Should old buildings be preserved?",
+        "Are there any old buildings you want to see in the future?",
+        "What aspect of culture do old buildings reflect?",
+        "How do old buildings affect the appearance of a place?"
+      ]
+    },
+    {
+      "title": "Films",
+      "season": "May - December 2026",
+      "questions": [
+        "What kind of movies do you like best?",
+        "How often do you go to a cinema to watch a movie?",
+        "Did you usually go to the cinema when you were a kid?",
+        "What was the first film that you watched?",
+        "Do you like to watch movies alone or with your friends?",
+        "Do you like to go to the cinema with your friends?",
+        "Do you prefer foreign films or films made in your country?"
+      ]
+    },
+    {
+      "title": "Sports programmes",
+      "season": "May - December 2026",
+      "questions": [
+        "Do you like watching sports programmes on TV?",
+        "Who do you like to watch live sports games with?"
+      ]
+    }
+  ]
+}

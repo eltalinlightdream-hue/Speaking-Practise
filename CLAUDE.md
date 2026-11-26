@@ -63,6 +63,8 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   with its questions. Run the mock exactly as the set is. Part 1 topics may repeat between mocks.
 - Sets 20–25 have no Part 2 cue card: **do not include them as mock tests** (44 active mocks).
   Their Part 1 and Part 3 questions **are still used in General Training**.
+- Extra Part 1 topics (General Training only, never in mocks): `content/ielts/part1-topics.json`, typed from the
+  owner's screenshots (Nov 2026). They merge into existing topics by title; `season` is for reference only.
 - **General Training (IELTS)**: the student picks Part 1 only, Part 2 only, Part 3 only, or Part 1 + Part 3.
   Questions come from the pools built from all sets. Replay allowed.
 - **Mock Test**: never repeat a set until all active sets are done, then a new cycle starts. No replay.
