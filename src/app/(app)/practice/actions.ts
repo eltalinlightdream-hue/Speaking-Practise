@@ -2,11 +2,36 @@
 
 import { requireProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { isExamCode } from "@/config/exams";
-import { buildGeneralSteps, readChoice, type PoolTopic } from "@/lib/practice/general-plan";
+import { isExamCode, type ExamCode } from "@/config/exams";
+import { buildGeneralSteps, readChoice, type PoolTopic, type SeenMap } from "@/lib/practice/general-plan";
 import { loadPool } from "@/lib/practice/pool";
 import { allowedMock, buildMockSteps } from "@/lib/practice/mock";
 import type { RecordingType, SessionPlan } from "@/lib/practice/types";
+
+/** With "unlimited" we cannot know how far the student gets; count this many steps as seen. */
+const UNLIMITED_SEEN_STEPS = 10;
+
+/** What this student was shown before in General Training (key -> last time, ms). */
+async function loadSeen(userId: string, exam: ExamCode): Promise<SeenMap> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("practice_seen").select("item_key, seen_at").eq("user_id", userId).eq("exam", exam);
+  if (error) {
+    console.error("practice_seen read failed", error.message);
+    return new Map(); // still works, just plain random
+  }
+  return new Map((data ?? []).map((r) => [r.item_key as string, Date.parse(r.seen_at as string)]));
+}
+
+async function saveSeen(userId: string, exam: ExamCode, keys: string[]) {
+  const unique = [...new Set(keys)];
+  if (unique.length === 0) return;
+  const supabase = await createClient();
+  const seenAt = new Date().toISOString();
+  const { error } = await supabase
+    .from("practice_seen")
+    .upsert(unique.map((item_key) => ({ user_id: userId, exam, item_key, seen_at: seenAt })), { onConflict: "user_id,exam,item_key" });
+  if (error) console.error("practice_seen save failed", error.message);
+}
 
 export type StartResult = { plan?: SessionPlan; error?: "empty" | "taken" | string };
 
@@ -20,7 +45,7 @@ export async function startGeneralTraining(input: {
   count: number;
   recordingType: RecordingType;
 }): Promise<StartResult> {
-  await requireProfile();
+  const profile = await requireProfile();
   if (!isExamCode(input.exam)) return { error: "invalid exam" };
   const exam = input.exam;
   const recordingType: RecordingType = ["none", "audio", "video"].includes(input.recordingType) ? input.recordingType : "none";
@@ -28,10 +53,13 @@ export async function startGeneralTraining(input: {
   if (!choice) return { error: "invalid option" };
 
   const pools = new Map<number, PoolTopic[]>();
-  for (const p of choice.option.parts) pools.set(p, await loadPool(exam, p));
-  const built = buildGeneralSteps({ exam, optionId: input.optionId, count: input.count }, (p) => pools.get(p) ?? []);
+  const [seen] = await Promise.all([
+    loadSeen(profile.id, exam),
+    ...choice.option.parts.map(async (p) => pools.set(p, await loadPool(exam, p))),
+  ]);
+  const built = buildGeneralSteps({ exam, optionId: input.optionId, count: input.count }, (p) => pools.get(p) ?? [], seen);
   if (!built) return { error: "invalid option" };
-  const { option, unlimited, steps, label } = built;
+  const { option, unlimited, steps, keysByStep, label } = built;
 
   if (steps.length === 0) return { error: "empty" };
 
@@ -43,6 +71,8 @@ export async function startGeneralTraining(input: {
     p_recording_type: recordingType,
   });
   if (error || !sessionId) return { error: error?.message ?? "could not start" };
+
+  await saveSeen(profile.id, exam, keysByStep.slice(0, unlimited ? UNLIMITED_SEEN_STEPS : undefined).flat());
 
   return {
     plan: {

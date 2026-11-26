@@ -108,6 +108,12 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
 - Active time counts only while the page is visible. Progress is POSTed to `/api/practice/progress`.
 - `day_tashkent` = Tashkent day the session started (a session crossing midnight counts for its start day).
 - iPhone: `unlockSpeech()` runs inside the Start tap; recorder falls back to MP4.
+- No repeats (added 2026-11-26, students said questions repeated): `public.practice_seen` (migration
+  `20261126000100_practice_seen.sql`, applied) keeps, per student and exam, the last time each topic (`t:<id>`) and
+  question (`q<part>:<text>`, by text so the same question in two topics is one) was shown. `buildGeneralSteps(choice,
+  pools, seen)` picks unseen first, then the oldest seen (`freshFirst`, `pickAcrossTopics` levels in `random.ts`), so
+  nothing repeats until the pool runs out. `startGeneralTraining` saves `keysByStep` after the start (with ∞ only the
+  first 10 steps). Offline sessions have no memory (plain random).
 
 ## Mock tests, streak, progress (Step 4)
 
