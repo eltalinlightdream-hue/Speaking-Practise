@@ -65,6 +65,9 @@ by colour alone. Light mode only in v1. The hidden `/design` page shows every co
   Their Part 1 and Part 3 questions **are still used in General Training**.
 - Extra Part 1 topics (General Training only, never in mocks): `content/ielts/part1-topics.json`, typed from the
   owner's screenshots (Nov 2026). They merge into existing topics by title; `season` is for reference only.
+- Extra Part 3 topics (General Training only, not linked to a cue card): `content/ielts/part3-topics.json`, typed from
+  the owner's screenshots (26 Nov 2026). Same merge rules; `not_typed` lists questions the screenshots cut off.
+  Both extra files are loaded by `scripts/content/build_seed_sql.py`.
 - **General Training (IELTS)**: the student picks Part 1 only, Part 2 only, Part 3 only, or Part 1 + Part 3.
   Questions come from the pools built from all sets. Replay allowed.
 - **Mock Test**: never repeat a set until all active sets are done, then a new cycle starts. No replay.
